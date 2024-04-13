@@ -1,0 +1,29 @@
+{
+  "name": "psi",
+  "version": "1.0.0",
+  "description": "Projeto de Sistemas de Informação",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "devStart": "nodemon app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@qualweb/core": "^0.7.69",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "joi": "^17.12.3",
+    "mongoose": "^8.3.1",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "globals": "^15.0.0",
+    "nodemon": "^3.1.0",
+    "prettier": "3.2.5"
+  }
+}
