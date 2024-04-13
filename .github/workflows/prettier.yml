@@ -1,0 +1,21 @@
+name: Check Code Formatting
+
+on: [push, pull_request]
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Check Formatting with Prettier
+        run: |
+          npm install --save-dev prettier
+          npx prettier . --check
