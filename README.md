@@ -4,6 +4,11 @@ Projeto de Sistemas de Informação
 
 ---
 
+![Google Cloud Run](https://github.com/tiagomiguel29/PSI/actions/workflows/google-cloudrun-docker.yml/badge.svg)
+![Prettier Format](https://github.com/tiagomiguel29/PSI/actions/workflows/prettier.yml/badge.svg)
+
+---
+
 ## :warning: Use Pre-commit Hooks
 
 Before any commit, make sure to run the pre-commit hooks.
