@@ -1,4 +1,3 @@
-
 # This workflow build and push a Docker container to Google Artifact Registry and deploy it on Cloud Run when a commit is pushed to the "main" branch
 #
 # Overview:
@@ -45,11 +44,7 @@
 
 name: Build and Deploy to Cloud Run
 
-on:
-  workflow_run:
-    workflows: ["Node.js CI"]
-    types:
-      - completed
+on: [push]
 
 env:
   PROJECT_ID: private-270415 # TODO: update Google Cloud project id
@@ -59,7 +54,6 @@ env:
 
 jobs:
   deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     # Add 'id-token' with the intended permissions for workload identity federation
     permissions:
       contents: 'read'
@@ -115,4 +109,3 @@ jobs:
       # If required, use the Cloud Run url output in later steps
       - name: Show Output
         run: echo ${{ steps.deploy.outputs.url }}
-
