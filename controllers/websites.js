@@ -22,7 +22,7 @@ async function createWebsite(req, res) {
       newWebsite,
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(500).json({
       success: false,
       message: error.message,
     });
@@ -47,7 +47,7 @@ async function getWebsite(req, res) {
       website,
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(500).json({
       success: false,
       message: error.message,
     });
@@ -63,7 +63,7 @@ async function getWebsites(req, res) {
       websites,
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(500).json({
       success: false,
       message: error.message,
     });
@@ -88,7 +88,7 @@ async function removeWebsite(req, res) {
       message: 'Website deleted',
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(500).json({
       success: false,
       message: error.message,
     });
