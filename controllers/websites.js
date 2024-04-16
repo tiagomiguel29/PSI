@@ -53,3 +53,19 @@ async function getWebsite(req, res) {
     });
   }
 }
+
+async function getWebsites(req, res) {
+  try {
+    const websites = await Website.find();
+
+    return res.status(200).json({
+      success: true,
+      websites,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
