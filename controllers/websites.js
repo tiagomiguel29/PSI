@@ -56,10 +56,25 @@ async function getWebsite(req, res) {
 
 async function getWebsites(req, res) {
   try {
-    const websites = await Website.find();
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 10;
+    const sort = req.query.sort || 'createdAt';
+    const sortDirection = req.query.sortDirection === 'desc' ? -1 : 1;
+
+    const options = {
+      limit: limit,
+      skip: (page - 1) * limit,
+      sort: { [sort]: sortDirection },
+    };
+
+    const websites = await Website.find({}, null, options);
+    const totalWebsites = await Website.countDocuments();
 
     return res.status(200).json({
       success: true,
+      totalWebsites,
+      totalPages: Math.ceil(totalWebsites / limit),
+      currentPage: page,
       websites,
     });
   } catch (error) {
