@@ -19,6 +19,31 @@ async function createWebsite(req, res) {
 
     return res.status(201).json({
       success: true,
+      newWebsite,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
+
+async function getWebsite(req, res) {
+  const { id } = req.params;
+
+  try {
+    const website = await Website.findById(id);
+
+    if (!website) {
+      return res.status(404).json({
+        success: false,
+        message: 'Website not found',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
       website,
     });
   } catch (error) {
