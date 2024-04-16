@@ -61,13 +61,15 @@ async function getWebsites(req, res) {
     const sort = req.query.sort || 'createdAt';
     const sortDirection = req.query.sortDirection === 'desc' ? -1 : 1;
 
+    const { status } = req.query;
+
     const options = {
       limit: limit,
       skip: (page - 1) * limit,
       sort: { [sort]: sortDirection },
     };
 
-    const websites = await Website.find({}, null, options);
+    const websites = await Website.find(status ? { status } : {}, options);
     const totalWebsites = await Website.countDocuments();
 
     return res.status(200).json({
