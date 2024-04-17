@@ -1,0 +1,79 @@
+import { Injectable } from '@angular/core';import { HttpClient } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
+
+import { Website } from 'src/types/Website';
+
+interface WebsiteListResponse {
+  success: boolean;
+  websites: Website[];
+  totalWebsites: number;
+  totalPages: number;
+  currentPage: number;
+}
+
+interface WebsiteResponse {
+  success: boolean;
+  website: Website;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class WebsiteService {
+
+  private baseUrl = '/api/websites'; // Base URL for API
+
+  constructor(private http: HttpClient) { }
+
+  // Get all websites
+  getWebsites(): Observable<Website[]> {
+    return this.http.get<WebsiteListResponse>(`${this.baseUrl}`).pipe(
+      map(response => {
+        if (response.success) {
+          return response.websites;
+        } else {
+          throw new Error('Failed to load websites');
+        }
+      })
+    );
+  }
+
+  // Get a single website by ID
+  getWebsiteById(id: string): Observable<Website> {
+    return this.http.get<WebsiteResponse>(`${this.baseUrl}/${id}`).pipe(
+      map(response => {
+        if (response.success) {
+          return response.website;
+        } else {
+          throw new Error('Failed to load website');
+        }
+      })
+    );
+  }
+
+  // Create a new website
+  createWebsite(website: Website): Observable<Website> {
+    return this.http.post<WebsiteResponse>(`${this.baseUrl}/new`, website).pipe(
+      map(response => {
+        if (response.success) {
+          return response.website;
+        } else {
+          throw new Error('Failed to create website');
+        }
+      })
+    );
+  }
+
+  // Delete a website by ID
+  deleteWebsite(id: string): Observable<any> {
+    return this.http.delete<{success: boolean, message?: string}>(`${this.baseUrl}/${id}`).pipe(
+      map(response => {
+        if (response.success) {
+          return response.message || 'Website deleted successfully';
+        } else {
+          throw new Error('Failed to delete website');
+        }
+      })
+    );
+  }
+}
