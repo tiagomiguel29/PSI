@@ -69,7 +69,10 @@ async function getWebsites(req, res) {
       sort: { [sort]: sortDirection },
     };
 
-    const websites = await Website.find(status ? { status } : {}, options);
+    const websites = await Website.find(status ? { status } : {})
+      .limit(options.limit)
+      .skip(options.skip)
+      .sort(options.sort);
     const totalWebsites = await Website.countDocuments();
 
     return res.status(200).json({
@@ -80,6 +83,7 @@ async function getWebsites(req, res) {
       websites,
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       success: false,
       message: error.message,
