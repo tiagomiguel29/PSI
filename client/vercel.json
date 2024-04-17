@@ -2,7 +2,14 @@
     "rewrites": [
         {
             "source": "/api/:path*",
-            "destination": "https://api.psi.tiagomiguel.dev/:path*"
+            "destination": "https://api.psi.tiagomiguel.dev/api/:path*"
+        }
+    ],
+    "redirects": [
+        {
+            "source": "/api/:path*",
+            "destination": "https://api.psi.tiagomiguel.dev/api/:path*",
+            "permanent": true
         }
     ]
 }
