@@ -1,1 +1,67 @@
-<p>websites works!</p>
+
+    <!--
+    <p-table [value]="websites" [tableStyle]="{'min-width': '60rem'}">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width:20%">URL</th>
+                <th style="width:20%">Status</th>
+                <th pSortableColumn="lastEvaluated" style="width:20%">Last Evaluated <p-sortIcon field="lastEvaluated"></p-sortIcon></th>
+                <th pSortableColumn="createdAt" style="width:20%">Date Added <p-sortIcon field="createdAt"></p-sortIcon></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-website>
+            <tr>
+                <td>{{website.url}}</td>
+                <td>{{website.status}}</td>
+                <td>{{website.lastEvaluated}}</td>
+                <td>{{website.createdAt}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+-->
+
+
+<div class="mt-20">
+<div class="w-full md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto rounded-lg overflow-hidden">
+
+<table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)" class="rounded-lg">
+       class="mat-elevation-z8">
+
+  <!-- Position Column -->
+  <ng-container matColumnDef="url">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number">
+      URL
+    </th>
+    <td mat-cell *matCellDef="let element"> {{element.url}} </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
+        Status
+    </th>
+    <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+  </ng-container>
+
+  <!-- Weight Column -->
+  <ng-container matColumnDef="lastEvaluated">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by weight">
+        Last Evaluated
+    </th>
+    <td mat-cell *matCellDef="let element"> {{element.lastEvaluated}} </td>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="createdAt">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by symbol">
+        Date Added
+    </th>
+    <td mat-cell *matCellDef="let element"> {{element.createdAt}} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+</div>
+</div>

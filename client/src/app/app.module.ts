@@ -11,6 +11,10 @@ import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatButtonModule} from '@angular/material/button';
+import { TableModule } from 'primeng/table';
+
+import {MatSortModule} from '@angular/material/sort';
+import {MatTableModule} from '@angular/material/table';
 
 import { HomeComponent } from './home/home.component';
 import { WebsitesComponent } from './websites/websites.component';
@@ -32,7 +36,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
     MatFormFieldModule,
     MatDividerModule,
     MatButtonModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    TableModule,
+    MatTableModule,
+    MatSortModule
   ],
   providers: [],
   bootstrap: [AppComponent]
