@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {LiveAnnouncer} from '@angular/cdk/a11y';
 import { Website } from 'src/types/Website';
 import {AfterViewInit, ViewChild} from '@angular/core';
+import { WebsiteService } from '../services/website.service';
 
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -15,10 +16,10 @@ export class WebsitesComponent {
   websites!: Website[];
 
   displayedColumns: string[] = ['url', 'createdAt', 'status', 'lastEvaluated'];
-  dataSource = new MatTableDataSource(this.websites);
+  dataSource = new MatTableDataSource<Website>([]);
 
 
-  constructor(private _liveAnnouncer: LiveAnnouncer) {}
+  constructor(private _liveAnnouncer: LiveAnnouncer, private websiteService: WebsiteService) {}
 
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -40,32 +41,18 @@ export class WebsitesComponent {
   }
 
   ngOnInit() {
-    this.websites = [
-      {
-        url: 'https://example.com',
-        createdAt: '2021-08-01',
-        status: 'active',
-        lastEvaluated: '2021-08-01'
+    this.fetchWebsites();
+  }
+
+  fetchWebsites() {
+    this.websiteService.getWebsites().subscribe({
+      next: (websites) => {
+        this.dataSource.data = websites;
       },
-      {
-        url: 'https://example.net',
-        createdAt: '2021-08-01',
-        status: 'active',
-        lastEvaluated: '2021-08-01'
-      },
-      {
-        url: 'https://example.net',
-        createdAt: '2021-08-01',
-        status: 'active',
-        lastEvaluated: '2021-08-01'
-      },
-      {
-        url: 'https://example.net',
-        createdAt: '2021-08-01',
-        status: 'active',
-        lastEvaluated: '2021-08-01'
+      error: (error) => {
+        console.error('Error fetching websites:', error);
+        // You might want to handle errors better, e.g., displaying a message to the user
       }
-        ];
-        this.dataSource = new MatTableDataSource(this.websites);
+    });
   }
 }
