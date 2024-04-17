@@ -10,9 +10,17 @@ export class AppComponent {
   title = 'client';
 
   items: MenuItem[]; // Define menu items array
+  // Mobile menu state
+  mobileMenuActive: boolean;
 
   constructor() {
     this.items = [];
+    this.mobileMenuActive = false;
+  }
+
+  // Toggle mobile menu
+  toggleMobileMenu() {
+    this.mobileMenuActive = !this.mobileMenuActive;
   }
 
   ngOnInit() {
