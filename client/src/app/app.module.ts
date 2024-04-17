@@ -9,6 +9,8 @@ import { FormsModule } from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatButtonModule} from '@angular/material/button';
 
 import { HomeComponent } from './home/home.component';
 import { WebsitesComponent } from './websites/websites.component';
@@ -28,6 +30,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
     MatIconModule,
     MatInputModule,
     MatFormFieldModule,
+    MatDividerModule,
+    MatButtonModule,
     BrowserAnimationsModule
   ],
   providers: [],
