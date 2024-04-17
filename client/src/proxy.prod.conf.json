@@ -1,6 +1,6 @@
 {
     "/api": {
       "target": "https://api.psi.tiagomiguel.dev",
-      "secure": false
+      "secure": true
     }
   }
