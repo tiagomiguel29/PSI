@@ -8,4 +8,6 @@ router.get('/', (req, res) => {
   });
 });
 
+router.use('/websites', require('./websites'));
+
 module.exports = router;
