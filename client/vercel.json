@@ -4,5 +4,12 @@
             "source": "/api/:path*",
             "destination": "https://api.psi.tiagomiguel.dev/:path*"
         }
+    ],
+    "redirects": [
+        {
+            "source": "/api/:path*",
+            "destination": "https://api.psi.tiagomiguel.dev/:path*",
+            "permanent": true
+        }
     ]
 }
