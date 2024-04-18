@@ -1,9 +1,57 @@
-<div class="flex items-center justify-center h-full flex-1 px-4">
-    <form class="example-form flex flex-col items-center justify-center w-full md:w-3/4 lg:w-2/3 xl:w-1/2">
+<!-- Hidden if firstStep is not true -->
+<div [@slideInOut]="currentStep" id="home" class="flex-1 flex items-center">
+<div id="first-step" class="flex items-center justify-center h-full flex-1 px-4" *ngIf="currentStep == 'stepOne'">
+    <form class="flex flex-col items-center justify-center w-full md:w-3/4 lg:w-2/3 xl:w-1/2">
+      <mat-form-field floatLabel="always" class="w-full">
+        <input matInput type="url" placeholder="">
+        <span matTextPrefix>https://&nbsp;</span>
+      </mat-form-field>
+      <button mat-flat-button color="primary" (click)="nextStep()">Add site</button>
+      </form>
+</div>
+
+<div id="second-step" class="mx-auto w-full md:w-3/4 lg:w-2/3 xl:w-1/2 mt-20" *ngIf="currentStep == 'stepTwo'">
+  <div>
+    <form class="justify-between flex flex-col md:flex-row items-center w-full space-x-1">
       <mat-form-field floatLabel="always" class="w-full">
         <input matInput type="url" class="example-right-align" placeholder="">
         <span matTextPrefix>https://&nbsp;</span>
       </mat-form-field>
-      <button mat-flat-button color="primary">Add site</button>
+      <button mat-flat-button color="primary" (click)="nextStep()">Add Page</button>
+      <button mat-flat-button color="warn" (click)="previousStep()">Cancel</button>
+      <button mat-flat-button class="bg-blue-500" (click)="done()">Skip</button>
+
       </form>
+  </div>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>
+              <div class="px-4">
+                Pages Added
+              </div>
+            </mat-card-title>
+            <mat-card-subtitle>
+              <div class="px-4">
+                You added {{pages.length}} {{pages.length != 1 ? 'pages' : 'page'}}
+              </div>
+            </mat-card-subtitle>
+        </mat-card-header>
+      <mat-card-content>
+          <div *ngFor="let page of pages">
+            <div class="py-8 px-4 flex items-center justify-between">
+              <span>{{page}}</span>
+              <button mat-icon-button (click)="removePage(page)">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                  <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z" clip-rule="evenodd" />
+                </svg>
+              </button>
+            </div>
+            <mat-divider></mat-divider>
+
+          </div>
+
+
+      </mat-card-content>
+    </mat-card>
+</div>
 </div>

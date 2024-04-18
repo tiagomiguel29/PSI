@@ -15,7 +15,7 @@ import {MatTableDataSource} from '@angular/material/table';
 export class WebsitesComponent {
   websites!: Website[];
 
-  displayedColumns: string[] = ['url', 'createdAt', 'status', 'lastEvaluated'];
+  displayedColumns: string[] = ['url', 'status', 'createdAt', 'lastEvaluated'];
   dataSource = new MatTableDataSource<Website>([]);
 
 
