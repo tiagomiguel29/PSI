@@ -3,8 +3,10 @@
 <div id="first-step" class="flex items-center justify-center h-full flex-1 px-4" *ngIf="currentStep == 'stepOne'">
     <form class="flex flex-col items-center justify-center w-full md:w-3/4 lg:w-2/3 xl:w-1/2">
       <mat-form-field floatLabel="always" class="w-full">
-        <input matInput type="url" placeholder="">
+        <input matInput type="url" placeholder="" [formControl]="url">
         <span matTextPrefix>https://&nbsp;</span>
+        <mat-error *ngIf="url.hasError('pattern') && !url.hasError('required')">Please enter a valid URL</mat-error>
+        <mat-error *ngIf="url.hasError('required')">URL is <strong>required</strong></mat-error>
       </mat-form-field>
       <button mat-flat-button color="primary" (click)="nextStep()">Add site</button>
       </form>
@@ -14,10 +16,13 @@
   <div>
     <form class="justify-between flex flex-col md:flex-row items-center w-full space-x-1">
       <mat-form-field floatLabel="always" class="w-full">
-        <input matInput type="url" class="example-right-align" placeholder="">
+        <input matInput type="url" placeholder="" [formControl]="pageInput">
         <span matTextPrefix>https://&nbsp;</span>
+        <mat-error *ngIf="pageInput.hasError('pattern') && !pageInput.hasError('requiredField')">Please enter a valid URL</mat-error>
+        <mat-error *ngIf="pageInput.hasError('requiredField')">URL is <strong>required</strong></mat-error>
+
       </mat-form-field>
-      <button mat-flat-button color="primary" (click)="nextStep()">Add Page</button>
+      <button mat-flat-button color="primary" (click)="addPage()">Add Page</button>
       <button mat-flat-button color="warn" (click)="previousStep()">Cancel</button>
       <button mat-flat-button class="bg-blue-500" (click)="done()">Skip</button>
 
