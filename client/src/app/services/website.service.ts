@@ -3,6 +3,8 @@ import { Observable, map } from 'rxjs';
 
 import { Website } from 'src/types/Website';
 
+import { environment } from 'src/environments/environment';
+
 interface WebsiteListResponse {
   success: boolean;
   websites: Website[];
@@ -21,7 +23,7 @@ interface WebsiteResponse {
 })
 export class WebsiteService {
 
-  private baseUrl = '/api/websites'; // Base URL for API
+  private baseUrl = environment.apiUrl + '/api/websites'; // Base URL for API
 
   constructor(private http: HttpClient) { }
 
