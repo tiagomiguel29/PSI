@@ -1,8 +1,9 @@
 const Website = require('../models/Website');
+const Page = require('../models/Page');
 const { validateWebsite } = require('../utils/validation/website');
 
 async function createWebsite(req, res) {
-  const { url } = req.body;
+  const { url, pages } = req.body;
 
   try {
     const website = { url };
@@ -17,9 +18,22 @@ async function createWebsite(req, res) {
 
     const newWebsite = await Website.create(website);
 
+    const pageDocs = [];
+
+    if (pages && pages.length > 0) {
+      for (const page of pages) {
+        const newPage = await Page.create({
+          url: page,
+          website: newWebsite._id,
+        });
+        pageDocs.push(newPage);
+      }
+    }
+
     return res.status(201).json({
       success: true,
-      newWebsite,
+      website: newWebsite,
+      pages: pageDocs,
     });
   } catch (error) {
     return res.status(500).json({

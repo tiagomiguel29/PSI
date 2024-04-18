@@ -52,8 +52,8 @@ export class WebsiteService {
   }
 
   // Create a new website
-  createWebsite(website: Website): Observable<Website> {
-    return this.http.post<WebsiteResponse>(`${this.baseUrl}/new`, website).pipe(
+  createWebsite(url: string, pages: string[]): Observable<Website> {
+    return this.http.post<WebsiteResponse>(`${this.baseUrl}/new`, {url, pages}).pipe(
       map(response => {
         if (response.success) {
           return response.website;
