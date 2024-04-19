@@ -16,20 +16,22 @@ import {MatButtonModule} from '@angular/material/button';
 import { TableModule } from 'primeng/table';
 import {MatCardModule} from '@angular/material/card';
 import {MatPaginatorModule} from '@angular/material/paginator';
-
+import {MatChipsModule} from '@angular/material/chips';
 
 import {MatSortModule} from '@angular/material/sort';
 import {MatTableModule} from '@angular/material/table';
 
 import { HomeComponent } from './home/home.component';
 import { WebsitesComponent } from './websites/websites.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { WebsiteDetailsComponent } from './website-details/website-details.component'
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    WebsitesComponent
+    WebsitesComponent,
+    WebsiteDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -48,7 +50,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
     MatSortModule,
     MatCardModule,
     ReactiveFormsModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatChipsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
