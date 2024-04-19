@@ -3,11 +3,13 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { FormControl, Validators } from '@angular/forms';
 import { WebsiteService } from '../services/website.service';
 import { Router } from '@angular/router';
+import { ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
+  encapsulation: ViewEncapsulation.None,
   animations: [
     trigger('slideInOut', [
       state('stepOne', style({ transform: 'translateX(0%)' })),
@@ -82,7 +84,6 @@ export class HomeComponent {
   }
 
   done() {
-    if (this.url.valid && this.url.value !== null) {
       this.websiteService.createWebsite('https://' + this.url.value, this.pages).subscribe({
         next: (website) => {
           // TODO: Handle the response
@@ -94,8 +95,5 @@ export class HomeComponent {
           // TODO: Handle the error
         }
       });
-    } else {
-      // TODO: Handle the error
-    }
   }
 }
