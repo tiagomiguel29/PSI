@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-websites',
@@ -20,12 +21,23 @@ export class WebsitesComponent {
   currentPage!: number;
   limit!: number;
   isLoading = true;
+  statusOptions: any[] = [
+    {value: 'all', viewValue: 'All'},
+    {value: 'Por avaliar', viewValue: 'Por avaliar'},
+    {value: 'Em avaliação', viewValue: 'Em avaliação'},
+    {value: 'Avaliado', viewValue: 'Avaliado'},
+    {value: 'Erro na avaliação', viewValue: 'Erro na avaliação'},
+  ];
+  statusFormControl = new FormControl();
+
 
   displayedColumns: string[] = ['url', 'status', 'createdAt', 'lastEvaluated', 'actions'];
   dataSource = new MatTableDataSource<{}>(this.websites);
 
 
-  constructor(private _liveAnnouncer: LiveAnnouncer, private websiteService: WebsiteService, private route: ActivatedRoute, private router: Router) {}
+  constructor(private _liveAnnouncer: LiveAnnouncer,
+    private websiteService: WebsiteService,
+    private route: ActivatedRoute, private router: Router) {}
 
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -80,12 +92,15 @@ export class WebsitesComponent {
     this.currentPage = Number(this.route.snapshot.queryParamMap.get('page')) || 1;
     this.limit = Number(this.route.snapshot.queryParamMap.get('limit')) || 10;
     this.fetchWebsites(this.currentPage, this.limit);
+    this.statusFormControl.valueChanges.subscribe((value) => {
+      this.fetchWebsites(this.currentPage, this.limit, 'createdAt', 'desc', value);
+    });
 
   }
 
-  fetchWebsites(page = 1, limit = 10, sort = 'createdAt', sortDirection = 'desc') {
+  fetchWebsites(page = 1, limit = 10, sort = 'createdAt', sortDirection = 'desc', status = 'all') {
     this.isLoading = true;
-    this.websiteService.getWebsites(page, limit, sort, sortDirection).subscribe({
+    this.websiteService.getWebsites(page, limit, sort, sortDirection, status).subscribe({
       next: (res) => {
         this.isLoading = false;
         this.websites = res.websites;

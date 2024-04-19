@@ -30,8 +30,9 @@ export class WebsiteService {
   constructor(private http: HttpClient) { }
 
   // Get all websites
-  getWebsites(page = 1, limit = 10, sort = 'createdAt', sortDirection = 'desc'): Observable<WebsiteListResponse> {
-    return this.http.get<WebsiteListResponse>(`${this.baseUrl}?page=${page}&limit=${limit}&sort=${sort}&sortDirection=${sortDirection}`).pipe(
+  getWebsites(page = 1, limit = 10, sort = 'createdAt', sortDirection = 'desc', status = 'all'): Observable<WebsiteListResponse> {
+    const statusQuery = status === 'all' ? '' : `&status=${status}`;
+    return this.http.get<WebsiteListResponse>(`${this.baseUrl}?page=${page}&limit=${limit}&sort=${sort}&sortDirection=${sortDirection}${statusQuery}`).pipe(
       map(response => {
         if (response.success) {
           return response

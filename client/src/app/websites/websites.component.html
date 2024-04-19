@@ -1,6 +1,21 @@
 <div class="mt-20">
 <div class="w-full md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto rounded-lg overflow-hidden shadow-lg">
 
+  <div class="flex flex-row justify-between items-center bg-white shadow-lg rounded-t-lg py-4 px-4 mb-8">
+    <div>
+      <h1 class=" text-black text-lg font-bold">Websites List</h1>
+    </div>
+    <mat-form-field>
+      <mat-label>
+        Status
+      </mat-label>
+      <mat-select [formControl]="statusFormControl">
+          <mat-option [value]="status.value" *ngFor="let status of statusOptions">
+            {{status.viewValue}}
+          </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)" class="rounded-lg">
        class="mat-elevation-z8">
 
