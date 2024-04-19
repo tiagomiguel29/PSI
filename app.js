@@ -2,17 +2,30 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const morgan = require('morgan');
+const mongoose = require('mongoose');
 
 if (
-  !process.env.NODE_ENV === 'production' &&
-  !process.env.NODE_ENV === 'staging'
+  !(process.env.NODE_ENV === 'production') &&
+  !(process.env.NODE_ENV === 'staging')
 ) {
   require('dotenv').config();
 }
 
 /* MONGODB CONNECTION */
 
+mongoose
+  .connect(process.env.MONGODB_URI, {})
+  .then(() => {
+    console.log('Connected to MongoDB');
+  })
+  .catch((error) => {
+    console.log('Error connecting to MongoDB', error.message);
+  });
+
 /* LOAD MONOGOOSE MODELS */
+
+require('./models/Website');
+require('./models/Page');
 
 /* EXPRESS MIDDLEWARE */
 

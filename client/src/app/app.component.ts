@@ -1,13 +1,35 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
   title = 'client';
+
+  items: MenuItem[]; // Define menu items array
+  // Mobile menu state
+  mobileMenuActive: boolean;
+
+  constructor() {
+    this.items = [];
+    this.mobileMenuActive = false;
+  }
+
+  // Toggle mobile menu
+  toggleMobileMenu() {
+    this.mobileMenuActive = !this.mobileMenuActive;
+  }
+
+  ngOnInit() {
+    this.items = [
+      {
+        label: 'Home',
+        icon: 'pi pi-fw pi-home',
+        routerLink: ['/']
+      },
+    ];
+  }
 }
