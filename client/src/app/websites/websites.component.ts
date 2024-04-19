@@ -15,13 +15,14 @@ import { MatPaginator } from '@angular/material/paginator';
   styleUrls: ['./websites.component.css']
 })
 export class WebsitesComponent {
-  websites!: Website[];
+  websites: Website[] = [{}, {}, {}, {}, {}];
   pages!: number;
   currentPage!: number;
   limit!: number;
+  isLoading = true;
 
   displayedColumns: string[] = ['url', 'status', 'createdAt', 'lastEvaluated', 'actions'];
-  dataSource = new MatTableDataSource<Website>([]);
+  dataSource = new MatTableDataSource<{}>(this.websites);
 
 
   constructor(private _liveAnnouncer: LiveAnnouncer, private websiteService: WebsiteService, private route: ActivatedRoute, private router: Router) {}
@@ -83,8 +84,10 @@ export class WebsitesComponent {
   }
 
   fetchWebsites(page = 1, limit = 10, sort = 'createdAt', sortDirection = 'desc') {
+    this.isLoading = true;
     this.websiteService.getWebsites(page, limit, sort, sortDirection).subscribe({
       next: (res) => {
+        this.isLoading = false;
         this.websites = res.websites;
         this.dataSource = new MatTableDataSource(res.websites);
         this.paginator.length = res.totalWebsites
@@ -93,6 +96,7 @@ export class WebsitesComponent {
       },
       error: (error) => {
         console.error('Error fetching websites:', error);
+        this.isLoading = false;
       }
     });
   }

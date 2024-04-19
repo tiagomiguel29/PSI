@@ -45,7 +45,7 @@ export class WebsiteDetailsComponent {
     this.websiteService.getWebsiteById(this._id).subscribe({
       next: (website) => {
         this.website = website;
-        this.pages = website.pages;
+        this.pages = website.pages || [];
         this.dataSource = new MatTableDataSource<Page>(website.pages);
       },
       error: (error) => {

@@ -17,6 +17,7 @@ import { TableModule } from 'primeng/table';
 import {MatCardModule} from '@angular/material/card';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatChipsModule} from '@angular/material/chips';
+import { SkeletonModule } from 'primeng/skeleton';
 
 import {MatSortModule} from '@angular/material/sort';
 import {MatTableModule} from '@angular/material/table';
@@ -51,7 +52,8 @@ import { WebsiteDetailsComponent } from './website-details/website-details.compo
     MatCardModule,
     ReactiveFormsModule,
     MatPaginatorModule,
-    MatChipsModule
+    MatChipsModule,
+    SkeletonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
