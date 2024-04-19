@@ -88,7 +88,7 @@ export class HomeComponent {
         next: (website) => {
           // TODO: Handle the response
 
-          this.router.navigate(['/websites']);
+          this.router.navigate(['/websites/', website._id]);
 
             },
         error: (error) => {
