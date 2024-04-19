@@ -1,0 +1,10 @@
+div[[@slideInOut]] {
+  overflow-x: hidden; /* Prevents scroll bar from appearing horizontally */
+  position: relative;
+  width: 100%;
+}
+
+.step-content {
+  width: 100%;
+  position: absolute;
+}

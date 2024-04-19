@@ -3,9 +3,12 @@ import {LiveAnnouncer} from '@angular/cdk/a11y';
 import { Website } from 'src/types/Website';
 import {AfterViewInit, ViewChild} from '@angular/core';
 import { WebsiteService } from '../services/website.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-websites',
@@ -13,18 +16,52 @@ import {MatTableDataSource} from '@angular/material/table';
   styleUrls: ['./websites.component.css']
 })
 export class WebsitesComponent {
-  websites!: Website[];
+  websites: Website[] = [{}, {}, {}, {}, {}];
+  pages!: number;
+  currentPage!: number;
+  limit!: number;
+  isLoading = true;
+  statusOptions: any[] = [
+    {value: 'all', viewValue: 'All'},
+    {value: 'Por avaliar', viewValue: 'Por avaliar'},
+    {value: 'Em avaliação', viewValue: 'Em avaliação'},
+    {value: 'Avaliado', viewValue: 'Avaliado'},
+    {value: 'Erro na avaliação', viewValue: 'Erro na avaliação'},
+  ];
+  statusFormControl = new FormControl();
 
-  displayedColumns: string[] = ['url', 'createdAt', 'status', 'lastEvaluated'];
-  dataSource = new MatTableDataSource<Website>([]);
+
+  displayedColumns: string[] = ['url', 'status', 'createdAt', 'lastEvaluated', 'actions'];
+  dataSource = new MatTableDataSource<{}>(this.websites);
 
 
-  constructor(private _liveAnnouncer: LiveAnnouncer, private websiteService: WebsiteService) {}
+  constructor(private _liveAnnouncer: LiveAnnouncer,
+    private websiteService: WebsiteService,
+    private route: ActivatedRoute, private router: Router) {}
+
 
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+
+    this.route.queryParamMap.subscribe(params => {
+      this.currentPage = Number(params.get('page')) || 1;
+      this.limit = Number(params.get('limit')) || 10;
+
+      this.fetchWebsites(this.currentPage, this.limit);
+    })
+
+    this.paginator.page.subscribe(() => {
+      this.currentPage = this.paginator.pageIndex + 1;
+      this.limit = this.paginator.pageSize;
+
+      this.updateQueryParams();
+      this.fetchWebsites(this.currentPage, this.limit);
+    });
   }
 
   /** Announce the change in sort state for assistive technology. */
@@ -40,18 +77,41 @@ export class WebsitesComponent {
     }
   }
 
-  ngOnInit() {
-    this.fetchWebsites();
+  updateQueryParams() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        page: this.paginator.pageIndex + 1,
+        limit: this.paginator.pageSize
+      },
+      queryParamsHandling: 'merge', // Merge with existing query params
+    });
   }
 
-  fetchWebsites() {
-    this.websiteService.getWebsites().subscribe({
-      next: (websites) => {
-        this.dataSource.data = websites;
+  ngOnInit() {
+    this.currentPage = Number(this.route.snapshot.queryParamMap.get('page')) || 1;
+    this.limit = Number(this.route.snapshot.queryParamMap.get('limit')) || 10;
+    this.fetchWebsites(this.currentPage, this.limit);
+    this.statusFormControl.valueChanges.subscribe((value) => {
+      this.fetchWebsites(this.currentPage, this.limit, 'createdAt', 'desc', value);
+    });
+
+  }
+
+  fetchWebsites(page = 1, limit = 10, sort = 'createdAt', sortDirection = 'desc', status = 'all') {
+    this.isLoading = true;
+    this.websiteService.getWebsites(page, limit, sort, sortDirection, status).subscribe({
+      next: (res) => {
+        this.isLoading = false;
+        this.websites = res.websites;
+        this.dataSource = new MatTableDataSource(res.websites);
+        this.paginator.length = res.totalWebsites
+
+
       },
       error: (error) => {
         console.error('Error fetching websites:', error);
-        // You might want to handle errors better, e.g., displaying a message to the user
+        this.isLoading = false;
       }
     });
   }

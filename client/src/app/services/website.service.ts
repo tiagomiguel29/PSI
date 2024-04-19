@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';import { HttpClient } from '@angular/
 import { Observable, map } from 'rxjs';
 
 import { Website } from 'src/types/Website';
+import { Page } from 'src/types/Page';
+
+import { environment } from 'src/environments/environment';
 
 interface WebsiteListResponse {
   success: boolean;
@@ -14,6 +17,7 @@ interface WebsiteListResponse {
 interface WebsiteResponse {
   success: boolean;
   website: Website;
+  pages: Page[];
 }
 
 @Injectable({
@@ -21,16 +25,17 @@ interface WebsiteResponse {
 })
 export class WebsiteService {
 
-  private baseUrl = '/api/websites'; // Base URL for API
+  private baseUrl = environment.apiUrl + '/api/websites'; // Base URL for API
 
   constructor(private http: HttpClient) { }
 
   // Get all websites
-  getWebsites(): Observable<Website[]> {
-    return this.http.get<WebsiteListResponse>(`${this.baseUrl}`).pipe(
+  getWebsites(page = 1, limit = 10, sort = 'createdAt', sortDirection = 'desc', status = 'all'): Observable<WebsiteListResponse> {
+    const statusQuery = status === 'all' ? '' : `&status=${status}`;
+    return this.http.get<WebsiteListResponse>(`${this.baseUrl}?page=${page}&limit=${limit}&sort=${sort}&sortDirection=${sortDirection}${statusQuery}`).pipe(
       map(response => {
         if (response.success) {
-          return response.websites;
+          return response
         } else {
           throw new Error('Failed to load websites');
         }
@@ -43,7 +48,7 @@ export class WebsiteService {
     return this.http.get<WebsiteResponse>(`${this.baseUrl}/${id}`).pipe(
       map(response => {
         if (response.success) {
-          return response.website;
+          return {...response.website, pages: response.pages};
         } else {
           throw new Error('Failed to load website');
         }
@@ -52,8 +57,8 @@ export class WebsiteService {
   }
 
   // Create a new website
-  createWebsite(website: Website): Observable<Website> {
-    return this.http.post<WebsiteResponse>(`${this.baseUrl}/new`, website).pipe(
+  createWebsite(url: string, pages: string[]): Observable<Website> {
+    return this.http.post<WebsiteResponse>(`${this.baseUrl}/new`, {url, pages}).pipe(
       map(response => {
         if (response.success) {
           return response.website;
