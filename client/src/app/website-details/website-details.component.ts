@@ -10,9 +10,12 @@ import { Sort } from '@angular/material/sort';
 
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { Inject } from '@angular/core';
+import { PagesService } from '../services/pages.service';
 
 export interface DialogData {
+  websiteId: string;
   pageUrl: string;
+  onCloseSuccess: Function;
 }
 
 @Component({
@@ -74,13 +77,17 @@ export class WebsiteDetailsComponent {
 
   openDialog(): void {
     const dialogRef = this.dialog.open(AddPageDialog, {
-      data: {pageUrl: this.pageUrlToAdd},
+      data: {
+        pageUrl: this.pageUrlToAdd,
+        websiteId: this._id,
+        onCloseSuccess: this.fetchWebsite.bind(this)
+      },
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
       this.pageUrlToAdd = result;
     });
+
   }
 }
 
@@ -94,9 +101,28 @@ export class AddPageDialog {
   constructor(
     public dialogRef: MatDialogRef<AddPageDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    private pagesService: PagesService
   ) {}
 
-  onNoClick(): void {
+  onAdd(): void {
+    if (this.data.pageUrl) {
+      this.pagesService.createPage({
+        url: 'https://' + this.data.pageUrl,
+        websiteId: this.data.websiteId
+      }).subscribe({
+        next: (response) => {
+          this.data.onCloseSuccess();
+          this.dialogRef.close(response.page);
+
+        },
+        error: (error) => {
+          console.error('Failed to add page:', error);
+        }
+      });
+    }
+  }
+
+  onCancel(): void {
     this.dialogRef.close();
   }
 }

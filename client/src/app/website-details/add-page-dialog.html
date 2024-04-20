@@ -8,6 +8,6 @@
   </mat-form-field>
 </div>
 <div mat-dialog-actions>
-  <button mat-flat-button (click)="onNoClick()" color="warn">Cancel</button>
-  <button mat-flat-button [mat-dialog-close]="data.pageUrl" cdkFocusInitial color="primary">Add</button>
+  <button mat-flat-button (click)="onCancel()" color="warn">Cancel</button>
+  <button mat-flat-button (click)="onAdd()" cdkFocusInitial color="primary">Add</button>
 </div>
