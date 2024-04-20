@@ -30,7 +30,7 @@ export class WebsiteDetailsComponent {
   pages: Page[] = [];
   pageUrlToAdd: string = '';
 
-  displayedColumns: string[] = ['url', 'status', 'createdAt', 'lastEvaluated', 'actions'];
+  displayedColumns: string[] = ['url', 'status', 'createdAt', 'lastEvaluated'];
   dataSource = new MatTableDataSource<Page>([]);
 
   constructor(private route: ActivatedRoute,
