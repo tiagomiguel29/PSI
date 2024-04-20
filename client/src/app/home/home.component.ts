@@ -4,6 +4,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { WebsiteService } from '../services/website.service';
 import { Router } from '@angular/router';
 import { ViewEncapsulation } from '@angular/core';
+import { ValidatorFn, AbstractControl } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
@@ -29,15 +30,13 @@ import { ViewEncapsulation } from '@angular/core';
 })
 export class HomeComponent {
   url = new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(\\/[^\\s]*)?$')])
-  pageInput = new FormControl('', [Validators.pattern('^[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(\\/[^\\s]*)?$')])
-  firstStep: boolean;
-  pages: string[];
+  pageInput = new FormControl('', [Validators.pattern('^[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(\\/[^\\s]*)?$'), this.subpageValidator()])
+  pages: string[] = []
   currentStep = "stepOne"
 
 
   constructor(private websiteService: WebsiteService, private router: Router) {
-    this.firstStep = true
-    this.pages = []
+
   }
 
   ngOnInit() {
@@ -55,7 +54,6 @@ export class HomeComponent {
   }
 
   previousStep() {
-    this.firstStep = true
     this.currentStep = "stepOne"
     this.url.reset()
     this.pages = []
@@ -64,11 +62,13 @@ export class HomeComponent {
   nextStep() {
     if (!this.url.valid) return
     this.currentStep = "stepTwo"
-    this.firstStep = false
   }
 
   removePage(page: string) {
     this.pages = this.pages.filter(p => p !== page)
+  }
+
+  onPageInput() {
   }
 
   addPage() {
@@ -81,6 +81,9 @@ export class HomeComponent {
     if (this.pages.includes(this.pageInput.value)) return // Check if input is already in the list
     this.pages = [...this.pages, 'https://' + this.pageInput.value]
     this.pageInput.reset()
+
+
+
   }
 
   done() {
@@ -96,4 +99,22 @@ export class HomeComponent {
         }
       });
   }
+
+
+  isSubPage(parent: string|null, page: string) {
+    if (!parent) return false
+
+    return page.startsWith(parent) && page !== parent && parent !== page + '/' && page !== parent + '/'
+  }
+
+  subpageValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+
+      if (control.value && !this.isSubPage(this.url.value, control.value)) {
+        return { invalidSubpage: true }
+      }
+      return null
+    };
+  }
+
 }

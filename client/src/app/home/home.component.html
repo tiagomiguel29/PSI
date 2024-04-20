@@ -34,11 +34,12 @@
       <form class="flex flex-col w-full space-x-1">
         <div class="w-full">
           <mat-form-field floatLabel="always" class="w-full">
-            <input matInput type="url" placeholder="" [formControl]="pageInput">
+            <input matInput type="url" placeholder="" [formControl]="pageInput" (input)="onPageInput()">
             <span matTextPrefix>https://&nbsp;</span>
             <mat-error *ngIf="pageInput.hasError('pattern') && !pageInput.hasError('requiredField')">Please enter a valid URL</mat-error>
             <mat-error *ngIf="pageInput.hasError('requiredField')">URL is <strong>required</strong></mat-error>
-
+            <mat-error *ngIf="pageInput.hasError('duplicate')">URL already added</mat-error>
+            <mat-error *ngIf="pageInput.hasError('invalidSubpage')">Page must be a subpage of the website URL provided</mat-error>
           </mat-form-field>
         </div>
         <div class="w-full flex flex-row justify-end">
