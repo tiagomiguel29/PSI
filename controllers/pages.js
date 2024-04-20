@@ -120,4 +120,4 @@ async function removePage(req, res) {
   }
 }
 
-module.exports = { createPage, getPage, getPages };
+module.exports = { createPage, getPage, removePage, getPages };
