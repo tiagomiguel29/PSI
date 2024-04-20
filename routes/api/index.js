@@ -9,5 +9,6 @@ router.get('/', (req, res) => {
 });
 
 router.use('/websites', require('./websites'));
+router.use('/pages', require('./pages'));
 
 module.exports = router;
