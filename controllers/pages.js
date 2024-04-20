@@ -4,18 +4,18 @@ const Page = require('../models/Page');
 const { validatePage } = require('../utils/validation/page');
 
 async function createPage(req, res) {
-  const { url, websiteId } = req.body;
-
-  const { error } = validatePage({ url, website: websiteId });
-
-  if (error) {
-    return res.status(400).json({
-      success: false,
-      errors: error.details.map((error) => error.message),
-    });
-  }
-
   try {
+    const { url, websiteId } = req.body;
+
+    const { error } = validatePage({ url, website: websiteId });
+
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        errors: error.details.map((error) => error.message),
+      });
+    }
+
     const website = await Website.findById(websiteId);
 
     if (!website) {
