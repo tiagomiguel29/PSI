@@ -40,6 +40,9 @@
         </div>
         <div>
             <div class="w-full md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto rounded-lg overflow-hidden shadow-lg mt-14">
+                <div class="flex justify-end flex-row items-center bg-white rounded-t-lg py-4 px-4">
+                    <button mat-flat-button color="primary" (click)="openDialog()">Add Page</button>
+                </div>
                 <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)" class="rounded-lg">
                     class="mat-elevation-z8">
 

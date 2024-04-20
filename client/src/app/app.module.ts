@@ -19,6 +19,8 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatChipsModule} from '@angular/material/chips';
 import { SkeletonModule } from 'primeng/skeleton';
 import {MatSelectModule} from '@angular/material/select';
+import {MatDialogModule} from '@angular/material/dialog';
+
 
 import {MatSortModule} from '@angular/material/sort';
 import {MatTableModule} from '@angular/material/table';
@@ -27,13 +29,15 @@ import { HomeComponent } from './home/home.component';
 import { WebsitesComponent } from './websites/websites.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { WebsiteDetailsComponent } from './website-details/website-details.component'
+import { AddPageDialog } from './website-details/website-details.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     WebsitesComponent,
-    WebsiteDetailsComponent
+    WebsiteDetailsComponent,
+    AddPageDialog
   ],
   imports: [
     BrowserModule,
@@ -56,6 +60,7 @@ import { WebsiteDetailsComponent } from './website-details/website-details.compo
     MatChipsModule,
     SkeletonModule,
     MatSelectModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]
