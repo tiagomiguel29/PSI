@@ -17,16 +17,6 @@ function validatePage(page) {
     throw new Error('Invalid URL');
   }
 
-  // Validate website as MongoDB ObjectId
-  if (
-    !joi
-      .string()
-      .regex(/^[0-9a-fA-F]{24}$/)
-      .test(page.website)
-  ) {
-    throw new Error('Invalid website ID');
-  }
-
   return pageSchema.validate(page);
 }
 
