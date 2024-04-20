@@ -7,15 +7,18 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Sort } from '@angular/material/sort';
+import { ValidatorFn, AbstractControl } from '@angular/forms';
+import { Validators } from '@angular/forms';
 
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { Inject } from '@angular/core';
 import { PagesService } from '../services/pages.service';
 import { MessageService } from 'primeng/api';
+import { FormControl } from '@angular/forms';
 
 export interface DialogData {
   websiteId: string;
-  pageUrl: string;
+  pageUrl: FormControl;
   onCloseSuccess: Function;
 }
 
@@ -28,7 +31,7 @@ export class WebsiteDetailsComponent {
   _id: string;
   website: any;
   pages: Page[] = [];
-  pageUrlToAdd: string = '';
+  pageUrlToAdd = new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(\\/[^\\s]*)?$'), this.subpageValidator()]);
 
   displayedColumns: string[] = ['url', 'status', 'createdAt', 'lastEvaluated'];
   dataSource = new MatTableDataSource<Page>([]);
@@ -86,9 +89,26 @@ export class WebsiteDetailsComponent {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.pageUrlToAdd = result;
+      this.pageUrlToAdd = new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(\\/[^\\s]*)?$'), this.subpageValidator()]);
     });
 
+  }
+
+  isSubPage(parent: string|null, page: string) {
+    const fullUrl = 'https://' + page
+    if (!parent) return false
+
+    return fullUrl.startsWith(parent) && fullUrl !== parent && parent !== fullUrl + '/' && fullUrl !== parent + '/'
+  }
+
+  subpageValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+
+      if (control.value && !this.isSubPage(this.website.url, control.value)) {
+        return { invalidSubpage: true }
+      }
+      return null
+    };
   }
 }
 
@@ -107,15 +127,17 @@ export class AddPageDialog {
   ) {}
 
   onAdd(): void {
+    if (this.data.pageUrl.invalid) return;
     if (this.data.pageUrl) {
       this.pagesService.createPage({
-        url: 'https://' + this.data.pageUrl,
+        url: 'https://' + this.data.pageUrl.value,
         websiteId: this.data.websiteId
       }).subscribe({
         next: (response) => {
           this.data.onCloseSuccess();
           this.messageService.add({severity:'success', summary:'Success', detail:'Page added successfully'});
           this.dialogRef.close();
+
 
         },
         error: (error) => {
