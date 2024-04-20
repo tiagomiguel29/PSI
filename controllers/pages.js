@@ -76,12 +76,14 @@ async function getPages(req, res) {
     const options = {
       limit: limit,
       sort: { [sort]: sortDirection },
+      skip: (page - 1) * limit,
     };
 
-    const pages = await Page.paginate(
-      websiteId ? { website: websiteId } : {},
-      options,
-    );
+    const pages = await Page.paginate(websiteId ? { website: websiteId } : {})
+      .populate('website')
+      .limit(options.limit)
+      .skip(options.skip)
+      .sort(options.sort);
 
     return res.status(200).json({
       success: true,
