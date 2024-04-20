@@ -20,6 +20,7 @@ import {MatChipsModule} from '@angular/material/chips';
 import { SkeletonModule } from 'primeng/skeleton';
 import {MatSelectModule} from '@angular/material/select';
 import {MatDialogModule} from '@angular/material/dialog';
+import { ToastModule } from 'primeng/toast';
 
 
 import {MatSortModule} from '@angular/material/sort';
@@ -30,6 +31,7 @@ import { WebsitesComponent } from './websites/websites.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { WebsiteDetailsComponent } from './website-details/website-details.component'
 import { AddPageDialog } from './website-details/website-details.component';
+import { MessageService } from 'primeng/api';
 
 @NgModule({
   declarations: [
@@ -60,9 +62,12 @@ import { AddPageDialog } from './website-details/website-details.component';
     MatChipsModule,
     SkeletonModule,
     MatSelectModule,
-    MatDialogModule
+    MatDialogModule,
+    ToastModule
   ],
-  providers: [],
+  providers: [
+    MessageService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

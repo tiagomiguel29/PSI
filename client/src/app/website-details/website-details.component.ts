@@ -11,6 +11,7 @@ import { Sort } from '@angular/material/sort';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { Inject } from '@angular/core';
 import { PagesService } from '../services/pages.service';
+import { MessageService } from 'primeng/api';
 
 export interface DialogData {
   websiteId: string;
@@ -101,7 +102,8 @@ export class AddPageDialog {
   constructor(
     public dialogRef: MatDialogRef<AddPageDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    private pagesService: PagesService
+    private pagesService: PagesService,
+    private messageService: MessageService,
   ) {}
 
   onAdd(): void {
@@ -112,11 +114,12 @@ export class AddPageDialog {
       }).subscribe({
         next: (response) => {
           this.data.onCloseSuccess();
-          this.dialogRef.close(response.page);
+          this.messageService.add({severity:'success', summary:'Success', detail:'Page added successfully'});
+          this.dialogRef.close();
 
         },
         error: (error) => {
-          console.error('Failed to add page:', error);
+          this.messageService.add({severity:'error', summary:'Error', detail:'Failed to add page'});
         }
       });
     }
