@@ -3,6 +3,7 @@
 <div id="first-step" class="flex items-center justify-center h-full flex-1 px-4" *ngIf="currentStep == 'stepOne'">
     <form class="flex flex-col items-center justify-center w-full md:w-3/4 lg:w-2/3 xl:w-1/2">
       <mat-form-field floatLabel="always" class="w-full">
+        <mat-label class="sr-only">Website URL to add</mat-label>
         <input matInput type="url" placeholder="" [formControl]="url">
         <span matTextPrefix>https://&nbsp;</span>
         <mat-error *ngIf="url.hasError('pattern') && !url.hasError('required')">Please enter a valid URL</mat-error>
