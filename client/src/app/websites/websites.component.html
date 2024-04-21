@@ -16,6 +16,9 @@
       </mat-select>
     </mat-form-field>
   </div>
+  <div class="overflow-x-scroll">
+
+
 <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)" class="rounded-lg">
        class="mat-elevation-z8">
 
@@ -107,6 +110,7 @@
 
 
 </table>
+</div>
 
 <mat-paginator [pageSizeOptions]="[5, 10, 20]"
                  showFirstLastButtons
