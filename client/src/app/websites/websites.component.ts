@@ -18,8 +18,8 @@ import { FormControl } from '@angular/forms';
 export class WebsitesComponent {
   websites: Website[] = [{}, {}, {}, {}, {}];
   pages!: number;
-  currentPage!: number;
-  limit!: number;
+  currentPage = 1;
+  limit = 5;
   isLoading = true;
   statusOptions: any[] = [
     { value: 'all', viewValue: 'All' },
@@ -55,7 +55,7 @@ export class WebsitesComponent {
 
     this.route.queryParamMap.subscribe(params => {
       this.currentPage = Number(params.get('page')) || 1;
-      this.limit = Number(params.get('limit')) || 10;
+      this.limit = Number(params.get('limit')) || 5;
 
       this.fetchWebsites(this.currentPage, this.limit);
     });
@@ -96,8 +96,7 @@ export class WebsitesComponent {
   ngOnInit() {
     this.currentPage =
       Number(this.route.snapshot.queryParamMap.get('page')) || 1;
-    this.limit = Number(this.route.snapshot.queryParamMap.get('limit')) || 10;
-    this.fetchWebsites(this.currentPage, this.limit);
+    this.limit = Number(this.route.snapshot.queryParamMap.get('limit')) || 5;
     this.statusFormControl.valueChanges.subscribe(value => {
       this.fetchWebsites(
         this.currentPage,
@@ -111,11 +110,12 @@ export class WebsitesComponent {
 
   fetchWebsites(
     page = 1,
-    limit = 10,
+    limit = 5,
     sort = 'createdAt',
     sortDirection = 'desc',
     status = 'all'
   ) {
+    console.log(limit);
     this.isLoading = true;
     this.websiteService
       .getWebsites(page, limit, sort, sortDirection, status)

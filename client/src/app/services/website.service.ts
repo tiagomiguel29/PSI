@@ -32,7 +32,7 @@ export class WebsiteService {
   // Get all websites
   getWebsites(
     page = 1,
-    limit = 10,
+    limit = 5,
     sort = 'createdAt',
     sortDirection = 'desc',
     status = 'all'
