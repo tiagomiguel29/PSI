@@ -1,4 +1,4 @@
-import { Page } from "./Page";
+import { Page } from './Page';
 
 export type Website = {
   _id?: string;

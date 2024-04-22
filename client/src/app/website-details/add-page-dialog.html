@@ -4,14 +4,22 @@
   <mat-form-field appearance="fill" class="w-full" floatLabel="always">
     <mat-label class="sr-only">Page to add</mat-label>
     <span matTextPrefix>https://&nbsp;</span>
-    <input matInput [formControl]="data.pageUrl">
-    <mat-error *ngIf="data.pageUrl.hasError('pattern') && !data.pageUrl.hasError('requiredField')">Please enter a valid URL</mat-error>
-    <mat-error *ngIf="data.pageUrl.hasError('requiredField')">URL is <strong>empty</strong></mat-error>
-    <mat-error *ngIf="data.pageUrl.hasError('invalidSubpage')">Page must be a subpage of the website</mat-error>
-
+    <input matInput [formControl]="data.pageUrl" />
+    <mat-error
+      *ngIf="data.pageUrl.hasError('pattern') && !data.pageUrl.hasError('requiredField')"
+      >Please enter a valid URL</mat-error
+    >
+    <mat-error *ngIf="data.pageUrl.hasError('requiredField')"
+      >URL is <strong>empty</strong></mat-error
+    >
+    <mat-error *ngIf="data.pageUrl.hasError('invalidSubpage')"
+      >Page must be a subpage of the website</mat-error
+    >
   </mat-form-field>
 </div>
 <div mat-dialog-actions>
   <button mat-flat-button (click)="onCancel()" color="warn">Cancel</button>
-  <button mat-flat-button (click)="onAdd()" cdkFocusInitial color="primary">Add</button>
+  <button mat-flat-button (click)="onAdd()" cdkFocusInitial color="primary">
+    Add
+  </button>
 </div>

@@ -1,96 +1,133 @@
 <section class="">
-    <div>
-        <div id="website-header" class="flex items-stretch flex-col grow shrink justify-start max-w-full">
-            <div class="max-w-screen mx-auto px-6 w-full md:w-3/4 lg:w-2/3 xl:w-1/2 bg-white rounded-md shadow-lg mt-14 py-4">
-                <div class="flex flex-col grow shrink justify-start max-w-full">
-                    <header>
-                        <div class="flex items-center">
-                            <div class="flex items-stretch basis-auto flex-col flex-grow-0 shrink justify-start gap-0 sm:w-auto w-full">
-
-                                <div class="flex items-stretch justify-start flex-col sm:flex-row shrink">
-                                    <div class="flex items-stretch basis-auto flex-col justify-start gap-x-0 flex-grow-0 shrink">
-                                        <div class="sm:mr-5 items-stretch flex basis-auto flex-col flex-grow-0 shrink justify-center">
-                                            <div class="flex items-stretch basis-auto flex-col flex-grow-0 shrink justify-center gap-y-0">
-                                                <div class="aspect-video overflow-hidden  flex basis-auto shrink-0 flex-grow-0 justify-center border-neutral-300 bg-neutral-300 transpa border-solid rounded-md border-2 p-0">
-                                                    <div class="flex justify-center items-center" >
-                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="w-full">
-                                                            <path d="M21.721 12.752a9.711 9.711 0 0 0-.945-5.003 12.754 12.754 0 0 1-4.339 2.708 18.991 18.991 0 0 1-.214 4.772 17.165 17.165 0 0 0 5.498-2.477ZM14.634 15.55a17.324 17.324 0 0 0 .332-4.647c-.952.227-1.945.347-2.966.347-1.021 0-2.014-.12-2.966-.347a17.515 17.515 0 0 0 .332 4.647 17.385 17.385 0 0 0 5.268 0ZM9.772 17.119a18.963 18.963 0 0 0 4.456 0A17.182 17.182 0 0 1 12 21.724a17.18 17.18 0 0 1-2.228-4.605ZM7.777 15.23a18.87 18.87 0 0 1-.214-4.774 12.753 12.753 0 0 1-4.34-2.708 9.711 9.711 0 0 0-.944 5.004 17.165 17.165 0 0 0 5.498 2.477ZM21.356 14.752a9.765 9.765 0 0 1-7.478 6.817 18.64 18.64 0 0 0 1.988-4.718 18.627 18.627 0 0 0 5.49-2.098ZM2.644 14.752c1.682.971 3.53 1.688 5.49 2.099a18.64 18.64 0 0 0 1.988 4.718 9.765 9.765 0 0 1-7.478-6.816ZM13.878 2.43a9.755 9.755 0 0 1 6.116 3.986 11.267 11.267 0 0 1-3.746 2.504 18.63 18.63 0 0 0-2.37-6.49ZM12 2.276a17.152 17.152 0 0 1 2.805 7.121c-.897.23-1.837.353-2.805.353-.968 0-1.908-.122-2.805-.353A17.151 17.151 0 0 1 12 2.276ZM10.122 2.43a18.629 18.629 0 0 0-2.37 6.49 11.266 11.266 0 0 1-3.746-2.504 9.754 9.754 0 0 1 6.116-3.985Z" />
-                                                          </svg>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="flex items-stretch justify-start flex-col basis-auto flex-grow flex-shrink gap-x-6 gap-y-6">
-                                        <div class="flex items-stretch flex-col sm:flex-row flex-grow-0 shrink justify-between gap-x-0 pt-1">
-                                            <p class="text-xl font-bold text-gray-900 sm:text-2xl">Website Details</p>
-                                            <mat-chip class="w-fit">
-                                                <span class="text-sm font-medium text-white px-2 py-1">{{website.status}}</span>
-                                            </mat-chip>
-                                        </div>
-                                        <p class="text-sm font-medium text-gray-600"><span class="font-bold">URL: </span>{{website.url}}</p>
-                                    </div>
-                                </div>
-                            </div>
+  <div>
+    <div
+      id="website-header"
+      class="flex items-stretch flex-col grow shrink justify-start max-w-full">
+      <div
+        class="max-w-screen mx-auto px-6 w-full md:w-3/4 lg:w-2/3 xl:w-1/2 bg-white rounded-md shadow-lg mt-14 py-4">
+        <div class="flex flex-col grow shrink justify-start max-w-full">
+          <header>
+            <div class="flex items-center">
+              <div
+                class="flex items-stretch basis-auto flex-col flex-grow-0 shrink justify-start gap-0 sm:w-auto w-full">
+                <div
+                  class="flex items-stretch justify-start flex-col sm:flex-row shrink">
+                  <div
+                    class="flex items-stretch basis-auto flex-col justify-start gap-x-0 flex-grow-0 shrink">
+                    <div
+                      class="sm:mr-5 items-stretch flex basis-auto flex-col flex-grow-0 shrink justify-center">
+                      <div
+                        class="flex items-stretch basis-auto flex-col flex-grow-0 shrink justify-center gap-y-0">
+                        <div
+                          class="aspect-video overflow-hidden flex basis-auto shrink-0 flex-grow-0 justify-center border-neutral-300 bg-neutral-300 transpa border-solid rounded-md border-2 p-0">
+                          <div class="flex justify-center items-center">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="white"
+                              class="w-full">
+                              <path
+                                d="M21.721 12.752a9.711 9.711 0 0 0-.945-5.003 12.754 12.754 0 0 1-4.339 2.708 18.991 18.991 0 0 1-.214 4.772 17.165 17.165 0 0 0 5.498-2.477ZM14.634 15.55a17.324 17.324 0 0 0 .332-4.647c-.952.227-1.945.347-2.966.347-1.021 0-2.014-.12-2.966-.347a17.515 17.515 0 0 0 .332 4.647 17.385 17.385 0 0 0 5.268 0ZM9.772 17.119a18.963 18.963 0 0 0 4.456 0A17.182 17.182 0 0 1 12 21.724a17.18 17.18 0 0 1-2.228-4.605ZM7.777 15.23a18.87 18.87 0 0 1-.214-4.774 12.753 12.753 0 0 1-4.34-2.708 9.711 9.711 0 0 0-.944 5.004 17.165 17.165 0 0 0 5.498 2.477ZM21.356 14.752a9.765 9.765 0 0 1-7.478 6.817 18.64 18.64 0 0 0 1.988-4.718 18.627 18.627 0 0 0 5.49-2.098ZM2.644 14.752c1.682.971 3.53 1.688 5.49 2.099a18.64 18.64 0 0 0 1.988 4.718 9.765 9.765 0 0 1-7.478-6.816ZM13.878 2.43a9.755 9.755 0 0 1 6.116 3.986 11.267 11.267 0 0 1-3.746 2.504 18.63 18.63 0 0 0-2.37-6.49ZM12 2.276a17.152 17.152 0 0 1 2.805 7.121c-.897.23-1.837.353-2.805.353-.968 0-1.908-.122-2.805-.353A17.151 17.151 0 0 1 12 2.276ZM10.122 2.43a18.629 18.629 0 0 0-2.37 6.49 11.266 11.266 0 0 1-3.746-2.504 9.754 9.754 0 0 1 6.116-3.985Z" />
+                            </svg>
+                          </div>
                         </div>
-                    </header>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="flex items-stretch justify-start flex-col basis-auto flex-grow flex-shrink gap-x-6 gap-y-6">
+                    <div
+                      class="flex items-stretch flex-col sm:flex-row flex-grow-0 shrink justify-between gap-x-0 pt-1">
+                      <p class="text-xl font-bold text-gray-900 sm:text-2xl">
+                        Website Details
+                      </p>
+                      <mat-chip class="w-fit">
+                        <span
+                          class="text-sm font-medium text-white px-2 py-1"
+                          >{{ website.status }}</span
+                        >
+                      </mat-chip>
+                    </div>
+                    <p class="text-sm font-medium text-gray-600">
+                      <span class="font-bold">URL: </span>{{ website.url }}
+                    </p>
+                  </div>
                 </div>
+              </div>
             </div>
+          </header>
         </div>
-        <div>
-            <div class="w-full md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto rounded-lg overflow-hidden shadow-lg mt-14">
-                <div class="flex justify-end flex-row items-center bg-white rounded-t-lg py-4 px-4">
-                    <button mat-flat-button color="primary" (click)="openDialog()">Add Page</button>
-                </div>
-                <div class="overflow-x-scroll">
-                <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)" class="rounded-lg">
-                    class="mat-elevation-z8">
-
-               <!-- Position Column -->
-               <ng-container matColumnDef="url">
-                 <th mat-header-cell *matHeaderCellDef>
-                   URL
-                 </th>
-                 <td mat-cell *matCellDef="let element"> {{element.url}} </td>
-               </ng-container>
-
-               <!-- Name Column -->
-               <ng-container matColumnDef="status">
-                 <th mat-header-cell *matHeaderCellDef>
-                     Status
-                 </th>
-                 <td mat-cell *matCellDef="let element"> {{element.status}} </td>
-               </ng-container>
-
-               <!-- Weight Column -->
-               <ng-container matColumnDef="lastEvaluated">
-                 <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by weight">
-                     Last Evaluated
-                 </th>
-                 <td mat-cell *matCellDef="let element"> {{element.lastEvaluated | date:'MMM d, y, h:mm:ss a' }} </td>
-               </ng-container>
-
-               <!-- Symbol Column -->
-               <ng-container matColumnDef="createdAt">
-                 <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by symbol">
-                     Date Added
-                 </th>
-                 <td mat-cell *matCellDef="let element"> {{ element.createdAt | date:'MMM d, y, h:mm:ss a' }} </td>
-               </ng-container>
-
-               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-               <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-
-             </table>
-            </div>
-             <mat-paginator [pageSizeOptions]="[5, 10, 20]"
-                              showFirstLastButtons
-                              aria-label="Select page of periodic elements">
-               </mat-paginator>
-            </div>
-        </div>
+      </div>
     </div>
+    <div>
+      <div
+        class="w-full md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto rounded-lg overflow-hidden shadow-lg mt-14">
+        <div
+          class="flex justify-end flex-row items-center bg-white rounded-t-lg py-4 px-4">
+          <button mat-flat-button color="primary" (click)="openDialog()">
+            Add Page
+          </button>
+        </div>
+        <div class="overflow-x-scroll">
+          <table
+            mat-table
+            [dataSource]="dataSource"
+            matSort
+            (matSortChange)="announceSortChange($event)"
+            class="rounded-lg">
+            class="mat-elevation-z8">
+
+            <!-- Position Column -->
+            <ng-container matColumnDef="url">
+              <th mat-header-cell *matHeaderCellDef>URL</th>
+              <td mat-cell *matCellDef="let element">{{ element.url }}</td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let element">{{ element.status }}</td>
+            </ng-container>
+
+            <!-- Weight Column -->
+            <ng-container matColumnDef="lastEvaluated">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                sortActionDescription="Sort by weight">
+                Last Evaluated
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.lastEvaluated | date: 'MMM d, y, h:mm:ss a' }}
+              </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="createdAt">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                sortActionDescription="Sort by symbol">
+                Date Added
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.createdAt | date: 'MMM d, y, h:mm:ss a' }}
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+        </div>
+        <mat-paginator
+          [pageSizeOptions]="[5, 10, 20]"
+          showFirstLastButtons
+          aria-label="Select page of periodic elements">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
 </section>
 <p-toast></p-toast>
