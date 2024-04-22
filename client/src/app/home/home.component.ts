@@ -11,6 +11,7 @@ import { WebsiteService } from '../services/website.service';
 import { Router } from '@angular/router';
 import { ViewEncapsulation } from '@angular/core';
 import { ValidatorFn, AbstractControl } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-home',
@@ -48,7 +49,8 @@ export class HomeComponent {
 
   constructor(
     private websiteService: WebsiteService,
-    private router: Router
+    private router: Router,
+    private messageService: MessageService,
   ) {}
 
   ngOnInit() {
@@ -101,12 +103,20 @@ export class HomeComponent {
       .createWebsite('https://' + this.url.value, this.pages)
       .subscribe({
         next: website => {
-          // TODO: Handle the response
-
+          console.log(website);
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Website created successfully',
+          });
           this.router.navigate(['/websites/', website._id]);
         },
         error: error => {
-          // TODO: Handle the error
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Error in creating website',
+          });
         },
       });
   }
