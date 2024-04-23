@@ -7,4 +7,5 @@ export type Website = {
   status?: string;
   lastEvaluated?: string;
   pages?: Page[];
+  imageUrl?: string;
 };

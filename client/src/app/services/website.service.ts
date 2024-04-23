@@ -19,6 +19,7 @@ interface WebsiteResponse {
   success: boolean;
   website: Website;
   pages: Page[];
+  imageUrl?: string;
 }
 
 @Injectable({
@@ -58,7 +59,7 @@ export class WebsiteService {
     return this.http.get<WebsiteResponse>(`${this.baseUrl}/${id}`).pipe(
       map(response => {
         if (response.success) {
-          return { ...response.website, pages: response.pages };
+          return { ...response.website, pages: response.pages, imageUrl: response.imageUrl};
         } else {
           throw new Error('Failed to load website');
         }
