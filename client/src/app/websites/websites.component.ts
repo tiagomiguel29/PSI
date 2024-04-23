@@ -21,6 +21,8 @@ export class WebsitesComponent {
   currentPage = 1;
   limit = 5;
   isLoading = true;
+  sort = 'createdAt';
+  sortDirection = 'desc';
   statusOptions: any[] = [
     { value: 'all', viewValue: 'All' },
     { value: 'Por avaliar', viewValue: 'Por avaliar' },
@@ -46,18 +48,20 @@ export class WebsitesComponent {
     private router: Router
   ) {}
 
-  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatSort) sortComponent!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
+    this.dataSource.sort = this.sortComponent;
     this.dataSource.paginator = this.paginator;
 
     this.route.queryParamMap.subscribe(params => {
       this.currentPage = Number(params.get('page')) || 1;
       this.limit = Number(params.get('limit')) || 5;
+      this.sort = params.get('sort') || 'createdAt';
+      this.sortDirection = params.get('sortDirection') || 'desc';
 
-      this.fetchWebsites(this.currentPage, this.limit);
+      this.fetchWebsites(this.currentPage, this.limit, this.sort, this.sortDirection)
     });
 
     this.paginator.page.subscribe(() => {
@@ -66,6 +70,14 @@ export class WebsitesComponent {
 
       this.updateQueryParams();
       this.fetchWebsites(this.currentPage, this.limit);
+    });
+
+    this.sortComponent.sortChange.subscribe((sortState: Sort) => {
+      this.sort = sortState.active || 'createdAt';
+      this.sortDirection = sortState.direction || 'desc';
+      console.log(this.sort, this.sortDirection)
+
+      this.updateQueryParams();
     });
   }
 
@@ -83,11 +95,14 @@ export class WebsitesComponent {
   }
 
   updateQueryParams() {
+    console.log(this.sort, this.sortDirection)
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
         page: this.paginator.pageIndex + 1,
         limit: this.paginator.pageSize,
+        sort: this.sort,
+        sortDirection: this.sortDirection
       },
       queryParamsHandling: 'merge', // Merge with existing query params
     });
@@ -115,7 +130,6 @@ export class WebsitesComponent {
     sortDirection = 'desc',
     status = 'all'
   ) {
-    console.log(limit);
     this.isLoading = true;
     this.websiteService
       .getWebsites(page, limit, sort, sortDirection, status)
