@@ -35,7 +35,7 @@
                     </div>
                   </div>
                   <div
-                    class="flex items-stretch justify-start flex-col basis-auto flex-grow flex-shrink gap-x-6 gap-y-6">
+                    class="flex items-stretch justify-start flex-col basis-auto flex-grow flex-shrink gap-x-6 gap-y-3">
                     <div
                       class="flex items-stretch flex-col sm:flex-row justify-between pt-1">
                       <p class="text-xl font-bold text-gray-900 sm:text-2xl">
@@ -50,6 +50,13 @@
                     </div>
                     <p class="text-sm font-medium text-gray-600">
                       <span class="font-bold">URL: </span>{{ website.url }}
+                    </p>
+                    <p class="text-sm font-medium text-gray-600">
+                      <span class="font-bold">Created at: </span>{{ website.createdAt | date: 'MMM d, y, h:mm:ss a' }}
+                    </p>
+                    <p class="text-sm font-medium text-gray-600">
+                      <span class="font-bold">Last Evaluation: </span>{{ website.lastEvaluated ? (website.lastEvaluated | date: 'MMM d, y, h:mm:ss a') : 'Not evaluated yet' }}
+
                     </p>
                   </div>
                 </div>
