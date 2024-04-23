@@ -1,6 +1,8 @@
 const Website = require('../models/Website');
 const Page = require('../models/Page');
 const { validateWebsite } = require('../utils/validation/website');
+const { binaryScreenshot } = require('../services/puppeteer');
+const { uploadFile, generateLink } = require('../services/s3');
 
 async function createWebsite(req, res) {
   const { url, pages } = req.body;
@@ -30,10 +32,23 @@ async function createWebsite(req, res) {
       }
     }
 
+    const websiteScreenShot = await binaryScreenshot(url);
+
+    if (websiteScreenShot) {
+      await uploadFile(
+        websiteScreenShot,
+        `psi/websites/${newWebsite._id}.png`,
+        'image/png',
+      );
+    }
+
+    const signedUrl = await generateLink(`psi/websites/${newWebsite._id}.png`);
+
     return res.status(201).json({
       success: true,
       website: newWebsite,
       pages: pageDocs,
+      signedUrl,
     });
   } catch (error) {
     return res.status(500).json({
@@ -58,10 +73,13 @@ async function getWebsite(req, res) {
 
     const pages = await Page.find({ website: website._id });
 
+    const imageUrl = await generateLink(`psi/websites/${website._id}.png`);
+
     return res.status(200).json({
       success: true,
       website,
       pages,
+      imageUrl,
     });
   } catch (error) {
     return res.status(500).json({
