@@ -2,7 +2,13 @@ const puppeteer = require('puppeteer');
 
 async function binaryScreenshot(url) {
   try {
-    const browser = await puppeteer.launch();
+    const options = {
+      headless: true,
+      ignoreHTTPSErrors: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    };
+
+    const browser = await puppeteer.launch(options);
     const page = await browser.newPage();
     await page.setViewport({
       width: 1728,
