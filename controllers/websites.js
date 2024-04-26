@@ -3,6 +3,7 @@ const Page = require('../models/Page');
 const { validateWebsite } = require('../utils/validation/website');
 const { binaryScreenshot } = require('../services/puppeteer');
 const { uploadFile, generateLink } = require('../services/s3');
+const { evaluate } = require('../services/qualweb');
 
 async function createWebsite(req, res) {
   const { url, pages } = req.body;
@@ -151,9 +152,39 @@ async function removeWebsite(req, res) {
   }
 }
 
+async function evaluateWebsite(req, res) {
+  const { id } = req.params;
+
+  try {
+    const website = await Website.findById(id);
+
+    if (!website) {
+      return res.status(404).json({
+        success: false,
+        message: 'Website not found',
+      });
+    }
+
+    const results = await evaluate(website.url);
+
+    console.log(results);
+
+    return res.status(200).json({
+      success: true,
+      results,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
+
 module.exports = {
   createWebsite,
   getWebsite,
   getWebsites,
   removeWebsite,
+  evaluateWebsite,
 };
