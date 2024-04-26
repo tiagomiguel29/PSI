@@ -1,4 +1,4 @@
-const { uploadFile } = require('./s3');
+const { uploadFile, generateLink } = require('./s3');
 const { binaryScreenshot } = require('./puppeteer');
 
 async function captureAndUpload(url, key, website) {
@@ -12,7 +12,7 @@ async function captureAndUpload(url, key, website) {
     if (screenshot) {
       await uploadFile(screenshot, key, 'image/png');
 
-      website.previewImage = key;
+      website.previewImage = generateLink(key);
       website.previewImageStatus = 'Captured';
 
       await website.save();
