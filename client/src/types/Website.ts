@@ -5,6 +5,8 @@ export type Website = {
   url?: string;
   createdAt?: string;
   status?: string;
+  previewImage?: string;
+  previewImageStatus?: string;
   lastEvaluated?: string;
   pages?: Page[];
   imageUrl?: string;

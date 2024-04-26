@@ -21,7 +21,7 @@
                         <div
                           class="aspect-video overflow-hidden flex basis-auto shrink-0 flex-grow-0 justify-center border-neutral-300 bg-neutral-300 dark:border-gray-600 dark:bg-gray-600 border-solid rounded-md border-2 p-0">
 
-                            <div *ngIf="website.imageUrl" class="w-full h-full sm:max-w-96">
+                            <div *ngIf="!imageLoading" class="w-full h-full sm:max-w-96">
                               <img
                                 src="{{ website.imageUrl }}"
                                 alt="Website screenshot image"
@@ -29,7 +29,7 @@
                               />
                             </div>
 
-                          <div *ngIf="!website.imageUrl" class="flex justify-center items-center" >
+                          <div *ngIf="imageLoading" class="flex justify-center items-center" >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               viewBox="0 0 24 24"

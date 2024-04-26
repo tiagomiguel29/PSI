@@ -35,6 +35,8 @@ export class WebsiteDetailsComponent {
   _id: string;
   website: any;
   pages: Page[] = [];
+  imageUrl?: string = '';
+  imageLoading: boolean = true;
   pageUrlToAdd = new FormControl('', [
     Validators.required,
     Validators.pattern('^[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(\\/[^\\s]*)?$'),
@@ -75,6 +77,12 @@ export class WebsiteDetailsComponent {
         this.website = website;
         this.pages = website.pages || [];
         this.dataSource = new MatTableDataSource<Page>(website.pages);
+        if (website.previewImageStatus === 'Captured') {
+          this.imageUrl = website.imageUrl;
+          this.imageLoading = false;
+        } else {
+          this.imageLoading = true;
+        }
       },
       error: error => {
         console.error('Error fetching website:', error);
