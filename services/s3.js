@@ -20,7 +20,6 @@ const s3 = new S3Client({
 
 // Upload file to S3
 async function uploadFile(file, key, info) {
-  console.log('Uploading file to S3...');
   try {
     const params = {
       Bucket: process.env.AWS_BUCKET_NAME,
@@ -70,7 +69,7 @@ async function deleteFile(key) {
   }
 }
 
-async function generateLink(objectKey) {
+function generateLink(objectKey) {
   return `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${objectKey}`;
 
   /*
