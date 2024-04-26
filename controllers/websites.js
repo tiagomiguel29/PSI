@@ -34,7 +34,7 @@ async function createWebsite(req, res) {
       }
     }
 
-    captureAndUpload(url, `psi/websites/${newWebsite._id}.png`);
+    captureAndUpload(url, `psi/websites/${newWebsite._id}.png`, newWebsite);
 
     const signedUrl = await generateLink(`psi/websites/${newWebsite._id}.png`);
 

@@ -15,6 +15,15 @@ const WebsiteSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+    previewImage: {
+      type: String,
+      default: null,
+    },
+    previewImageStatus: {
+      type: String,
+      enum: ['Not captured', 'Capturing', 'Captured', 'Error'],
+      default: 'Not captured',
+    },
   },
   {
     timestamps: true,
