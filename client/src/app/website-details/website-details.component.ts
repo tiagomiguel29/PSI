@@ -78,7 +78,6 @@ export class WebsiteDetailsComponent {
       },
       error: error => {
         console.error('Error fetching website:', error);
-        // You might want to handle errors better, e.g., displaying a message to the user
       },
     });
   }
