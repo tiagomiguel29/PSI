@@ -4,6 +4,7 @@ const { validateWebsite } = require('../utils/validation/website');
 const { binaryScreenshot } = require('../services/puppeteer');
 const { uploadFile, generateLink } = require('../services/s3');
 const { evaluate } = require('../services/qualweb');
+const { captureAndUpload } = require('../services/integrations');
 
 async function createWebsite(req, res) {
   const { url, pages } = req.body;
@@ -33,15 +34,7 @@ async function createWebsite(req, res) {
       }
     }
 
-    const websiteScreenShot = await binaryScreenshot(url);
-
-    if (websiteScreenShot) {
-      await uploadFile(
-        websiteScreenShot,
-        `psi/websites/${newWebsite._id}.png`,
-        'image/png',
-      );
-    }
+    captureAndUpload(url, `psi/websites/${newWebsite._id}.png`);
 
     const signedUrl = await generateLink(`psi/websites/${newWebsite._id}.png`);
 
