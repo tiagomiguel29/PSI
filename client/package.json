@@ -7,7 +7,8 @@
     "build": "ng build --configuration=$ANGULAR_CONFIGURATION",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "startProd": "ng serve --port 3018 --host 0.0.0.0 --disable-host-check true --configuration=prodapp"
   },
   "private": true,
   "dependencies": {
