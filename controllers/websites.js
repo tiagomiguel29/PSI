@@ -1,8 +1,7 @@
 const Website = require('../models/Website');
 const Page = require('../models/Page');
 const { validateWebsite } = require('../utils/validation/website');
-const { binaryScreenshot } = require('../services/puppeteer');
-const { uploadFile, generateLink } = require('../services/s3');
+const { generateLink } = require('../services/s3');
 const { evaluate } = require('../services/qualweb');
 const { captureAndUpload } = require('../services/integrations');
 
