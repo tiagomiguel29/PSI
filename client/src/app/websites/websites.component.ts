@@ -23,6 +23,7 @@ export class WebsitesComponent {
   isLoading = true;
   sort = 'createdAt';
   sortDirection = 'desc';
+  status = 'all';
   statusOptions: any[] = [
     { value: 'all', viewValue: 'All' },
     { value: 'Por avaliar', viewValue: 'Por avaliar' },
@@ -30,7 +31,7 @@ export class WebsitesComponent {
     { value: 'Avaliado', viewValue: 'Avaliado' },
     { value: 'Erro na avaliação', viewValue: 'Erro na avaliação' },
   ];
-  statusFormControl = new FormControl();
+  statusFormControl = new FormControl('all');
 
   displayedColumns: string[] = [
     'url',
@@ -52,16 +53,23 @@ export class WebsitesComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngAfterViewInit() {
-    this.dataSource.sort = this.sortComponent;
-    this.dataSource.paginator = this.paginator;
-
     this.route.queryParamMap.subscribe(params => {
       this.currentPage = Number(params.get('page')) || 1;
       this.limit = Number(params.get('limit')) || 5;
       this.sort = params.get('sort') || 'createdAt';
       this.sortDirection = params.get('sortDirection') || 'desc';
-
-      this.fetchWebsites(this.currentPage, this.limit, this.sort, this.sortDirection)
+      this.paginator.pageSize = this.limit;
+      this.paginator.pageIndex = this.currentPage - 1;
+      this.status = params.get('status') || 'all';
+      this.statusFormControl = params.get('status') ? new FormControl(params.get('status')) : new FormControl('all');
+      this.statusFormControl.valueChanges.subscribe(value => {
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: { status: value },
+          queryParamsHandling: 'merge',
+        });
+      });
+      this.fetchWebsites(this.currentPage, this.limit, this.sort, this.sortDirection, this.status);
     });
 
     this.paginator.page.subscribe(() => {
@@ -75,7 +83,6 @@ export class WebsitesComponent {
     this.sortComponent.sortChange.subscribe((sortState: Sort) => {
       this.sort = sortState.active || 'createdAt';
       this.sortDirection = sortState.direction || 'desc';
-      console.log(this.sort, this.sortDirection)
 
       this.updateQueryParams();
     });
@@ -95,14 +102,14 @@ export class WebsitesComponent {
   }
 
   updateQueryParams() {
-    console.log(this.sort, this.sortDirection)
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
         page: this.paginator.pageIndex + 1,
         limit: this.paginator.pageSize,
         sort: this.sort,
-        sortDirection: this.sortDirection
+        sortDirection: this.sortDirection,
+        status: this.statusFormControl.value
       },
       queryParamsHandling: 'merge', // Merge with existing query params
     });
@@ -112,14 +119,22 @@ export class WebsitesComponent {
     this.currentPage =
       Number(this.route.snapshot.queryParamMap.get('page')) || 1;
     this.limit = Number(this.route.snapshot.queryParamMap.get('limit')) || 5;
+    this.sort = this.route.snapshot.queryParamMap.get('sort') || 'createdAt';
+    this.sortDirection =
+      this.route.snapshot.queryParamMap.get('sortDirection') || 'desc';
+    this.status = this.route.snapshot.queryParamMap.get('status') || 'all';
+    this.statusFormControl = this.route.snapshot.queryParamMap.get('status')
+      ? new FormControl(this.route.snapshot.queryParamMap.get('status'))
+      : new FormControl('all');
+    this.paginator.pageSize = this.limit;
+    this.paginator.pageIndex = this.currentPage - 1;
+
     this.statusFormControl.valueChanges.subscribe(value => {
-      this.fetchWebsites(
-        this.currentPage,
-        this.limit,
-        'createdAt',
-        'desc',
-        value
-      );
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { status: value },
+        queryParamsHandling: 'merge',
+      });
     });
   }
 
