@@ -1,7 +1,7 @@
 const Website = require('../models/Website');
 const Page = require('../models/Page');
 
-const { isMongoId } = require('../utils/validation/common');
+const { isMongoId, isSubPage } = require('../utils/validation/common');
 const { validatePage } = require('../utils/validation/page');
 
 async function createPage(req, res) {
@@ -34,6 +34,13 @@ async function createPage(req, res) {
       return res.status(404).json({
         success: false,
         message: 'Website not found',
+      });
+    }
+
+    if (!isSubPage(website.url, url)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Page is not a subpage of the website',
       });
     }
 

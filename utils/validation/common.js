@@ -22,4 +22,26 @@ function isURL(value, helpers) {
   return value;
 }
 
-module.exports = { isMongoId, isURL };
+function isSubPage(parentUrl, childUrl) {
+  try {
+    const parent = new URL(parentUrl);
+    const child = new URL(childUrl);
+
+    if (child.origin !== parent.origin) {
+      return false;
+    }
+
+    const parentPath = parent.pathname.endsWith('/')
+      ? parent.pathname.slice(0, -1)
+      : parent.pathname;
+    const childPath = child.pathname.endsWith('/')
+      ? child.pathname.slice(0, -1)
+      : child.pathname;
+
+    return childPath.startsWith(parentPath);
+  } catch (error) {
+    return false;
+  }
+}
+
+module.exports = { isMongoId, isURL, isSubPage };

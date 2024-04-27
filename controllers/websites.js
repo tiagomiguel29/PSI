@@ -4,7 +4,7 @@ const { validateWebsite } = require('../utils/validation/website');
 const { generateLink } = require('../services/s3');
 const { evaluate } = require('../services/qualweb');
 const { captureAndUpload } = require('../services/integrations');
-const { isMongoId } = require('../utils/validation/common');
+const { isMongoId, isSubPage } = require('../utils/validation/common');
 const { validatePage } = require('../utils/validation/page');
 
 async function createWebsite(req, res) {
@@ -73,10 +73,18 @@ async function addPages(req, res) {
       if (error) {
         return res.status(400).json({
           success: false,
+          message: 'Invalid page data',
           errors: error.details.map((error) => ({
             field: error.context.key,
             message: error.message,
           })),
+        });
+      }
+
+      if (!isSubPage(website.url, page)) {
+        return res.status(400).json({
+          success: false,
+          message: 'All pages must be subpages of the website URL',
         });
       }
 
