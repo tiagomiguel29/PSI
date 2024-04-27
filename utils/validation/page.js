@@ -3,9 +3,14 @@ const joi = require('joi');
 const { isMongoId, isURL } = require('./common');
 
 const pageSchema = joi.object({
-  // Use isURL to validate the url and apply custom error messages
-  url: joi.string().custom(isURL).message('Invalid URL').required(),
-  website: joi.string().custom(isMongoId).required(),
+  url: joi.string().custom(isURL).required().messages({
+    'any.required': 'URL is required',
+    'any.invalid': 'Invalid URL',
+  }),
+  website: joi.string().custom(isMongoId).required().messages({
+    'any.required': 'Website ID is required',
+    'any.invalid': 'Invalid Website ID',
+  }),
 });
 
 function validatePage(page) {
