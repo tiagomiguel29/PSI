@@ -49,7 +49,7 @@
         </div>
       </div>
       <div
-        class="mt-12 border-white border-solid border-2 px-4 py-4 mb-12 rounded-lg">
+        class="mt-12 bg-white dark:bg-gray-800 px-4 py-4 mb-12 rounded-lg shadow-lg">
         <form class="flex flex-col w-full space-x-1">
           <div class="w-full">
             <mat-form-field floatLabel="always" class="w-full">
@@ -59,7 +59,7 @@
                 placeholder=""
                 [formControl]="pageInput"
                 (input)="onPageInput()" />
-              <span matTextPrefix>https://&nbsp;</span>
+              <span matTextPrefix class="dark:text-zinc-400">https://&nbsp;</span>
               <mat-error
                 *ngIf="
                   pageInput.hasError('pattern') &&
@@ -89,25 +89,25 @@
     <mat-card>
       <mat-card-header>
         <mat-card-title>
-          <div class="px-4">Pages To Add</div>
+          <div class="px-4 dark:text-white">Pages To Add</div>
         </mat-card-title>
         <mat-card-subtitle>
           <div class="px-4">
-            You added {{ pages.length }}
+            You have {{ pages.length }}
             {{ pages.length != 1 ? 'pages' : 'page' }}
+            to be added
           </div>
         </mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <div *ngFor="let page of pages">
           <div class="py-8 px-4 flex items-center justify-between">
-            <span>{{ page }}</span>
+            <span class="dark:text-white">{{ page }}</span>
             <button mat-icon-button (click)="removePage(page)">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
-                fill="currentColor"
-                class="w-6 h-6">
+                class="w-6 h-6 dark:fill-white">
                 <path
                   fill-rule="evenodd"
                   d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
