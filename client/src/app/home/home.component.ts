@@ -46,6 +46,7 @@ export class HomeComponent {
   ]);
   pages: string[] = [];
   currentStep = 'stepOne';
+  wbesiteId?: string;
 
   constructor(
     private websiteService: WebsiteService,
@@ -73,11 +74,58 @@ export class HomeComponent {
     this.currentStep = 'stepOne';
     this.url.reset();
     this.pages = [];
+    this.wbesiteId = undefined;
   }
 
   nextStep() {
     if (!this.url.valid) return;
+    this.websiteService.createWebsite('https://' + this.url.value).subscribe({
+      next: response => {
+        if (response.success) {
+          this.wbesiteId = response.website._id;
+          this.currentStep = 'stepTwo';
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Website added successfully',
+          });
+        } else {
+          if (response.message) {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: response.message,
+            });
+            if (response.errors) {
+              response.errors.forEach((error: any) => {
+                if (error.field === 'url') {
+                  this.url.setErrors({ invalidUrl: true });
+                }
+              });
+            }
+          }
+        }
+      },
+      error: error => {
+        if (error.error.message) {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.error.message,
+          });
+        }
+
+        if (error.error.errors) {
+          error.error.errors.forEach((error: any) => {
+            if (error.field === 'url') {
+              this.url.setErrors({ invalidUrl: true });
+            }
+          });
+        }
+      },
+    });
     this.currentStep = 'stepTwo';
+
   }
 
   removePage(page: string) {
@@ -99,26 +147,39 @@ export class HomeComponent {
   }
 
   done() {
-    this.websiteService
-      .createWebsite('https://' + this.url.value, this.pages)
-      .subscribe({
-        next: website => {
-          console.log(website);
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Website created successfully',
-          });
-          this.router.navigate(['/websites/', website._id]);
+    if (this.pages.length === 0) this.router.navigate(['/websites/', this.wbesiteId]);
+
+    if (this.pages.length > 0) {
+      this.websiteService.addPagesToWebsite(this.wbesiteId!, this.pages).subscribe({
+        next: response => {
+          if (response.success) {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Pages added successfully',
+            });
+            this.router.navigate(['/websites/', this.wbesiteId]);
+          } else {
+            if (response.message) {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: response.message,
+              });
+            }
+          }
         },
         error: error => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Error in creating website',
-          });
+          if (error.error.message) {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: error.error.message,
+            });
+          }
         },
       });
+    }
   }
 
   isSubPage(parent: string | null, page: string) {

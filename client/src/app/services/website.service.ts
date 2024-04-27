@@ -18,8 +18,15 @@ interface WebsiteListResponse {
 interface WebsiteResponse {
   success: boolean;
   website: Website;
-  pages: Page[];
+  pages?: Page[];
   imageUrl?: string;
+  message?: string;
+  errors?: Error[];
+}
+
+interface Error {
+  field: string;
+  message: string;
 }
 
 @Injectable({
@@ -68,17 +75,20 @@ export class WebsiteService {
   }
 
   // Create a new website
-  createWebsite(url: string, pages: string[]): Observable<Website> {
+  createWebsite(url: string): Observable<WebsiteResponse> {
     return this.http
-      .post<WebsiteResponse>(`${this.baseUrl}/new`, { url, pages })
+      .post<WebsiteResponse>(`${this.baseUrl}/new`, { url })
       .pipe(
-        map(response => {
-          if (response.success) {
-            return response.website;
-          } else {
-            throw new Error('Failed to create website');
-          }
-        })
+        map(response => response)
+      );
+  }
+
+  // Add pages to a website
+  addPagesToWebsite(id: string, pages: string[]): Observable<WebsiteResponse> {
+    return this.http
+      .post<WebsiteResponse>(`${this.baseUrl}/${id}/addPages`, { pages })
+      .pipe(
+        map(response => response)
       );
   }
 
