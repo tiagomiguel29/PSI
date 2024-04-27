@@ -17,6 +17,7 @@ async function createWebsite(req, res) {
     if (error) {
       return res.status(400).json({
         success: false,
+        message: 'Invalid website data',
         errors: error.details.map((error) => ({
           field: error.context.key,
           message: error.message,
