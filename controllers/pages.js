@@ -1,7 +1,7 @@
 const Website = require('../models/Website');
 const Page = require('../models/Page');
 
-const { isMongoId, isSubPage } = require('../utils/validation/common');
+const { isMongoId, isSubPage, trimURL } = require('../utils/validation/common');
 const { validatePage } = require('../utils/validation/page');
 
 async function createPage(req, res) {
@@ -44,7 +44,7 @@ async function createPage(req, res) {
       });
     }
 
-    const page = await Page.create({ url, website: websiteId });
+    const page = await Page.create({ url: trimURL(url), website: websiteId });
 
     return res.status(201).json({
       success: true,

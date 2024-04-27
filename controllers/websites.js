@@ -4,14 +4,14 @@ const { validateWebsite } = require('../utils/validation/website');
 const { generateLink } = require('../services/s3');
 const { evaluate } = require('../services/qualweb');
 const { captureAndUpload } = require('../services/integrations');
-const { isMongoId, isSubPage } = require('../utils/validation/common');
+const { isMongoId, isSubPage, trimURL } = require('../utils/validation/common');
 const { validatePage } = require('../utils/validation/page');
 
 async function createWebsite(req, res) {
   const { url } = req.body;
 
   try {
-    const website = { url };
+    const website = { url: trimURL(url) };
     const { error } = validateWebsite(website);
 
     if (error) {
@@ -89,7 +89,7 @@ async function addPages(req, res) {
       }
 
       const newPage = await Page.create({
-        url: page,
+        url: trimURL(page),
         website: id,
       });
 

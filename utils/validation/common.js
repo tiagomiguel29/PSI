@@ -44,4 +44,16 @@ function isSubPage(parentUrl, childUrl) {
   }
 }
 
-module.exports = { isMongoId, isURL, isSubPage };
+function trimURL(url) {
+  if (!url) {
+    return url;
+  }
+
+  url = url.trim();
+
+  const trimmed = url.endsWith('/') ? url.slice(0, -1) : url;
+
+  return trimmed;
+}
+
+module.exports = { isMongoId, isURL, isSubPage, trimURL };
