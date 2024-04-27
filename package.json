@@ -19,7 +19,8 @@
     "joi": "^17.12.3",
     "mongoose": "^8.3.1",
     "morgan": "^1.10.0",
-    "puppeteer": "^21.3.6"
+    "puppeteer": "^21.3.6",
+    "validator": "^13.11.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
