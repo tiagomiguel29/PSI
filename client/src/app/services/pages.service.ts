@@ -2,12 +2,20 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
+import { response } from 'express';
 
 export interface Page {
   url: string;
   websiteId: string;
   _id?: string; // Optional, included when fetching or deleting
+}
+
+export interface PageResponse {
+  success: boolean;
+  page: Page;
+  message?: string;
+  errors?: Error[];
 }
 
 @Injectable({
@@ -18,11 +26,9 @@ export class PagesService {
 
   constructor(private http: HttpClient) {}
 
-  createPage(pageData: Page): Observable<any> {
-    return this.http.post(`${this.baseUrl}/new`, pageData).pipe(
-      catchError((error: any) => {
-        throw 'Error in creating page: ' + error;
-      })
+  createPage(pageData: Page): Observable<PageResponse> {
+    return this.http.post<PageResponse>(`${this.baseUrl}/new`, pageData).pipe(
+      map(response => response),
     );
   }
 

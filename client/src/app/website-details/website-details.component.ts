@@ -156,6 +156,7 @@ export class AddPageDialog {
         })
         .subscribe({
           next: response => {
+            if (response.success) {
             this.data.onCloseSuccess();
             this.messageService.add({
               severity: 'success',
@@ -163,12 +164,19 @@ export class AddPageDialog {
               detail: 'Page added successfully',
             });
             this.dialogRef.close();
+          } else {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: response.message || 'Failed to add page',
+            });
+          }
           },
           error: error => {
             this.messageService.add({
               severity: 'error',
               summary: 'Error',
-              detail: 'Failed to add page',
+              detail: error.error.message || 'Failed to add page',
             });
           },
         });
