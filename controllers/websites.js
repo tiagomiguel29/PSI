@@ -4,9 +4,11 @@ const { validateWebsite } = require('../utils/validation/website');
 const { generateLink } = require('../services/s3');
 const { evaluate } = require('../services/qualweb');
 const { captureAndUpload } = require('../services/integrations');
+const { isMongoId } = require('../utils/validation/common');
+const { validatePage } = require('../utils/validation/page');
 
 async function createWebsite(req, res) {
-  const { url, pages } = req.body;
+  const { url } = req.body;
 
   try {
     const website = { url };
@@ -21,27 +23,67 @@ async function createWebsite(req, res) {
 
     const newWebsite = await Website.create(website);
 
-    const pageDocs = [];
-
-    if (pages && pages.length > 0) {
-      for (const page of pages) {
-        const newPage = await Page.create({
-          url: page,
-          website: newWebsite._id,
-        });
-        pageDocs.push(newPage);
-      }
-    }
-
     captureAndUpload(url, `psi/websites/${newWebsite._id}.png`, newWebsite);
 
-    const signedUrl = await generateLink(`psi/websites/${newWebsite._id}.png`);
+    const signedUrl = generateLink(`psi/websites/${newWebsite._id}.png`);
 
     return res.status(201).json({
       success: true,
       website: newWebsite,
-      pages: pageDocs,
       signedUrl,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
+
+async function addPages(req, res) {
+  const { id } = req.params;
+  const { pages } = req.body;
+
+  try {
+    if (!isMongoId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid website ID',
+      });
+    }
+
+    const website = await Website.findById(id);
+
+    if (!website) {
+      return res.status(404).json({
+        success: false,
+        message: 'Website not found',
+      });
+    }
+
+    const pageDocs = [];
+
+    for (const page of pages) {
+      const { error } = validatePage({ url: page, website: id });
+
+      if (error) {
+        return res.status(400).json({
+          success: false,
+          errors: error.details.map((error) => error.message),
+        });
+      }
+
+      const newPage = await Page.create({
+        url: page,
+        website: id,
+      });
+
+      pageDocs.push(newPage);
+    }
+
+    return res.status(201).json({
+      success: true,
+      pages: pageDocs,
     });
   } catch (error) {
     return res.status(500).json({
@@ -175,6 +217,7 @@ async function evaluateWebsite(req, res) {
 
 module.exports = {
   createWebsite,
+  addPages,
   getWebsite,
   getWebsites,
   removeWebsite,
