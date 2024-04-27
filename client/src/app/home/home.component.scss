@@ -1,4 +1,4 @@
-div[[@slideInOut]] {
+div[data-slide-in-out] {
   overflow-x: hidden; /* Prevents scroll bar from appearing horizontally */
   position: relative;
   width: 100%;

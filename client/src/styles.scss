@@ -1,0 +1,268 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+// Plus imports for other components in your app.
+
+// Tailwind CSS Palette
+// Blue
+
+$tailwind-blue: (
+  50: #eff6ff,
+  100: #dbeafe,
+  200: #bfdbfe,
+  300: #93c5fd,
+  400: #60a5fa,
+  500: #3b82f6,
+  600: #2563eb,
+  700: #1d4ed8,
+  800: #1e40af,
+  900: #1e3a8a,
+  950: #172554,
+
+  contrast: (
+    50: #1e3a8a,
+    100: #1e3a8a,
+    200: #1e3a8a,
+    300: #1e3a8a,
+    400: #1e3a8a,
+    500: #1e3a8a,
+    600: #1e3a8a,
+    700: #1e3a8a,
+    800: #1e3a8a,
+    900: #1e3a8a,
+    950: #1e3a8a,
+  ),
+);
+
+// Slate
+
+$tailwind-slate: (
+  50: #f8fafc,
+  100: #f1f5f9,
+  200: #e2e8f0,
+  300: #cbd5e1,
+  400: #94a3b8,
+  500: #64748b,
+  600: #475569,
+  700: #334155,
+  800: #1e293b,
+  900: #0f172a,
+  950: #020617,
+
+  contrast: (
+    50: #64748b,
+    100: #64748b,
+    200: #64748b,
+    300: #64748b,
+    400: #64748b,
+    500: #64748b,
+    600: #64748b,
+    700: #64748b,
+    800: #64748b,
+    900: #64748b,
+    950: #64748b,
+  ),
+);
+
+// Gray
+
+$tailwind-gray: (
+  50: #f9fafb,
+  100: #f3f4f6,
+  200: #e5e7eb,
+  300: #d1d5db,
+  400: #9ca3af,
+  500: #6b7280,
+  600: #4b5563,
+  700: #374151,
+  800: #1f2937,
+  900: #111827,
+  950: #030712,
+
+  contrast: (
+    50: #6b7280,
+    100: #6b7280,
+    200: #6b7280,
+    300: #6b7280,
+    400: #6b7280,
+    500: #6b7280,
+    600: #6b7280,
+    700: #6b7280,
+    800: #6b7280,
+    900: #6b7280,
+    950: #6b7280,
+  ),
+);
+
+// Neutral
+
+$tailwind-neutral: (
+  50: #fafafa,
+  100: #f5f5f5,
+  200: #e5e5e5,
+  300: #d4d4d4,
+  400: #a3a3a3,
+  500: #737373,
+  600: #525252,
+  700: #404040,
+  800: #262626,
+  900: #171717,
+  950: #0a0a0a,
+
+  contrast: (
+    50: #737373,
+    100: #737373,
+    200: #737373,
+    300: #737373,
+    400: #737373,
+    500: #737373,
+    600: #737373,
+    700: #737373,
+    800: #737373,
+    900: #737373,
+    950: #737373,
+  ),
+);
+
+// Red
+
+$tailwind-red: (
+  50: #fef2f2,
+  100: #fee2e2,
+  200: #fecaca,
+  300: #fca5a5,
+  400: #f87171,
+  500: #ef4444,
+  600: #dc2626,
+  700: #b91c1c,
+  800: #991b1b,
+  900: #7f1d1d,
+  950: #450a0a,
+
+  contrast: (
+    50: #ef4444,
+    100: #ef4444,
+    200: #ef4444,
+    300: #ef4444,
+    400: #ef4444,
+    500: #ef4444,
+    600: #ef4444,
+    700: #ef4444,
+    800: #ef4444,
+    900: #ef4444,
+    950: #ef4444,
+  ),
+);
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$client-primary: mat.define-palette($tailwind-blue, 800);
+$client-accent: mat.define-palette(mat.$cyan-palette, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$client-warn: mat.define-palette($tailwind-red, 600);
+
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$client-theme: mat.define-light-theme((
+  color: (
+    primary: $client-primary,
+    accent: $client-accent,
+    warn: $client-warn,
+  )
+));
+
+$light-theme: mat.define-light-theme((
+  color: (
+    primary: $client-primary,
+    accent: $client-accent,
+    warn: $client-warn,
+
+  )
+));
+
+$dark-theme: mat.define-dark-theme((
+  color: (
+    primary: $client-primary,
+    accent: $client-accent,
+    warn: $client-warn,
+
+  )
+));
+
+@include mat.core-theme($dark-theme);
+@include mat.button-theme($dark-theme);
+@include mat.table-color($dark-theme);
+@include mat.all-component-themes($dark-theme);
+
+@media (prefers-color-scheme: light) {
+  @include mat.core-theme($light-theme);
+  @include mat.button-theme($light-theme);
+  @include mat.table-color($light-theme);
+  @include mat.all-component-themes($light-theme);
+}
+
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+//@include mat.all-component-themes($client-theme);
+
+/* You can add global styles to this file, and also import other style files */
+
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+
+
+@layer tailwind-base, primeng, tailwind-utilities;
+
+@layer tailwind-base {
+  @tailwind base;
+}
+
+@layer tailwind-utilities {
+  @tailwind components;
+  @tailwind utilities;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+app-home {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+@media (prefers-color-scheme: dark) {
+
+  * {
+    --mat-select-panel-background-color: #1f2937;
+  }
+
+  html,
+body {
+  --mdc-filled-text-field-container-color: #374151;
+}
+
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  --mdc-dialog-container-color: #1f2937;
+}
+}

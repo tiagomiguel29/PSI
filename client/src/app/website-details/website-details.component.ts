@@ -29,7 +29,7 @@ export interface DialogData {
 @Component({
   selector: 'app-website-details',
   templateUrl: './website-details.component.html',
-  styleUrls: ['./website-details.component.css'],
+  styleUrls: ['./website-details.component.scss'],
 })
 export class WebsiteDetailsComponent {
   _id: string;

@@ -13,7 +13,7 @@ import { FormControl } from '@angular/forms';
 @Component({
   selector: 'app-websites',
   templateUrl: './websites.component.html',
-  styleUrls: ['./websites.component.css'],
+  styleUrls: ['./websites.component.scss'],
 })
 export class WebsitesComponent {
   websites: Website[] = [{}, {}, {}, {}, {}];
