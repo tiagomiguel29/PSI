@@ -10,13 +10,17 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.556.0",
+    "@aws-sdk/s3-request-presigner": "^3.556.0",
     "@qualweb/core": "^0.7.69",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "joi": "^17.12.3",
     "mongoose": "^8.3.1",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "puppeteer": "^21.3.6",
+    "validator": "^13.11.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",

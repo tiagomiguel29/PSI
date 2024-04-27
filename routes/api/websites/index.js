@@ -5,6 +5,10 @@ const websitesControllers = require('../../../controllers/websites');
 
 router.post('/new', websitesControllers.createWebsite);
 
+router.get('/:id/evaluate', websitesControllers.evaluateWebsite);
+
+router.post('/:id/addPages', websitesControllers.addPages);
+
 router.get('/:id', websitesControllers.getWebsite);
 
 router.delete('/:id', websitesControllers.removeWebsite);

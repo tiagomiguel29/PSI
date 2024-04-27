@@ -1,16 +1,9 @@
 # Use the official Ubuntu base image
-FROM ubuntu:latest
+FROM ghcr.io/puppeteer/puppeteer:21.3.6
 
 # Set environment variables
 ENV NODE_VERSION 16
 ENV PORT 3000
-
-# Install dependencies
-RUN apt-get update && apt-get install -y curl
-
-# Install Node.js
-RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash -
-RUN apt-get install -y nodejs
 
 # Create app directory
 WORKDIR /app

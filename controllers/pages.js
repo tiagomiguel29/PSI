@@ -1,21 +1,33 @@
 const Website = require('../models/Website');
 const Page = require('../models/Page');
 
+const { isMongoId, isSubPage, trimURL } = require('../utils/validation/common');
 const { validatePage } = require('../utils/validation/page');
 
 async function createPage(req, res) {
-  const { url, websiteId } = req.body;
-
-  const { error } = validatePage({ url, website: websiteId });
-
-  if (error) {
-    return res.status(400).json({
-      success: false,
-      errors: error.details.map((error) => error.message),
-    });
-  }
-
   try {
+    const { url, websiteId } = req.body;
+
+    if (!isMongoId(websiteId)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid website ID',
+      });
+    }
+
+    const { error } = validatePage({ url, website: websiteId });
+
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid page data',
+        errors: error.details.map((error) => ({
+          field: error.context.key,
+          message: error.message,
+        })),
+      });
+    }
+
     const website = await Website.findById(websiteId);
 
     if (!website) {
@@ -25,7 +37,14 @@ async function createPage(req, res) {
       });
     }
 
-    const page = await Page.create({ url, website: websiteId });
+    if (!isSubPage(website.url, url)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Page is not a subpage of the website',
+      });
+    }
+
+    const page = await Page.create({ url: trimURL(url), website: websiteId });
 
     return res.status(201).json({
       success: true,
@@ -43,6 +62,13 @@ async function getPage(req, res) {
   const { id } = req.params;
 
   try {
+    if (!isMongoId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid page ID',
+      });
+    }
+
     const page = await Page.findById(id).populate('website');
 
     if (!page) {
@@ -73,15 +99,24 @@ async function getPages(req, res) {
 
     const { websiteId } = req.query;
 
+    if (websiteId && !isMongoId(websiteId)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid website ID',
+      });
+    }
+
     const options = {
       limit: limit,
       sort: { [sort]: sortDirection },
+      skip: (page - 1) * limit,
     };
 
-    const pages = await Page.paginate(
-      websiteId ? { website: websiteId } : {},
-      options,
-    );
+    const pages = await Page.paginate(websiteId ? { website: websiteId } : {})
+      .populate('website')
+      .limit(options.limit)
+      .skip(options.skip)
+      .sort(options.sort);
 
     return res.status(200).json({
       success: true,
@@ -99,6 +134,13 @@ async function removePage(req, res) {
   const { id } = req.params;
 
   try {
+    if (!isMongoId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid page ID',
+      });
+    }
+
     const page = await Page.findByIdAndDelete(id);
 
     if (!page) {
@@ -120,4 +162,4 @@ async function removePage(req, res) {
   }
 }
 
-module.exports = { createPage, getPage, getPages };
+module.exports = { createPage, getPage, removePage, getPages };

@@ -1,33 +1,20 @@
 const joi = require('joi');
 
+const { isMongoId, isURL } = require('./common');
+
 const pageSchema = joi.object({
-  url: joi.string().required(),
-  website: joi.string().required(),
-  status: joi
-    .string()
-    .valid('Por avaliar', 'Em avaliação', 'Avaliado', 'Erro na avaliação')
-    .default('Por avaliar'),
-  lastEvaluated: joi.date().default(null),
+  url: joi.string().custom(isURL).required().messages({
+    'any.required': 'URL is required',
+    'any.invalid': 'Invalid URL',
+  }),
+  website: joi.string().custom(isMongoId).required().messages({
+    'any.required': 'Website ID is required',
+    'any.invalid': 'Invalid Website ID',
+  }),
 });
 
 function validatePage(page) {
-  // Validate URL
-  const urlRegex = new RegExp('^(http|https)://', 'i');
-  if (!urlRegex.test(page.url)) {
-    throw new Error('Invalid URL');
-  }
-
-  // Validate website as MongoDB ObjectId
-  if (
-    !joi
-      .string()
-      .regex(/^[0-9a-fA-F]{24}$/)
-      .test(page.website)
-  ) {
-    throw new Error('Invalid website ID');
-  }
-
-  return pageSchema.validate(page);
+  return pageSchema.validate(page, { abortEarly: false, stripUnknown: true });
 }
 
 module.exports = {

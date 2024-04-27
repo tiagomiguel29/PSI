@@ -5,6 +5,7 @@ const WebsiteSchema = new mongoose.Schema(
     url: {
       type: String,
       required: true,
+      trim: true,
     },
     status: {
       type: String,
@@ -14,6 +15,16 @@ const WebsiteSchema = new mongoose.Schema(
     lastEvaluated: {
       type: Date,
       default: null,
+    },
+    previewImage: {
+      type: String,
+      default: null,
+      trim: true,
+    },
+    previewImageStatus: {
+      type: String,
+      enum: ['Not captured', 'Capturing', 'Captured', 'Error'],
+      default: 'Not captured',
     },
   },
   {

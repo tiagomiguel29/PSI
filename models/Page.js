@@ -5,6 +5,7 @@ const PageSchema = new mongoose.Schema(
     url: {
       type: String,
       required: true,
+      trim: true,
     },
     website: {
       type: mongoose.Schema.Types.ObjectId,
@@ -13,7 +14,13 @@ const PageSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['Por avaliar', 'Em avaliação', 'Avaliado', 'Erro na avaliação'],
+      enum: [
+        'Por avaliar',
+        'Em avaliação',
+        'Conforme',
+        'Não conforme',
+        'Erro na avaliação',
+      ],
       default: 'Por avaliar',
     },
     lastEvaluated: {

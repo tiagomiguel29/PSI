@@ -1,38 +1,103 @@
 const Website = require('../models/Website');
 const Page = require('../models/Page');
 const { validateWebsite } = require('../utils/validation/website');
+const { generateLink } = require('../services/s3');
+const { evaluate } = require('../services/qualweb');
+const { captureAndUpload } = require('../services/integrations');
+const { isMongoId, isSubPage, trimURL } = require('../utils/validation/common');
+const { validatePage } = require('../utils/validation/page');
 
 async function createWebsite(req, res) {
-  const { url, pages } = req.body;
+  const { url } = req.body;
 
   try {
-    const website = { url };
+    const website = { url: trimURL(url) };
     const { error } = validateWebsite(website);
 
     if (error) {
       return res.status(400).json({
         success: false,
-        errors: error.details.map((error) => error.message),
+        message: 'Invalid website data',
+        errors: error.details.map((error) => ({
+          field: error.context.key,
+          message: error.message,
+        })),
       });
     }
 
     const newWebsite = await Website.create(website);
 
-    const pageDocs = [];
+    captureAndUpload(url, `psi/websites/${newWebsite._id}.png`, newWebsite);
 
-    if (pages && pages.length > 0) {
-      for (const page of pages) {
-        const newPage = await Page.create({
-          url: page,
-          website: newWebsite._id,
-        });
-        pageDocs.push(newPage);
-      }
-    }
+    const signedUrl = generateLink(`psi/websites/${newWebsite._id}.png`);
 
     return res.status(201).json({
       success: true,
       website: newWebsite,
+      signedUrl,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
+
+async function addPages(req, res) {
+  const { id } = req.params;
+  const { pages } = req.body;
+
+  try {
+    if (!isMongoId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid website ID',
+      });
+    }
+
+    const website = await Website.findById(id);
+
+    if (!website) {
+      return res.status(404).json({
+        success: false,
+        message: 'Website not found',
+      });
+    }
+
+    const pageDocs = [];
+
+    for (const page of pages) {
+      const { error } = validatePage({ url: page, website: id });
+
+      if (error) {
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid page data',
+          errors: error.details.map((error) => ({
+            field: error.context.key,
+            message: error.message,
+          })),
+        });
+      }
+
+      if (!isSubPage(website.url, page)) {
+        return res.status(400).json({
+          success: false,
+          message: 'All pages must be subpages of the website URL',
+        });
+      }
+
+      const newPage = await Page.create({
+        url: trimURL(page),
+        website: id,
+      });
+
+      pageDocs.push(newPage);
+    }
+
+    return res.status(201).json({
+      success: true,
       pages: pageDocs,
     });
   } catch (error) {
@@ -47,6 +112,13 @@ async function getWebsite(req, res) {
   const { id } = req.params;
 
   try {
+    if (!isMongoId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid website ID',
+      });
+    }
+
     const website = await Website.findById(id);
 
     if (!website) {
@@ -58,10 +130,13 @@ async function getWebsite(req, res) {
 
     const pages = await Page.find({ website: website._id });
 
+    const imageUrl = await generateLink(`psi/websites/${website._id}.png`);
+
     return res.status(200).json({
       success: true,
       website,
       pages,
+      imageUrl,
     });
   } catch (error) {
     return res.status(500).json({
@@ -90,7 +165,10 @@ async function getWebsites(req, res) {
       .limit(options.limit)
       .skip(options.skip)
       .sort(options.sort);
-    const totalWebsites = await Website.countDocuments();
+
+    const totalWebsites = await Website.countDocuments(
+      status ? { status } : {},
+    );
 
     return res.status(200).json({
       success: true,
@@ -112,6 +190,13 @@ async function removeWebsite(req, res) {
   const { id } = req.params;
 
   try {
+    if (!isMongoId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid website ID',
+      });
+    }
+
     const website = await Website.findByIdAndDelete(id);
 
     if (!website) {
@@ -133,9 +218,47 @@ async function removeWebsite(req, res) {
   }
 }
 
+async function evaluateWebsite(req, res) {
+  const { id } = req.params;
+
+  try {
+    if (!isMongoId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid website ID',
+      });
+    }
+
+    const website = await Website.findById(id);
+
+    if (!website) {
+      return res.status(404).json({
+        success: false,
+        message: 'Website not found',
+      });
+    }
+
+    const results = await evaluate(website.url);
+
+    console.log(results);
+
+    return res.status(200).json({
+      success: true,
+      results,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
+
 module.exports = {
   createWebsite,
+  addPages,
   getWebsite,
   getWebsites,
   removeWebsite,
+  evaluateWebsite,
 };

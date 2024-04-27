@@ -1,0 +1,16 @@
+
+/* Dark mode colors */
+@media (prefers-color-scheme: dark) {
+    .mat-mdc-chip {
+        background-color: #93c5fd !important;
+    }
+
+    table {
+        background-color: #1f2937 !important;
+    }
+
+    mat-paginator {
+        background-color: #1f2937 !important;
+        color: white !important;
+    }
+}
