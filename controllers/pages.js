@@ -85,6 +85,13 @@ async function getPages(req, res) {
 
     const { websiteId } = req.query;
 
+    if (websiteId && !isMongoId(websiteId)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid website ID',
+      });
+    }
+
     const options = {
       limit: limit,
       sort: { [sort]: sortDirection },
