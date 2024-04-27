@@ -5,6 +5,7 @@ const PageSchema = new mongoose.Schema(
     url: {
       type: String,
       required: true,
+      trim: true,
     },
     website: {
       type: mongoose.Schema.Types.ObjectId,
