@@ -165,7 +165,10 @@ async function getWebsites(req, res) {
       .limit(options.limit)
       .skip(options.skip)
       .sort(options.sort);
-    const totalWebsites = await Website.countDocuments();
+
+    const totalWebsites = await Website.countDocuments(
+      status ? { status } : {},
+    );
 
     return res.status(200).json({
       success: true,
