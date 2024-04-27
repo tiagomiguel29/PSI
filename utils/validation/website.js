@@ -1,21 +1,16 @@
 const joi = require('joi');
 
+const { isURL } = require('./common');
+
 const websiteSchema = joi.object({
-  url: joi.string().required(),
-  status: joi
-    .string()
-    .valid('Por avaliar', 'Em avaliação', 'Avaliado', 'Erro na avaliação')
-    .default('Por avaliar'),
-  lastEvaluated: joi.date().default(null),
+  url: joi.string().custom(isURL).required(),
 });
 
 function validateWebsite(website) {
-  const urlRegex = new RegExp('^(http|https)://', 'i');
-  if (!urlRegex.test(website.url)) {
-    throw new Error('Invalid URL');
-  }
-
-  return websiteSchema.validate(website);
+  return websiteSchema.validate(website, {
+    abortEarly: false,
+    stripUnknown: true,
+  });
 }
 
 module.exports = {
