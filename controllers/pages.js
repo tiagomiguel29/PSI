@@ -1,18 +1,30 @@
 const Website = require('../models/Website');
 const Page = require('../models/Page');
 
+const { isMongoId } = require('../utils/validation/common');
 const { validatePage } = require('../utils/validation/page');
 
 async function createPage(req, res) {
   try {
     const { url, websiteId } = req.body;
 
+    if (!isMongoId(websiteId)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid website ID',
+      });
+    }
+
     const { error } = validatePage({ url, website: websiteId });
 
     if (error) {
       return res.status(400).json({
         success: false,
-        errors: error.details.map((error) => error.message),
+        message: 'Invalid page data',
+        errors: error.details.map((error) => ({
+          field: error.context.key,
+          message: error.message,
+        })),
       });
     }
 
