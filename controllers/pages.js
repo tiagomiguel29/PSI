@@ -62,6 +62,13 @@ async function getPage(req, res) {
   const { id } = req.params;
 
   try {
+    if (!isMongoId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid page ID',
+      });
+    }
+
     const page = await Page.findById(id).populate('website');
 
     if (!page) {
@@ -127,6 +134,13 @@ async function removePage(req, res) {
   const { id } = req.params;
 
   try {
+    if (!isMongoId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid page ID',
+      });
+    }
+
     const page = await Page.findByIdAndDelete(id);
 
     if (!page) {

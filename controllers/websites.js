@@ -112,6 +112,13 @@ async function getWebsite(req, res) {
   const { id } = req.params;
 
   try {
+    if (!isMongoId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid website ID',
+      });
+    }
+
     const website = await Website.findById(id);
 
     if (!website) {
@@ -180,6 +187,13 @@ async function removeWebsite(req, res) {
   const { id } = req.params;
 
   try {
+    if (!isMongoId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid website ID',
+      });
+    }
+
     const website = await Website.findByIdAndDelete(id);
 
     if (!website) {
@@ -205,6 +219,13 @@ async function evaluateWebsite(req, res) {
   const { id } = req.params;
 
   try {
+    if (!isMongoId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid website ID',
+      });
+    }
+
     const website = await Website.findById(id);
 
     if (!website) {
