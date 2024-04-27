@@ -3,7 +3,10 @@ const joi = require('joi');
 const { isURL } = require('./common');
 
 const websiteSchema = joi.object({
-  url: joi.string().custom(isURL).required(),
+  url: joi.string().custom(isURL).required().messages({
+    'any.required': 'URL is required',
+    'any.invalid': 'Invalid URL',
+  }),
 });
 
 function validateWebsite(website) {

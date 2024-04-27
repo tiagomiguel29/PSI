@@ -17,7 +17,10 @@ async function createWebsite(req, res) {
     if (error) {
       return res.status(400).json({
         success: false,
-        errors: error.details.map((error) => error.message),
+        errors: error.details.map((error) => ({
+          field: error.context.key,
+          message: error.message,
+        })),
       });
     }
 
@@ -69,7 +72,10 @@ async function addPages(req, res) {
       if (error) {
         return res.status(400).json({
           success: false,
-          errors: error.details.map((error) => error.message),
+          errors: error.details.map((error) => ({
+            field: error.context.key,
+            message: error.message,
+          })),
         });
       }
 
