@@ -68,7 +68,7 @@
               <mat-error *ngIf="pageInput.hasError('duplicate')"
                 >URL already added</mat-error
               >
-              <mat-error *ngIf="pageInput.hasError('invalidSubpage')"
+              <mat-error *ngIf="pageInput.hasError('invalidSubpage') && !pageInput.hasError('requiredField') && !pageInput.hasError('pattern')"
                 >Page must be a subpage of the website URL provided</mat-error
               >
             </mat-form-field>
