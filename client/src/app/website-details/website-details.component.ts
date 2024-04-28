@@ -23,6 +23,7 @@ export interface DialogData {
   websiteId: string;
   pageUrl: FormControl;
   onCloseSuccess: Function;
+  protocol: string;
 }
 
 @Component({
@@ -36,6 +37,7 @@ export class WebsiteDetailsComponent {
   pages: Page[] = [];
   imageUrl?: string = '';
   imageLoading: boolean = true;
+  protocol = 'https://';
   pageUrlToAdd = new FormControl('', [
     Validators.required,
     Validators.pattern('^[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(\\/[^\\s]*)?$'),
@@ -92,6 +94,9 @@ export class WebsiteDetailsComponent {
         } else {
           this.imageLoading = true;
         }
+        if (website.url?.startsWith('http://')) {
+          this.protocol = 'http://';
+        }
       },
       error: error => {
         console.error('Error fetching website:', error);
@@ -137,8 +142,8 @@ export class WebsiteDetailsComponent {
     });
 
     this.pageUrlToAdd.valueChanges.subscribe(value => {
-      if (value && value.startsWith('https://')) {
-        this.pageUrlToAdd.setValue(value.replace('https://', ''), {
+      if (value && value.startsWith(this.protocol)) {
+        this.pageUrlToAdd.setValue(value.replace(this.protocol, ''), {
           emitEvent: false,
         });
       }
@@ -151,6 +156,7 @@ export class WebsiteDetailsComponent {
         pageUrl: this.pageUrlToAdd,
         websiteId: this._id,
         onCloseSuccess: this.fetchPages.bind(this),
+        protocol: this.protocol,
       },
     });
 
@@ -162,8 +168,8 @@ export class WebsiteDetailsComponent {
       ]);
 
       this.pageUrlToAdd.valueChanges.subscribe(value => {
-        if (value && value.startsWith('https://')) {
-          this.pageUrlToAdd.setValue(value.replace('https://', ''), {
+        if (value && value.startsWith(this.protocol)) {
+          this.pageUrlToAdd.setValue(value.replace(this.protocol, ''), {
             emitEvent: false,
           });
         }
@@ -174,7 +180,7 @@ export class WebsiteDetailsComponent {
   }
 
   isSubPage(parent: string | null, page: string) {
-    const fullUrl = 'https://' + page;
+    const fullUrl = this.protocol + page;
     if (!parent) return false;
 
     return (
@@ -236,7 +242,7 @@ export class AddPageDialog {
     if (this.data.pageUrl) {
       this.pagesService
         .createPage({
-          url: 'https://' + this.data.pageUrl.value,
+          url: this.data.protocol + this.data.pageUrl.value,
           websiteId: this.data.websiteId,
         })
         .subscribe({
