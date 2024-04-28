@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Website } from 'src/types/Website';
-import { AfterViewInit, ViewChild } from '@angular/core';
+import { ViewChild } from '@angular/core';
 import { WebsiteService } from '../services/website.service';
 import { ActivatedRoute, Router } from '@angular/router';
 

@@ -3,10 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { WebsiteService } from '../services/website.service';
 import { Page } from 'src/types/Page';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, Sort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { Sort } from '@angular/material/sort';
 import { ValidatorFn, AbstractControl } from '@angular/forms';
 import { Validators } from '@angular/forms';
 
@@ -42,20 +41,32 @@ export class WebsiteDetailsComponent {
     Validators.pattern('^[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(\\/[^\\s]*)?$'),
     this.subpageValidator(),
   ]);
+  statusOptions = [{ value: 'all', viewValue: 'All'},
+              { value: 'Por avaliar', viewValue: 'Por avaliar' },
+              { value: 'Em avaliação', viewValue: 'Em avaliação' },
+              { value: 'Conforme', viewValue: 'Conforme' },
+              { value: 'Não conforme', viewValue: 'Não conforme'},
+              { value: 'Erro na avaliação', viewValue: 'Erro na avaliação'}
+  ]
+
+  statusFormControl = new FormControl('all');
 
   displayedColumns: string[] = ['url', 'status', 'createdAt', 'lastEvaluated'];
-  dataSource = new MatTableDataSource<Page>([]);
+  dataSource = new MatTableDataSource<{}>(
+    this.pages
+  );
 
   constructor(
+    private _liveAnnouncer: LiveAnnouncer,
     private route: ActivatedRoute,
     private websiteService: WebsiteService,
-    private _liveAnnouncer: LiveAnnouncer,
+    private pagesService: PagesService,
     public dialog: MatDialog
   ) {
     this._id = this.route.snapshot.paramMap.get('id')!;
   }
 
-  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatSort) sortComponent!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   /** Announce the change in sort state for assistive technology. */
@@ -75,8 +86,6 @@ export class WebsiteDetailsComponent {
     this.websiteService.getWebsiteById(this._id).subscribe({
       next: website => {
         this.website = website;
-        this.pages = website.pages || [];
-        this.dataSource = new MatTableDataSource<Page>(website.pages);
         if (website.previewImageStatus === 'Captured') {
           this.imageUrl = website.imageUrl;
           this.imageLoading = false;
@@ -90,8 +99,42 @@ export class WebsiteDetailsComponent {
     });
   }
 
+  ngAfterViewInit() {
+
+    this.paginator.page.subscribe(() => {
+      this.fetchPages(this.paginator.pageIndex + 1, this.paginator.pageSize);
+    });
+
+    this.sortComponent.sortChange.subscribe((sortState: Sort) => {
+      this.fetchPages(
+        this.paginator.pageIndex + 1,
+        this.paginator.pageSize,
+        sortState.active,
+        sortState.direction
+      );
+    });
+
+
+  }
+
   ngOnInit() {
     this.fetchWebsite();
+    this.fetchPages();
+
+
+
+
+    this.statusFormControl.valueChanges.subscribe(value => {
+      if (value) {
+        this.fetchPages(
+        this.paginator.pageIndex + 1,
+        this.paginator.pageSize,
+        this.sortComponent.active,
+        this.sortComponent.direction,
+        value
+      );
+    }
+    });
   }
 
   openDialog(): void {
@@ -131,6 +174,27 @@ export class WebsiteDetailsComponent {
       }
       return null;
     };
+  }
+
+  fetchPages(
+    page = 1,
+    limit = 5,
+    sort = 'createdAt',
+    sortDirection = 'desc',
+    status = 'all'
+  ) {
+    this.pagesService.getPages(this._id, page, limit, sort, sortDirection, status).subscribe({
+      next: res => {
+        this.pages = res.pages;
+        this.dataSource.data = res.pages;
+        this.paginator.length = res.totalWebsitePages;
+      },
+      error: error => {
+        console.error('Error fetching pages:', error);
+      },
+    });
+
+
   }
 }
 
