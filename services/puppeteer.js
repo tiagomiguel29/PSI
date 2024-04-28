@@ -1,3 +1,4 @@
+const { timeout } = require('puppeteer');
 const puppeteer = require('puppeteer');
 
 async function binaryScreenshot(url) {
@@ -6,6 +7,7 @@ async function binaryScreenshot(url) {
       headless: true,
       ignoreHTTPSErrors: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      timeout: 0,
     };
 
     const browser = await puppeteer.launch(options);

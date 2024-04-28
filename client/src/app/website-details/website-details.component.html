@@ -95,25 +95,20 @@
             (matSortChange)="announceSortChange($event)"
             class="mat-elevation-z8 rounded-lg dark:bg-gray-800">
 
-            <!-- Position Column -->
             <ng-container matColumnDef="url">
               <th mat-header-cell *matHeaderCellDef class="dark:text-white">URL</th>
               <td mat-cell *matCellDef="let element">{{ element.url }}</td>
             </ng-container>
 
-            <!-- Name Column -->
             <ng-container matColumnDef="status">
               <th mat-header-cell *matHeaderCellDef class="dark:text-white">Status</th>
               <td mat-cell *matCellDef="let element">{{ element.status }}</td>
             </ng-container>
 
-            <!-- Weight Column -->
             <ng-container matColumnDef="lastEvaluated">
               <th
                 mat-header-cell
                 *matHeaderCellDef
-                mat-sort-header
-                sortActionDescription="Sort by evaluation date"
                 class="dark:text-white">
                 Last Evaluated
               </th>
@@ -122,13 +117,10 @@
               </td>
             </ng-container>
 
-            <!-- Symbol Column -->
             <ng-container matColumnDef="createdAt">
               <th
                 mat-header-cell
                 *matHeaderCellDef
-                mat-sort-header
-                sortActionDescription="Sort by date added"
                 class="dark:text-white"
                 >
                 Date Added
@@ -142,13 +134,6 @@
             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
           </table>
         </div>
-        <mat-paginator
-          [pageSizeOptions]="[5, 10, 20]"
-          showFirstLastButtons
-          aria-label="Select page of website pages"
-          class="py-2"
-          >
-        </mat-paginator>
       </div>
     </div>
   </div>
