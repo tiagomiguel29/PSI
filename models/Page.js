@@ -34,4 +34,6 @@ const PageSchema = new mongoose.Schema(
   },
 );
 
+PageSchema.index({ url: 1, website: 1 }, { unique: true });
+
 module.exports = Page = mongoose.model('Page', PageSchema);
