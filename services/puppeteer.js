@@ -7,6 +7,7 @@ async function binaryScreenshot(url) {
       headless: true,
       ignoreHTTPSErrors: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      timeout: 10000,
     };
 
     const browser = await puppeteer.launch(options);
