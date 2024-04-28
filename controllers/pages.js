@@ -96,6 +96,7 @@ async function getPages(req, res) {
     const limit = parseInt(req.query.limit, 10) || 10;
     const sort = req.query.sort || 'createdAt';
     const sortDirection = req.query.sortDirection === 'desc' ? -1 : 1;
+    const status = req.query.status;
 
     const { websiteId } = req.query;
 
@@ -112,15 +113,30 @@ async function getPages(req, res) {
       skip: (page - 1) * limit,
     };
 
-    const pages = await Page.paginate(websiteId ? { website: websiteId } : {})
-      .populate('website')
+    const filters = {};
+
+    if (websiteId) {
+      filters.website = websiteId;
+    }
+
+    if (status) {
+      filters.status = status;
+    }
+
+    const pages = await Page.find(filters)
+      .populate('website', 'url')
       .limit(options.limit)
       .skip(options.skip)
       .sort(options.sort);
 
+    const totalPages = await Page.countDocuments(filters);
+
     return res.status(200).json({
       success: true,
       pages,
+      totalWebsitePages: totalPages,
+      totalPages: Math.ceil(totalPages / limit),
+      currentPage: page,
     });
   } catch (error) {
     return res.status(500).json({
