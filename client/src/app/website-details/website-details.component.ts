@@ -142,7 +142,7 @@ export class WebsiteDetailsComponent {
       data: {
         pageUrl: this.pageUrlToAdd,
         websiteId: this._id,
-        onCloseSuccess: this.fetchWebsite.bind(this),
+        onCloseSuccess: this.fetchPages.bind(this),
       },
     });
 
@@ -211,7 +211,10 @@ export class AddPageDialog {
   ) {}
 
   onAdd(): void {
-    if (this.data.pageUrl.invalid) return;
+    if (this.data.pageUrl.invalid) {
+      console.log(this.data.pageUrl.errors)
+      return;
+    }
     if (this.data.pageUrl) {
       this.pagesService
         .createPage({
