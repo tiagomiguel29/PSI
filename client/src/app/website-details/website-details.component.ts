@@ -135,6 +135,14 @@ export class WebsiteDetailsComponent {
       );
     }
     });
+
+    this.pageUrlToAdd.valueChanges.subscribe(value => {
+      if (value && value.startsWith('https://')) {
+        this.pageUrlToAdd.setValue(value.replace('https://', ''), {
+          emitEvent: false,
+        });
+      }
+    });
   }
 
   openDialog(): void {
@@ -152,7 +160,17 @@ export class WebsiteDetailsComponent {
         Validators.pattern('^[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(\\/[^\\s]*)?$'),
         this.subpageValidator(),
       ]);
+
+      this.pageUrlToAdd.valueChanges.subscribe(value => {
+        if (value && value.startsWith('https://')) {
+          this.pageUrlToAdd.setValue(value.replace('https://', ''), {
+            emitEvent: false,
+          });
+        }
+      });
     });
+
+
   }
 
   isSubPage(parent: string | null, page: string) {
