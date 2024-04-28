@@ -47,6 +47,7 @@ export class HomeComponent {
   pages: string[] = [];
   currentStep = 'stepOne';
   wbesiteId?: string;
+  protocol = 'https://';
 
   constructor(
     private websiteService: WebsiteService,
@@ -58,16 +59,24 @@ export class HomeComponent {
     this.url.valueChanges.subscribe(value => {
       if (value && value.startsWith('https://')) {
         this.url.setValue(value.replace('https://', ''), { emitEvent: false });
+        this.protocol = 'https://';
+      } else if (value && value.startsWith('http://')) {
+        this.url.setValue(value.replace('http://', ''), { emitEvent: false });
+        this.protocol = 'http://';
       }
     });
 
     this.pageInput.valueChanges.subscribe(value => {
-      if (value && value.startsWith('https://')) {
-        this.pageInput.setValue(value.replace('https://', ''), {
+      if (value && value.startsWith(this.protocol)) {
+        this.pageInput.setValue(value.replace(this.protocol, ''), {
           emitEvent: false,
         });
       }
     });
+  }
+
+  switchProtocol() {
+    this.protocol = this.protocol === 'https://' ? 'http://' : 'https://';
   }
 
   previousStep() {
@@ -79,7 +88,7 @@ export class HomeComponent {
 
   nextStep() {
     if (!this.url.valid) return;
-    this.websiteService.createWebsite('https://' + this.url.value).subscribe({
+    this.websiteService.createWebsite(this.protocol + this.url.value).subscribe({
       next: response => {
         if (response.success) {
           this.wbesiteId = response.website._id;
@@ -142,7 +151,7 @@ export class HomeComponent {
 
     if (!this.pageInput.valid) return; // Check if input is valid
     if (this.pages.includes(this.pageInput.value)) return; // Check if input is already in the list
-    this.pages = [...this.pages, 'https://' + this.pageInput.value];
+    this.pages = [...this.pages, this.protocol + this.pageInput.value];
     this.pageInput.reset();
   }
 
