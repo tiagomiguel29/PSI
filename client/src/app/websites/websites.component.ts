@@ -126,8 +126,6 @@ export class WebsitesComponent {
     this.statusFormControl = this.route.snapshot.queryParamMap.get('status')
       ? new FormControl(this.route.snapshot.queryParamMap.get('status'))
       : new FormControl('all');
-    this.paginator.pageSize = this.limit;
-    this.paginator.pageIndex = this.currentPage - 1;
 
     this.statusFormControl.valueChanges.subscribe(value => {
       this.router.navigate([], {
