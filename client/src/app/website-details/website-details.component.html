@@ -68,7 +68,7 @@
                           class="text-sm font-medium text-white px-2 py-1"
                           aria-label="Website status"
 
-                          >{{ website.status }}</span
+                          >{{ website?.status }}</span
                         >
                       </mat-chip>
                     </div>
@@ -79,13 +79,13 @@
                     </div>
                     </div>
                     <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
-                      <span class="font-bold">URL: </span>{{ website.url }}
+                      <span class="font-bold">URL: </span>{{ website?.url }}
                     </p>
                     <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
-                      <span class="font-bold">Created at: </span>{{ website.createdAt | date: 'MMM d, y, h:mm:ss a' }}
+                      <span class="font-bold">Created at: </span>{{ website?.createdAt | date: 'MMM d, y, h:mm:ss a' }}
                     </p>
                     <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
-                      <span class="font-bold">Last Evaluation: </span>{{ website.lastEvaluated ? (website.lastEvaluated | date: 'MMM d, y, h:mm:ss a') : 'Not evaluated yet' }}
+                      <span class="font-bold">Last Evaluation: </span>{{ website?.lastEvaluated ? (website.lastEvaluated | date: 'MMM d, y, h:mm:ss a') : 'Not evaluated yet' }}
 
                     </p>
                   </div>
