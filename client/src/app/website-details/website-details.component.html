@@ -56,9 +56,10 @@
                     </div>
                   </div>
                   <div
-                    class="flex items-stretch justify-start flex-col basis-auto flex-grow flex-shrink gap-x-6 gap-y-3">
+                    class="flex items-stretch justify-start flex-col basis-auto flex-grow flex-shrink gap-x-6 gap-y-3 py-4 sm:py-0">
+                    <div class="flex flex-col sm:flex-row justify-between sm:items-start gap-y-4 gap-x-6">
                     <div
-                      class="flex items-stretch flex-col sm:flex-row justify-between pt-1">
+                      class="flex items-stretch flex-col sm:flex-row justify-between gap-x-6 gap-y-2 pt-1">
                       <p class="text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">
                         Website Details
                       </p>
@@ -70,6 +71,12 @@
                           >{{ website.status }}</span
                         >
                       </mat-chip>
+                    </div>
+                    <div class="w-full sm:w-fit">
+                      <button mat-flat-button class="w-full" color="warn" (click)="openDeleteDialog()">
+                        Delete
+                      </button>
+                    </div>
                     </div>
                     <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
                       <span class="font-bold">URL: </span>{{ website.url }}

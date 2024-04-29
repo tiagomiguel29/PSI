@@ -27,7 +27,7 @@ import { MatTableModule } from '@angular/material/table';
 import { HomeComponent } from './home/home.component';
 import { WebsitesComponent } from './websites/websites.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { WebsiteDetailsComponent } from './website-details/website-details.component';
+import { DeleteWebsiteDialog, WebsiteDetailsComponent } from './website-details/website-details.component';
 import { AddPageDialog } from './website-details/website-details.component';
 import { MessageService } from 'primeng/api';
 
@@ -38,6 +38,7 @@ import { MessageService } from 'primeng/api';
     WebsitesComponent,
     WebsiteDetailsComponent,
     AddPageDialog,
+    DeleteWebsiteDialog,
   ],
   imports: [
     BrowserModule,

@@ -7,6 +7,11 @@ import { Page } from 'src/types/Page';
 
 import { environment } from 'src/environments/environment';
 
+interface StandardResponse {
+  success: boolean;
+  message?: string;
+}
+
 interface WebsiteListResponse {
   success: boolean;
   websites: Website[];
@@ -93,17 +98,11 @@ export class WebsiteService {
   }
 
   // Delete a website by ID
-  deleteWebsite(id: string): Observable<any> {
+  deleteWebsite(id: string): Observable<StandardResponse> {
     return this.http
-      .delete<{ success: boolean; message?: string }>(`${this.baseUrl}/${id}`)
+      .delete<StandardResponse>(`${this.baseUrl}/${id}`)
       .pipe(
-        map(response => {
-          if (response.success) {
-            return response.message || 'Website deleted successfully';
-          } else {
-            throw new Error('Failed to delete website');
-          }
-        })
+        map(response => response)
       );
   }
 }

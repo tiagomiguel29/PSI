@@ -267,3 +267,8 @@ body {
   --mdc-dialog-container-color: #1f2937;
 }
 }
+
+.mat-mdc-dialog-actions {
+  display: flex;
+  justify-content: flex-end !important;
+}
