@@ -11,7 +11,6 @@ async function binaryScreenshot(url) {
       !(process.env.NODE_ENV === 'production') &&
       !(process.env.NODE_ENV === 'staging')
     ) {
-      options.executablePath = '/usr/bin/google-chrome-stable';
       options.args = ['--no-sandbox', '--disable-setuid-sandbox'];
     }
 
