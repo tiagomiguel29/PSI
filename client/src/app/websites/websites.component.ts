@@ -58,8 +58,6 @@ export class WebsitesComponent {
       this.limit = Number(params.get('limit')) || 5;
       this.sort = params.get('sort') || 'createdAt';
       this.sortDirection = params.get('sortDirection') || 'desc';
-      this.paginator.pageSize = this.limit;
-      this.paginator.pageIndex = this.currentPage - 1;
       this.status = params.get('status') || 'all';
       this.statusFormControl = params.get('status') ? new FormControl(params.get('status')) : new FormControl('all');
       this.statusFormControl.valueChanges.subscribe(value => {
@@ -77,7 +75,6 @@ export class WebsitesComponent {
       this.limit = this.paginator.pageSize;
 
       this.updateQueryParams();
-      this.fetchWebsites(this.currentPage, this.limit);
     });
 
     this.sortComponent.sortChange.subscribe((sortState: Sort) => {
@@ -152,6 +149,8 @@ export class WebsitesComponent {
           this.websites = res.websites;
           this.dataSource = new MatTableDataSource(res.websites);
           this.paginator.length = res.totalWebsites;
+          this.paginator.pageIndex = page - 1;
+          this.paginator.pageSize = limit;
         },
         error: error => {
           console.error('Error fetching websites:', error);
