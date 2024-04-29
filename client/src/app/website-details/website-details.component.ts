@@ -8,6 +8,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { ValidatorFn, AbstractControl } from '@angular/forms';
 import { Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import {
   MatDialog,
@@ -19,11 +20,16 @@ import { PagesService } from '../services/pages.service';
 import { MessageService } from 'primeng/api';
 import { FormControl } from '@angular/forms';
 
-export interface DialogData {
+export interface NewPageDialogData {
   websiteId: string;
   pageUrl: FormControl;
   onCloseSuccess: Function;
   protocol: string;
+}
+
+export interface DeleteWebsiteDialogData {
+  websiteId: string;
+  websiteUrl: string;
 }
 
 @Component({
@@ -179,6 +185,16 @@ export class WebsiteDetailsComponent {
 
   }
 
+  openDeleteDialog(): void {
+    this.dialog.open(DeleteWebsiteDialog, {
+      data: {
+        websiteId: this._id,
+        websiteUrl: this.website.url,
+      },
+    });
+  }
+
+
   isSubPage(parent: string | null, page: string) {
     const fullUrl = this.protocol + page;
     if (!parent) return false;
@@ -229,7 +245,7 @@ export class WebsiteDetailsComponent {
 export class AddPageDialog {
   constructor(
     public dialogRef: MatDialogRef<AddPageDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    @Inject(MAT_DIALOG_DATA) public data: NewPageDialogData,
     private pagesService: PagesService,
     private messageService: MessageService
   ) {}
@@ -271,6 +287,57 @@ export class AddPageDialog {
             });
           },
         });
+    }
+  }
+
+  onCancel(): void {
+    this.dialogRef.close();
+  }
+}
+
+// Delete website dialog
+
+@Component({
+  selector: 'delete-website-dialog',
+  templateUrl: './delete-website-dialog.html',
+})
+export class DeleteWebsiteDialog {
+  constructor(
+    public dialogRef: MatDialogRef<DeleteWebsiteDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: DeleteWebsiteDialogData,
+    private websiteService: WebsiteService,
+    private messageService: MessageService,
+    private router: Router
+  ) {}
+
+  onDelete(): void {
+    if (this.data.websiteId) {
+      this.websiteService.deleteWebsite(this.data.websiteId).subscribe({
+        next: response => {
+          if (response.success) {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Website deleted successfully',
+            });
+            this.dialogRef.close();
+            this.router.navigate(['/websites']);
+          } else {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: response.message || 'Failed to delete website',
+            });
+          }
+        },
+        error: error => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.error.message || 'Failed to delete website',
+          });
+        },
+      });
     }
   }
 
