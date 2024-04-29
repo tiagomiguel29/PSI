@@ -4,15 +4,16 @@ const puppeteer = require('puppeteer');
 async function binaryScreenshot(url) {
   try {
     const options = {
-      executablePath: '/usr/bin/google-chrome',
       ignoreHTTPSErrors: true,
-
-      args:
-        process.env.NODE_ENV === 'production' ||
-        process.env.NODE_ENV === 'staging'
-          ? []
-          : ['--no-sandbox', '--disable-setuid-sandbox'],
     };
+
+    if (
+      !(process.env.NODE_ENV === 'production') &&
+      !(process.env.NODE_ENV === 'staging')
+    ) {
+      options.executablePath = '/usr/bin/google-chrome-stable';
+      options.args = ['--no-sandbox', '--disable-setuid-sandbox'];
+    }
 
     console.log(options);
 
