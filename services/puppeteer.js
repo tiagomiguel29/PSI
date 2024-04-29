@@ -15,15 +15,9 @@ async function binaryScreenshot(url) {
       options.args = ['--no-sandbox', '--disable-setuid-sandbox'];
     }
 
-    console.log(options);
-
     const browser = await puppeteer.launch(options);
 
-    console.log('Browser launched');
-
     const page = await browser.newPage();
-
-    console.log('Page created');
 
     await page.setViewport({
       width: 1728,
@@ -31,11 +25,7 @@ async function binaryScreenshot(url) {
       deviceScaleFactor: 1,
     });
 
-    console.log('Viewport set');
-
     await page.goto(url);
-
-    console.log('Page loaded');
 
     return await page.screenshot({ encoding: 'binary' });
   } catch (error) {
