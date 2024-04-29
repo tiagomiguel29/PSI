@@ -4,20 +4,36 @@ const puppeteer = require('puppeteer');
 async function binaryScreenshot(url) {
   try {
     const options = {
-      headless: true,
+      executablePath: '/usr/bin/google-chrome',
       ignoreHTTPSErrors: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      timeout: 10000,
+
+      args:
+        NODE_ENV === 'production' || NODE_ENV === 'staging'
+          ? []
+          : ['--no-sandbox', '--disable-setuid-sandbox'],
     };
 
+    console.log(options);
+
     const browser = await puppeteer.launch(options);
+
+    console.log('Browser launched');
+
     const page = await browser.newPage();
+
+    console.log('Page created');
+
     await page.setViewport({
       width: 1728,
       height: 940,
       deviceScaleFactor: 1,
     });
-    await page.goto(url, { waitUntil: 'networkidle2' });
+
+    console.log('Viewport set');
+
+    await page.goto(url);
+
+    console.log('Page loaded');
 
     return await page.screenshot({ encoding: 'binary' });
   } catch (error) {
