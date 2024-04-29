@@ -8,7 +8,8 @@ async function binaryScreenshot(url) {
       ignoreHTTPSErrors: true,
 
       args:
-        NODE_ENV === 'production' || NODE_ENV === 'staging'
+        process.env.NODE_ENV === 'production' ||
+        process.env.NODE_ENV === 'staging'
           ? []
           : ['--no-sandbox', '--disable-setuid-sandbox'],
     };
