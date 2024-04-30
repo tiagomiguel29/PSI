@@ -98,6 +98,7 @@ export class HomeComponent {
             summary: 'Success',
             detail: 'Website added successfully',
           });
+          this.currentStep = 'stepTwo';
         } else {
           if (response.message) {
             this.messageService.add({
@@ -133,7 +134,7 @@ export class HomeComponent {
         }
       },
     });
-    this.currentStep = 'stepTwo';
+
 
   }
 
