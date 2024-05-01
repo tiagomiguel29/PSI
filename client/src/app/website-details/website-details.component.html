@@ -116,6 +116,28 @@
           </button>
 
         </div>
+        <div class="flex flex-row items-center justify-end gap-x-4 bg-white dark:bg-gray-800 px-4">
+          <button
+          mat-icon-button
+          color="primary"
+          aria-label="Evaluate selected pages"
+          [disabled]="!selection.hasValue()"
+          matTooltip="Evaluate selected pages"
+          matTooltipPosition="above"
+          >
+            <mat-icon>pageview</mat-icon>
+          </button>
+          <button mat-icon-button
+          color="primary"
+          aria-label="Delete selected pages"
+          [disabled]="!selection.hasValue()"
+          matTooltip="Delete selected pages"
+          matTooltipPosition="above"
+          (click)="openDeletePagesDialog()"
+           >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
         <div class="overflow-x-auto">
           <table
             mat-table
@@ -123,6 +145,19 @@
             matSort
             (matSortChange)="announceSortChange($event)"
             class="mat-elevation-z8 rounded-lg dark:bg-gray-800">
+
+            <ng-container matColumnDef="select">
+              <th mat-header-cell *matHeaderCellDef>
+                Select
+              </th>
+              <td mat-cell *matCellDef="let row">
+                <mat-checkbox (click)="$event.stopPropagation()"
+                              (change)="$event ? selection.toggle(row) : null"
+                              [checked]="selection.isSelected(row)"
+                              [aria-label]="checkboxLabel(row)">
+                </mat-checkbox>
+              </td>
+            </ng-container>
 
             <ng-container matColumnDef="url">
               <th mat-header-cell *matHeaderCellDef class="dark:text-white">URL</th>

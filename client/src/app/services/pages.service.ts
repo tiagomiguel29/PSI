@@ -26,6 +26,12 @@ export interface PageData {
   websiteId: string;
 }
 
+export interface StandardResponse {
+  success: boolean;
+  message?: string;
+  errors?: Error[];
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -69,6 +75,12 @@ export class PagesService {
       catchError((error: any) => {
         throw 'Error in deleting page: ' + error;
       })
+    );
+  }
+
+  removePages(ids: string[]): Observable<StandardResponse> {
+    return this.http.delete<StandardResponse>(`${this.baseUrl}`, { body: { ids } }).pipe(
+      map(response => response)
     );
   }
 }
