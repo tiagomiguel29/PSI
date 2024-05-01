@@ -11,4 +11,6 @@ router.delete('/:id', pagesControllers.removePage);
 
 router.get('/', pagesControllers.getPages);
 
+router.delete('/', pagesControllers.removePages);
+
 module.exports = router;
