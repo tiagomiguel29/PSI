@@ -185,4 +185,46 @@ async function removePage(req, res) {
   }
 }
 
-module.exports = { createPage, getPage, removePage, getPages };
+// Deletes multiple pages given an array of page IDs
+async function removePages(req, res) {
+  const { ids } = req.body;
+
+  try {
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid page IDs',
+      });
+    }
+
+    for (const id of ids) {
+      if (!isMongoId(id)) {
+        return res.status(400).json({
+          success: false,
+          message: 'One or more invalid page IDs',
+        });
+      }
+    }
+
+    const pages = await Page.deleteMany({ _id: { $in: ids } });
+
+    if (!pages) {
+      return res.status(404).json({
+        success: false,
+        message: 'Pages not found',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Pages deleted successfully',
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
+
+module.exports = { createPage, getPage, removePage, getPages, removePages };

@@ -20,6 +20,8 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ToastModule } from 'primeng/toast';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
@@ -27,7 +29,7 @@ import { MatTableModule } from '@angular/material/table';
 import { HomeComponent } from './home/home.component';
 import { WebsitesComponent } from './websites/websites.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DeleteWebsiteDialog, WebsiteDetailsComponent } from './website-details/website-details.component';
+import { DeleteWebsiteDialog, WebsiteDetailsComponent, DeletePagesDialog } from './website-details/website-details.component';
 import { AddPageDialog } from './website-details/website-details.component';
 import { MessageService } from 'primeng/api';
 
@@ -39,6 +41,7 @@ import { MessageService } from 'primeng/api';
     WebsiteDetailsComponent,
     AddPageDialog,
     DeleteWebsiteDialog,
+    DeletePagesDialog,
   ],
   imports: [
     BrowserModule,
@@ -63,6 +66,9 @@ import { MessageService } from 'primeng/api';
     MatSelectModule,
     MatDialogModule,
     ToastModule,
+    MatCheckboxModule,
+    MatTooltipModule,
+
   ],
   providers: [MessageService],
   bootstrap: [AppComponent],

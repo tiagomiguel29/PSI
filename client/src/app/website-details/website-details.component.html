@@ -1,5 +1,5 @@
 <section>
-  <div class="mt-14 max-w-screen mx-auto px-6 w-full md:w-3/4 lg:w-2/3 xl:w-1/2">
+  <div class="mt-14 max-w-screen mx-auto px-6 w-full md:w-3/4 lg:w-2/3 xl:w-2/3">
     <div class="flex flex-row items-center py-4">
       <a
         [routerLink]="['/websites']"
@@ -15,7 +15,7 @@
       id="website-header"
       class="flex items-stretch flex-col grow shrink justify-start max-w-full">
       <div
-        class="max-w-screen mx-auto px-6 w-full md:w-3/4 lg:w-2/3 xl:w-1/2 bg-white dark:bg-gray-800 rounded-md shadow-lg py-4">
+        class="max-w-screen mx-auto px-6 w-full md:w-3/4 lg:w-2/3 xl:w-2/3 bg-white dark:bg-gray-800 rounded-md shadow-lg py-4">
         <div class="flex flex-col grow shrink justify-start max-w-full">
           <header>
             <div class="">
@@ -96,9 +96,118 @@
         </div>
       </div>
     </div>
+
+    <!-- Website Stats -->
+    <div class="w-full md:w-3/4 lg:w-2/3 xl:w-2/3 mx-auto mt-10">
+    <div>
+      <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
+        <div class="relative overflow-hidden rounded-lg bg-white dark:bg-gray-800 px-4 pb-5 pt-5 shadow-lg sm:px-6 sm:pt-6">
+          <dt>
+            <div class="absolute rounded-md bg-green-500 p-3">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 fill-white">
+                <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 0 1 .208 1.04l-9 13.5a.75.75 0 0 1-1.154.114l-6-6a.75.75 0 0 1 1.06-1.06l5.353 5.353 8.493-12.74a.75.75 0 0 1 1.04-.207Z" clip-rule="evenodd" />
+              </svg>
+
+            </div>
+            <p class="ml-16 truncate text-sm font-medium text-gray-500 dark:text-gray-400">Pages Without Errors</p>
+          </dt>
+          <dd class="ml-16 flex items-baseline">
+            <p class="text-2xl font-semibold text-gray-900 dark:text-white">{{ website.stats.
+              pagesWithoutErrors }}</p>
+            <p class="ml-2 flex items-baseline text-sm font-semibold text-green-600">
+              <span class="sr-only"> Percentage </span>
+              {{ website.stats.
+                pagesWithoutErrors / website.stats.
+                evaluatedPages * 100 | number: '1.0-0' }}%
+            </p>
+
+          </dd>
+        </div>
+        <div class="relative overflow-hidden rounded-lg bg-white dark:bg-gray-800 px-4 pb-5 pt-5 shadow-lg sm:px-6 sm:pt-6">
+          <dt>
+            <div class="absolute rounded-md bg-red-500 p-3">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6" fill="white">
+                <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <p class="ml-16 truncate text-sm font-medium text-gray-500 dark:text-gray-400">Pages With Errors</p>
+          </dt>
+          <dd class="ml-16 flex items-baseline">
+            <p class="text-2xl font-semibold text-gray-900 dark:text-white">{{ website.stats.
+              pagesWithErrors }}</p>
+            <p class="ml-2 flex items-baseline text-sm font-semibold text-green-600">
+              <span class="sr-only"> Percentage </span>
+              {{ website.stats.
+                pagesWithErrors / website.stats.
+                evaluatedPages * 100 | number: '1.0-0' }}%
+            </p>
+          </dd>
+        </div>
+
+      </dl>
+    </div>
+    </div>
+
+    <!-- Website Error Type Stats -->
+    <div class="w-full md:w-3/4 lg:w-2/3 xl:w-2/3 mx-auto">
+    <div>
+      <dl class="mt-10 grid grid-cols-1 divide-y divide-gray-200 dark:divide-gray-600 overflow-hidden rounded-lg bg-white dark:bg-gray-800 shadow-lg md:grid-cols-3 md:divide-x md:divide-y-0">
+        <div class="px-4 py-5 sm:p-6">
+          <dt class="text-base font-normal text-gray-900 dark:text-gray-400">Pages with A errors</dt>
+          <dd class="mt-1 flex items-baseline justify-between md:block lg:flex">
+            <div class="flex items-baseline text-2xl font-semibold text-red-600">
+              {{ website.stats.
+                pagesWithAErrors }}
+              <div class="inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-red-100 text-red-800 md:mt-2 lg:mt-0">
+                <span class="sr-only"> Percentage </span>
+                {{ website.stats.
+                  pagesWithAErrors / website.stats.
+                  evaluatedPages * 100 | number: '1.0-0' }}%
+              </div>
+            </div>
+          </dd>
+        </div>
+        <div class="px-4 py-5 sm:p-6">
+          <dt class="text-base font-normal text-gray-900 dark:text-gray-400">Pages with AA errors</dt>
+          <dd class="mt-1 flex items-baseline justify-between md:block lg:flex">
+            <div class="flex items-baseline text-2xl font-semibold text-red-600">
+              {{ website.stats.
+                pagesWithAAErrors }}
+              <div class="inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-red-100 text-red-800 md:mt-2 lg:mt-0">
+                <span class="sr-only"> Percentage </span>
+                {{ website.stats.
+                  pagesWithAAErrors / website.stats.
+                  evaluatedPages * 100 | number: '1.0-0' }}%
+              </div>
+            </div>
+
+
+          </dd>
+        </div>
+        <div class="px-4 py-5 sm:p-6">
+          <dt class="text-base font-normal text-gray-900 dark:text-gray-400">Pages with AAA errors</dt>
+          <dd class="mt-1 flex items-baseline justify-between md:block lg:flex">
+            <div class="flex items-baseline text-2xl font-semibold text-red-600">
+              {{ website.stats.
+                pagesWithAAAErrors }}
+              <div class="inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-red-100 text-red-800 md:mt-2 lg:mt-0">
+                <span class="sr-only"> Percentage </span>
+                {{ website.stats.
+                  pagesWithAAAErrors / website.stats.
+                  evaluatedPages * 100 | number: '1.0-0' }}%
+              </div>
+            </div>
+
+
+          </dd>
+        </div>
+      </dl>
+    </div>
+    </div>
+    <!-- Website Pages -->
     <div>
       <div
-        class="w-full md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto rounded-lg overflow-hidden shadow-lg mt-14">
+        class="w-full md:w-3/4 lg:w-2/3 xl:w-2/3 mx-auto rounded-lg overflow-hidden shadow-lg mt-10">
         <div
           class="flex justify-between flex-row items-start bg-white dark:bg-gray-800 rounded-t-lg py-4 px-4">
           <mat-form-field>
@@ -116,6 +225,29 @@
           </button>
 
         </div>
+        <div class="flex flex-row items-center justify-end gap-x-4 bg-white dark:bg-gray-800 px-4">
+          <button
+          mat-icon-button
+          color="primary"
+          aria-label="Evaluate selected pages"
+          [disabled]="!selection.hasValue()"
+          matTooltip="Evaluate selected pages"
+          matTooltipPosition="above"
+          (click)="handleEvaluatePages()"
+          >
+            <mat-icon>pageview</mat-icon>
+          </button>
+          <button mat-icon-button
+          color="primary"
+          aria-label="Delete selected pages"
+          [disabled]="!selection.hasValue()"
+          matTooltip="Delete selected pages"
+          matTooltipPosition="above"
+          (click)="openDeletePagesDialog()"
+           >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
         <div class="overflow-x-auto">
           <table
             mat-table
@@ -123,6 +255,19 @@
             matSort
             (matSortChange)="announceSortChange($event)"
             class="mat-elevation-z8 rounded-lg dark:bg-gray-800">
+
+            <ng-container matColumnDef="select">
+              <th mat-header-cell *matHeaderCellDef>
+                Select
+              </th>
+              <td mat-cell *matCellDef="let row">
+                <mat-checkbox (click)="$event.stopPropagation()"
+                              (change)="$event ? selection.toggle(row) : null"
+                              [checked]="selection.isSelected(row)"
+                              [aria-label]="checkboxLabel(row)">
+                </mat-checkbox>
+              </td>
+            </ng-container>
 
             <ng-container matColumnDef="url">
               <th mat-header-cell *matHeaderCellDef class="dark:text-white">URL</th>

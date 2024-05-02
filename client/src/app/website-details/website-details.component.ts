@@ -19,12 +19,14 @@ import { Inject } from '@angular/core';
 import { PagesService } from '../services/pages.service';
 import { MessageService } from 'primeng/api';
 import { FormControl } from '@angular/forms';
+import { SelectionModel } from '@angular/cdk/collections';
 
 export interface NewPageDialogData {
   websiteId: string;
   pageUrl: FormControl;
   onCloseSuccess: Function;
   protocol: string;
+  pageIds?: string[];
 }
 
 export interface DeleteWebsiteDialogData {
@@ -59,16 +61,19 @@ export class WebsiteDetailsComponent {
 
   statusFormControl = new FormControl('all');
 
-  displayedColumns: string[] = ['url', 'status', 'createdAt', 'lastEvaluated'];
+  displayedColumns: string[] = ['select', 'url', 'status', 'createdAt', 'lastEvaluated'];
   dataSource = new MatTableDataSource<{}>(
     this.pages
   );
+
+  selection = new SelectionModel<Page>(true, []);
 
   constructor(
     private _liveAnnouncer: LiveAnnouncer,
     private route: ActivatedRoute,
     private websiteService: WebsiteService,
     private pagesService: PagesService,
+    private messageService: MessageService,
     public dialog: MatDialog
   ) {
     this._id = this.route.snapshot.paramMap.get('id')!;
@@ -88,6 +93,52 @@ export class WebsiteDetailsComponent {
     } else {
       this._liveAnnouncer.announce('Sorting cleared');
     }
+  }
+
+  checkboxLabel(row: Page): string {
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row`;
+  }
+
+  handleEvaluatePages() {
+    const pageIds = this.selection.selected.map(page => page._id);
+    this.websiteService.evaluate(this._id, pageIds).subscribe({
+      next: response => {
+        if (response.success) {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Evaluation started successfully',
+          });
+          this.fetchPages();
+        } else {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: response.message || 'Failed to start evaluation',
+          });
+        }
+      },
+      error: error => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: error.error.message || 'Failed to start evaluation',
+        });
+      },
+    });
+  }
+
+  openDeletePagesDialog(): void {
+    const dialogRef = this.dialog.open(DeletePagesDialog, {
+      data: {
+        pageIds: this.selection.selected.map(page => page._id),
+        onCloseSuccess: this.fetchPages.bind(this),
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.selection.clear();
+    });
   }
 
   fetchWebsite() {
@@ -236,6 +287,30 @@ export class WebsiteDetailsComponent {
 
 
   }
+
+  deletePages() {
+    const ids = this.selection.selected.map(page => page._id);
+
+    this.pagesService.removePages(ids).subscribe({
+      next: response => {
+        if (response.success) {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Pages deleted successfully',
+          });
+          this.fetchPages();
+        }
+      },
+      error: error => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: error.error.message || 'Failed to delete pages',
+        });
+      },
+    });
+  }
 }
 
 @Component({
@@ -335,6 +410,57 @@ export class DeleteWebsiteDialog {
             severity: 'error',
             summary: 'Error',
             detail: error.error.message || 'Failed to delete website',
+          });
+        },
+      });
+    }
+  }
+
+  onCancel(): void {
+    this.dialogRef.close();
+  }
+}
+
+// Delete pages dialog
+
+@Component({
+  selector: 'delete-pages-dialog',
+  templateUrl: './delete-pages-dialog.html',
+})
+
+export class DeletePagesDialog {
+  constructor(
+    public dialogRef: MatDialogRef<DeletePagesDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private pagesService: PagesService,
+    private messageService: MessageService
+  ) {}
+
+  onDelete(): void {
+    if (this.data.pageIds) {
+      this.pagesService.removePages(this.data.pageIds).subscribe({
+        next: response => {
+          if (response.success) {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Pages deleted successfully',
+            });
+            this.dialogRef.close();
+            this.data.onCloseSuccess();
+          } else {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: response.message || 'Failed to delete pages',
+            });
+          }
+        },
+        error: error => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.error.message || 'Failed to delete pages',
           });
         },
       });
