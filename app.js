@@ -26,6 +26,7 @@ mongoose
 
 require('./models/Website');
 require('./models/Page');
+require('./models/PageEvaluation');
 
 /* EXPRESS MIDDLEWARE */
 
