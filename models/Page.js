@@ -27,6 +27,12 @@ const PageSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+    stats: {
+      hasAAAErrors: Boolean,
+      hasAAErrors: Boolean,
+      hasAErrors: Boolean,
+      hasNoErrors: Boolean,
+    },
   },
   {
     timestamps: true,
