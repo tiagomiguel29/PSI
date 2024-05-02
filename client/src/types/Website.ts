@@ -10,4 +10,12 @@ export type Website = {
   lastEvaluated?: string;
   pages?: Page[];
   imageUrl?: string;
+  stats?: {
+    pagesWithoutErrors: number;
+    pagesWithErrors: number;
+    pagesWithAError: number;
+    pagesWithAAError: number;
+    pagesWithAAAError: number;
+    evaluatedPages: number;
+  }
 };
