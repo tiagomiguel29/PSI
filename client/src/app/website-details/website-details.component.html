@@ -124,6 +124,7 @@
           [disabled]="!selection.hasValue()"
           matTooltip="Evaluate selected pages"
           matTooltipPosition="above"
+          (click)="handleEvaluatePages()"
           >
             <mat-icon>pageview</mat-icon>
           </button>

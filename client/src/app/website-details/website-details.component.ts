@@ -99,6 +99,35 @@ export class WebsiteDetailsComponent {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row`;
   }
 
+  handleEvaluatePages() {
+    const pageIds = this.selection.selected.map(page => page._id);
+    this.websiteService.evaluate(this._id, pageIds).subscribe({
+      next: response => {
+        if (response.success) {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Evaluation started successfully',
+          });
+          this.fetchPages();
+        } else {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: response.message || 'Failed to start evaluation',
+          });
+        }
+      },
+      error: error => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: error.error.message || 'Failed to start evaluation',
+        });
+      },
+    });
+  }
+
   openDeletePagesDialog(): void {
     const dialogRef = this.dialog.open(DeletePagesDialog, {
       data: {

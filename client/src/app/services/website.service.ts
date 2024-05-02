@@ -105,4 +105,13 @@ export class WebsiteService {
         map(response => response)
       );
   }
+
+  // Evaluate a website pages
+  evaluate(id: string, pages: string[]): Observable<WebsiteResponse> {
+    return this.http
+      .post<WebsiteResponse>(`${this.baseUrl}/${id}/evaluate`, { pages })
+      .pipe(
+        map(response => response)
+      );
+  }
 }
