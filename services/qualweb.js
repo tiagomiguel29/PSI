@@ -72,7 +72,7 @@ async function handleEvaluationStart(website, pages) {
     page.status = 'Em avaliação';
     await page.save();
 
-    evaluate(page.url).then((result) => {
+    await evaluate(page.url).then((result) => {
       if (!result) {
         error = true;
       } else {
@@ -87,7 +87,7 @@ async function handleEvaluationStart(website, pages) {
 
   website.lastEvaluated = new Date();
 
-  updateWebsiteStats(website);
+  await updateWebsiteStats(website);
 
   if (error) {
     website.status = 'Erro na avaliação';
