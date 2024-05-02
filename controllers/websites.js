@@ -2,7 +2,7 @@ const Website = require('../models/Website');
 const Page = require('../models/Page');
 const { validateWebsite } = require('../utils/validation/website');
 const { generateLink } = require('../services/s3');
-const { evaluate } = require('../services/qualweb');
+const { handleEvaluationStart } = require('../services/qualweb');
 const { captureAndUpload } = require('../services/integrations');
 const { isMongoId, isSubPage, trimURL } = require('../utils/validation/common');
 const { validatePage } = require('../utils/validation/page');
@@ -234,8 +234,10 @@ async function removeWebsite(req, res) {
   }
 }
 
-async function evaluateWebsite(req, res) {
+async function evaluate(req, res) {
   const { id } = req.params;
+
+  const { pages } = req.body;
 
   try {
     if (!isMongoId(id)) {
@@ -254,13 +256,29 @@ async function evaluateWebsite(req, res) {
       });
     }
 
-    const results = await evaluate(website.url);
+    for (const page of pages) {
+      if (!isMongoId(page)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid page ID',
+        });
+      }
+    }
 
-    console.log(results);
+    const pageDocs = await Page.find({ _id: { $in: pages } });
+
+    if (pageDocs.length !== pages.length) {
+      return res.status(400).json({
+        success: false,
+        message: 'One or more pages not found',
+      });
+    }
+
+    handleEvaluationStart(website, pageDocs);
 
     return res.status(200).json({
       success: true,
-      results,
+      message: 'Evaluation started',
     });
   } catch (error) {
     return res.status(500).json({
@@ -276,5 +294,5 @@ module.exports = {
   getWebsite,
   getWebsites,
   removeWebsite,
-  evaluateWebsite,
+  evaluate,
 };

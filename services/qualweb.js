@@ -1,18 +1,20 @@
 const { QualWeb } = require('@qualweb/core');
+const PageEvaluation = require('../models/PageEvaluation');
+const fs = require('fs');
+
+const plugins = {
+  dBlock: true,
+  stealth: true,
+};
+
+const qualweb = new QualWeb(plugins);
 
 async function evaluate(url) {
   try {
-    const plugins = {
-      dBlock: true,
-      stealth: true,
-    };
-
-    const qualweb = new QualWeb(plugins);
-
     const clusterOptions = {
       timeout: 60 * 1000,
-      maxConcurrency: 1, // Change later
-      monitor: true,
+      maxConcurrency: 1,
+      //monitor: true,
     };
 
     const launchOptions = {
@@ -24,7 +26,7 @@ async function evaluate(url) {
     await qualweb.start(clusterOptions, launchOptions);
 
     const qualwebOptions = {
-      url: url,
+      urls: [url],
     };
 
     const results = await qualweb.evaluate(qualwebOptions);
@@ -38,6 +40,143 @@ async function evaluate(url) {
   }
 }
 
+// Checks is it fails at least one A or AA level rule
+function isConforme(assertions) {
+  const assertionsArray = Object.values(assertions);
+
+  const failed = assertionsArray.filter(
+    (assertion) => assertion.metadata.outcome === 'failed',
+  );
+
+  for (const assertion of failed) {
+    if (
+      assertion.metadata['success-criteria'].some(
+        (sc) => sc.level === 'A' || sc.level === 'AA',
+      )
+    ) {
+      return false;
+    }
+  }
+  return true;
+}
+
+// Will start the evaluation process of the pages and update the website status
+async function handleEvaluationStart(website, pages) {
+  website.status = 'Em avaliação';
+  await website.save();
+
+  let error = false;
+
+  for (const page of pages) {
+    page.status = 'Em avaliação';
+    await page.save();
+
+    evaluate(page.url).then((result) => {
+      if (!result) {
+        error = true;
+      } else {
+        const success = handlePageResults(result[page.url], page);
+
+        if (!success) {
+          error = true;
+        }
+      }
+    });
+  }
+
+  website.lastEvaluated = new Date();
+
+  if (error) {
+    website.status = 'Erro na avaliação';
+    await website.save();
+    return;
+  }
+
+  website.status = 'Avaliado';
+  await website.save();
+}
+
+// Will handle the results from a single pages, updating the page status and adding the results to the page
+async function handlePageResults(result, page) {
+  if (
+    !result ||
+    !result.modules ||
+    !result.modules['act-rules'] ||
+    !result.modules['wcag-techniques']
+  ) {
+    page.status = 'Erro na avaliação';
+    await page.save();
+    return false;
+  }
+
+  const resultOutcomeAct = isConforme(result.modules['act-rules'].assertions);
+  const resultOutcomeWcag = isConforme(
+    result.modules['wcag-techniques'].assertions,
+  );
+
+  const resultOutcome =
+    resultOutcomeAct && resultOutcomeWcag ? 'Conforme' : 'Não conforme';
+
+  page.status = resultOutcome;
+  page.lastEvaluated = new Date();
+  await page.save();
+
+  const actAssertionsKeys = Object.keys(result.modules['act-rules'].assertions);
+
+  for (const key of actAssertionsKeys) {
+    if (
+      result.modules['act-rules'].assertions[key].metadata.outcome ===
+      'inapplicable'
+    ) {
+      delete result.modules['act-rules'].assertions[key];
+    } else {
+      delete result.modules['act-rules'].assertions[key].results;
+    }
+  }
+
+  const wcagAssertionsKeys = Object.keys(
+    result.modules['wcag-techniques'].assertions,
+  );
+
+  for (const key of wcagAssertionsKeys) {
+    if (
+      result.modules['wcag-techniques'].assertions[key].metadata.outcome ===
+      'inapplicable'
+    ) {
+      delete result.modules['wcag-techniques'].assertions[key];
+    } else {
+      delete result.modules['wcag-techniques'].assertions[key].results;
+    }
+  }
+
+  const pageEvalDoc = new PageEvaluation({
+    page: page._id,
+    result: resultOutcome,
+    passed: result.metadata.passed,
+    warning: result.metadata.warning,
+    failed: result.metadata.failed,
+    inapplicable: result.metadata.inapplicable,
+    actRules: {
+      passed: result.modules['act-rules'].metadata.passed,
+      warning: result.modules['act-rules'].metadata.warning,
+      failed: result.modules['act-rules'].metadata.failed,
+      inapplicable: result.modules['act-rules'].metadata.inapplicable,
+      assertions: result.modules['act-rules'].assertions,
+    },
+    wcagTechniques: {
+      passed: result.modules['wcag-techniques'].metadata.passed,
+      warning: result.modules['wcag-techniques'].metadata.warning,
+      failed: result.modules['wcag-techniques'].metadata.failed,
+      inapplicable: result.modules['wcag-techniques'].metadata.inapplicable,
+      assertions: result.modules['wcag-techniques'].assertions,
+    },
+  });
+
+  await pageEvalDoc.save();
+
+  return true;
+}
+
 module.exports = {
-  evaluate,
+  handleEvaluationStart,
 };
