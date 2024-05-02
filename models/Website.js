@@ -27,6 +27,19 @@ const WebsiteSchema = new mongoose.Schema(
       enum: ['Not captured', 'Capturing', 'Captured', 'Error'],
       default: 'Not captured',
     },
+    stats: {
+      pagesWithoutErrors: Number,
+      pagesWithoutErrors: Number,
+      pagesWithAErrors: Number,
+      pagesWithAAErrors: Number,
+      totalPages: Number,
+      topErrors: [
+        {
+          name: String,
+          count: Number,
+        },
+      ],
+    },
   },
   {
     timestamps: true,
