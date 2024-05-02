@@ -1,6 +1,7 @@
 const { QualWeb } = require('@qualweb/core');
 const PageEvaluation = require('../models/PageEvaluation');
 const fs = require('fs');
+const Page = require('../models/Page');
 
 const plugins = {
   dBlock: true,
@@ -86,6 +87,8 @@ async function handleEvaluationStart(website, pages) {
 
   website.lastEvaluated = new Date();
 
+  updateWebsiteStats(website);
+
   if (error) {
     website.status = 'Erro na avaliação';
     await website.save();
@@ -119,6 +122,16 @@ async function handlePageResults(result, page) {
 
   page.status = resultOutcome;
   page.lastEvaluated = new Date();
+  page.stats.hasAAAErrors =
+    hasErrors(result.modules['act-rules'].assertions, 'AAA') ||
+    hasErrors(result.modules['wcag-techniques'].assertions, 'AAA');
+  page.stats.hasAAErrors =
+    hasErrors(result.modules['act-rules'].assertions, 'AA') ||
+    hasErrors(result.modules['wcag-techniques'].assertions, 'AA');
+  page.stats.hasAErrors =
+    hasErrors(result.modules['act-rules'].assertions, 'A') ||
+    hasErrors(result.modules['wcag-techniques'].assertions, 'A');
+  page.stats.hasNoErrors = result.metadata.failed === 0;
   await page.save();
 
   const actAssertionsKeys = Object.keys(result.modules['act-rules'].assertions);
@@ -175,6 +188,58 @@ async function handlePageResults(result, page) {
   await pageEvalDoc.save();
 
   return true;
+}
+
+function hasErrors(assertions, type) {
+  const assertionsArray = Object.values(assertions);
+
+  const failed = assertionsArray.filter(
+    (assertion) => assertion.metadata.outcome === 'failed',
+  );
+
+  for (const assertion of failed) {
+    if (
+      assertion.metadata['success-criteria'].some((sc) => sc.level === type)
+    ) {
+      return true;
+    }
+  }
+  return false;
+}
+
+async function updateWebsiteStats(website) {
+  try {
+    website.stats = {
+      pagesWithoutErrors: await Page.countDocuments({
+        website: website._id,
+        'stats.hasNoErrors': true,
+      }),
+      pagesWithErrors: await Page.countDocuments({
+        website: website._id,
+        'stats.hasNoErrors': false,
+      }),
+      pagesWithAErrors: await Page.countDocuments({
+        website: website._id,
+        'stats.hasAErrors': true,
+      }),
+      pagesWithAAErrors: await Page.countDocuments({
+        website: website._id,
+        'stats.hasAAErrors': true,
+      }),
+      pagesWithAAAErrors: await Page.countDocuments({
+        website: website._id,
+        'stats.hasAAAErrors': true,
+      }),
+      evaluatedPages: await Page.countDocuments({
+        website: website._id,
+        lastEvaluated: { $ne: null },
+      }),
+    };
+
+    await website.save();
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 module.exports = {
