@@ -29,10 +29,11 @@ const WebsiteSchema = new mongoose.Schema(
     },
     stats: {
       pagesWithoutErrors: Number,
-      pagesWithoutErrors: Number,
+      pagesWithErrors: Number,
       pagesWithAErrors: Number,
       pagesWithAAErrors: Number,
-      totalPages: Number,
+      pagesWithAAAErrors: Number,
+      evaluatedPages: Number,
       topErrors: [
         {
           name: String,
