@@ -1,8 +1,7 @@
 const { QualWeb } = require('@qualweb/core');
 const PageEvaluation = require('../models/PageEvaluation');
-const fs = require('fs');
-const Page = require('../models/Page');
 const { updateStats } = require('./stats');
+const { notifyPageUpdate, notifyWebsiteUpdate } = require('./sockets');
 
 const plugins = {
   dBlock: true,
@@ -57,6 +56,13 @@ async function handleEvaluationStart(website, pages) {
   for (const page of pages) {
     page.status = 'Evaluating';
     await page.save();
+    notifyPageUpdate(
+      website.id,
+      'Evaluating',
+      page.id,
+      page.status,
+      page.lastEvaluated,
+    );
 
     await evaluate(page.url).then(async (result) => {
       if (!result) {
@@ -76,11 +82,11 @@ async function handleEvaluationStart(website, pages) {
 
   if (error) {
     website.status = 'Evaluation error';
-    await website.save();
-    return;
   }
 
   await website.save();
+
+  notifyWebsiteUpdate(website.id);
 }
 
 // Will handle the results from a single pages, updating the page status and adding the results to the page
@@ -117,6 +123,14 @@ async function handlePageResults(result, page) {
     hasErrors(result.modules['wcag-techniques'].assertions, 'A');
   page.stats.hasNoErrors = result.metadata.failed === 0;
   await page.save();
+
+  notifyPageUpdate(
+    page.website.toString(),
+    'Evaluating',
+    page.id,
+    page.status,
+    page.lastEvaluated,
+  );
 
   const actAssertionsKeys = Object.keys(result.modules['act-rules'].assertions);
 

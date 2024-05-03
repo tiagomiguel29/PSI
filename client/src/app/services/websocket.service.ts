@@ -2,6 +2,13 @@ import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client'
 import { environment } from 'src/environments/environment';
 
+interface PageUpdate {
+  pageId: string;
+  newStatus: string;
+  date?: string;
+  websiteStatus?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -19,6 +26,10 @@ export class WebsocketService {
 
   onWebsiteUpdate(callback: (data: any) => void) {
     this.socket.on('website_updated', callback);
+  }
+
+  onPageUpdate(callback: (data: PageUpdate) => void) {
+    this.socket.on('page_updated', callback);
   }
 
   disconnect() {

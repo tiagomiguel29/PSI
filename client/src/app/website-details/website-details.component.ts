@@ -214,6 +214,22 @@ export class WebsiteDetailsComponent {
       this.fetchWebsite();
       this.fetchPages();
     });
+
+    // Subscribe to page updates an update the page status if the page is in the list
+    this.websocketService.onPageUpdate(data => {
+      if (data.websiteStatus) {
+        this.website.status = data.websiteStatus;
+      }
+
+      const page = this.pages.find(page => page._id === data.pageId);
+      if (page) {
+        page.status = data.newStatus;
+        if (data.date) {
+          page.lastEvaluated = data.date;
+        }
+        this.dataSource.data = this.pages;
+      }
+    });
   }
 
   openDialog(): void {

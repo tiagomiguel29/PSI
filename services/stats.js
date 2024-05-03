@@ -41,8 +41,6 @@ async function updateStats(website) {
 
   await website.save();
 
-  notifyWebsiteUpdate(website.id);
-
   return website;
 }
 
