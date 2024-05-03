@@ -272,3 +272,27 @@ body {
   display: flex;
   justify-content: flex-end !important;
 }
+
+.mat-mdc-chip.pending {
+  background-color: #a3a3a3 !important;
+}
+
+.mat-mdc-chip.evaluating {
+  background-color: #60a5fa !important;
+}
+
+.mat-mdc-chip.compliant, .mat-mdc-chip.evaluated {
+  background-color: #22c55e !important;
+}
+
+.mat-mdc-chip.notcompliant {
+  background-color: #eab308 !important;
+}
+
+.mat-mdc-chip.error {
+  background-color: #ef4444 !important;
+}
+
+.mat-mdc-progress-spinner {
+  --mdc-circular-progress-active-indicator-color: #ffff !important;
+}
