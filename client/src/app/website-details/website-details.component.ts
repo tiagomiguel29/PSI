@@ -132,6 +132,7 @@ export class WebsiteDetailsComponent {
     const dialogRef = this.dialog.open(DeletePagesDialog, {
       data: {
         pageIds: this.selection.selected.map(page => page._id),
+        websiteId: this.website._id,
         onCloseSuccess: this.fetchPages.bind(this),
       },
     });
@@ -291,7 +292,7 @@ export class WebsiteDetailsComponent {
   deletePages() {
     const ids = this.selection.selected.map(page => page._id);
 
-    this.pagesService.removePages(ids).subscribe({
+    this.pagesService.removePages(ids, this.website._id).subscribe({
       next: response => {
         if (response.success) {
           this.messageService.add({
@@ -438,7 +439,7 @@ export class DeletePagesDialog {
 
   onDelete(): void {
     if (this.data.pageIds) {
-      this.pagesService.removePages(this.data.pageIds).subscribe({
+      this.pagesService.removePages(this.data.pageIds, this.data.websiteId).subscribe({
         next: response => {
           if (response.success) {
             this.messageService.add({
