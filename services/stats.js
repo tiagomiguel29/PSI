@@ -1,13 +1,12 @@
 // Service to update the stats of a website
 
 const Page = require('../models/Page');
+const { notifyWebsiteUpdate } = require('./sockets');
 
 async function updateStats(website) {
   const pages = await Page.find({
     website: website._id,
   }).select('stats status');
-
-  console.log(pages);
 
   const evaluatedPages = pages.filter((p) =>
     ['Compliant', 'Not compliant'].includes(p.status),
@@ -39,6 +38,8 @@ async function updateStats(website) {
   }
 
   await website.save();
+
+  notifyWebsiteUpdate(website.id);
 
   return website;
 }
