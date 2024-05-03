@@ -26,10 +26,10 @@ export class WebsitesComponent {
   status = 'all';
   statusOptions: any[] = [
     { value: 'all', viewValue: 'All' },
-    { value: 'Por avaliar', viewValue: 'Por avaliar' },
-    { value: 'Em avaliação', viewValue: 'Em avaliação' },
-    { value: 'Avaliado', viewValue: 'Avaliado' },
-    { value: 'Erro na avaliação', viewValue: 'Erro na avaliação' },
+    { value: 'Pending evaluation', viewValue: 'Pending evaluation' },
+    { value: 'Evaluating', viewValue: 'Evaluating' },
+    { value: 'Evaluated', viewValue: 'Evaluated' },
+    { value: 'Evaluation error', viewValue: 'Evaluation error' },
   ];
   statusFormControl = new FormControl('all');
 

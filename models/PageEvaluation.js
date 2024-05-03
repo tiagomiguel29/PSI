@@ -9,7 +9,7 @@ const PageEvaluationSchema = new mongoose.Schema(
     },
     result: {
       type: String,
-      enum: ['Conforme', 'Não conforme', 'Erro na avaliação'],
+      enum: ['Compliant', 'Not compliant', 'Evaluation error'],
     },
     passed: Number,
     warning: Number,

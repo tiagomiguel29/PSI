@@ -63,12 +63,24 @@
                       <p class="text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">
                         Website Details
                       </p>
-                      <mat-chip class="w-fit">
+                      <mat-chip class="w-fit"
+                      [ngClass]="website?.
+                      status === 'Pending evaluation' ? 'pending' : website?.
+                      status === 'Evaluated' ? 'evaluated' : website?.
+                      status === 'Evaluating' ? 'evaluating' : 'error'"
+                      >
                         <span
-                          class="text-sm font-medium text-white px-2 py-1"
+                          class="text-sm font-medium text-white px-2 py-1 flex flex-row"
                           aria-label="Website status"
 
-                          >{{ website?.status }}</span
+                          >
+                          <mat-spinner
+                      *ngIf="website?.status === 'Evaluating'"
+                      diameter="20"
+                      strokeWidth="4"
+                      class="mr-2"
+                    ></mat-spinner>
+                          {{ website?.status }}</span
                         >
                       </mat-chip>
                     </div>
@@ -96,7 +108,7 @@
         </div>
       </div>
     </div>
-    <div *ngIf="website.lastEvaluated">
+    <div *ngIf="website?.lastEvaluated">
     <!-- Website Stats -->
     <div class="w-full md:w-3/4 lg:w-2/3 xl:w-2/3 mx-auto mt-10">
     <div>
@@ -277,7 +289,30 @@
 
             <ng-container matColumnDef="status">
               <th mat-header-cell *matHeaderCellDef class="dark:text-white">Status</th>
-              <td mat-cell *matCellDef="let element">{{ element.status }}</td>
+              <td mat-cell *matCellDef="let element">
+                  <!-- Status chip with a color for each status -->
+                  <mat-chip [ngClass]="element.status === 'Pending evaluation' ?
+                  'pending' : element.status === 'Evaluating' ?
+                  'evaluating' : element.status === 'Compliant' ?
+                  'compliant' : element.status === 'Not compliant' ?
+                  'notcompliant' : 'error'">
+                    <span class="text-white
+                    font-medium
+                    px-2
+                    py-1
+                    flex flex-row
+                    "
+                    >
+                    <mat-spinner
+                      *ngIf="element.status === 'Evaluating'"
+                      diameter="20"
+                      strokeWidth="4"
+                      class="mr-2"
+                    ></mat-spinner>
+                    {{ element.status }}</span>
+                  </mat-chip>
+
+              </td>
             </ng-container>
 
             <ng-container matColumnDef="lastEvaluated">

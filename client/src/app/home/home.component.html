@@ -16,7 +16,7 @@
         (keyup.enter)="switchProtocol()"
         >{{protocol}}&nbsp;</span>
         <mat-error *ngIf="url.hasError('pattern') && !url.hasError('required')"
-          >Please enter a valid URL</mat-error
+          >URL in wrong format (Ex: https://example.com)</mat-error
         >
         <mat-error *ngIf="url.hasError('required')"
           >URL is <strong>required</strong></mat-error
@@ -65,7 +65,7 @@
                   pageInput.hasError('pattern') &&
                   !pageInput.hasError('requiredField')
                 "
-                >Please enter a valid URL</mat-error
+                >URL in wrong format (Ex: https://example.com)</mat-error
               >
               <mat-error *ngIf="pageInput.hasError('requiredField')"
                 >URL is <strong>required</strong></mat-error

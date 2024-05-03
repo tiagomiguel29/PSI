@@ -10,8 +10,13 @@ const WebsiteSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['Por avaliar', 'Em avaliação', 'Avaliado', 'Erro na avaliação'],
-      default: 'Por avaliar',
+      enum: [
+        'Pending evaluation',
+        'Evaluating',
+        'Evaluated',
+        'Evaluation error',
+      ],
+      default: 'Pending evaluation',
     },
     lastEvaluated: {
       type: Date,

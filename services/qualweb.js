@@ -1,8 +1,7 @@
 const { QualWeb } = require('@qualweb/core');
 const PageEvaluation = require('../models/PageEvaluation');
-const fs = require('fs');
-const Page = require('../models/Page');
 const { updateStats } = require('./stats');
+const { notifyPageUpdate, notifyWebsiteUpdate } = require('./sockets');
 
 const plugins = {
   dBlock: true,
@@ -43,20 +42,27 @@ async function evaluate(url) {
 }
 
 // Checks is it fails at least one A or AA level rule
-function isConforme(assertions) {
+function isCompliant(assertions) {
   return !hasErrors(assertions, 'A') && !hasErrors(assertions, 'AA');
 }
 
 // Will start the evaluation process of the pages and update the website status
 async function handleEvaluationStart(website, pages) {
-  website.status = 'Em avaliação';
+  website.status = 'Evaluating';
   await website.save();
 
   let error = false;
 
   for (const page of pages) {
-    page.status = 'Em avaliação';
+    page.status = 'Evaluating';
     await page.save();
+    notifyPageUpdate(
+      website.id,
+      'Evaluating',
+      page.id,
+      page.status,
+      page.lastEvaluated,
+    );
 
     await evaluate(page.url).then(async (result) => {
       if (!result) {
@@ -74,17 +80,13 @@ async function handleEvaluationStart(website, pages) {
     });
   }
 
-  website.lastEvaluated = new Date();
-
-  await updateWebsiteStats(website);
-
   if (error) {
-    website.status = 'Erro na avaliação';
-    await website.save();
-    return;
+    website.status = 'Evaluation error';
   }
 
   await website.save();
+
+  notifyWebsiteUpdate(website.id);
 }
 
 // Will handle the results from a single pages, updating the page status and adding the results to the page
@@ -95,18 +97,18 @@ async function handlePageResults(result, page) {
     !result.modules['act-rules'] ||
     !result.modules['wcag-techniques']
   ) {
-    page.status = 'Erro na avaliação';
+    page.status = 'Evaluation error';
     await page.save();
     return false;
   }
 
-  const resultOutcomeAct = isConforme(result.modules['act-rules'].assertions);
-  const resultOutcomeWcag = isConforme(
+  const resultOutcomeAct = isCompliant(result.modules['act-rules'].assertions);
+  const resultOutcomeWcag = isCompliant(
     result.modules['wcag-techniques'].assertions,
   );
 
   const resultOutcome =
-    resultOutcomeAct && resultOutcomeWcag ? 'Conforme' : 'Não conforme';
+    resultOutcomeAct && resultOutcomeWcag ? 'Compliant' : 'Not compliant';
 
   page.status = resultOutcome;
   page.lastEvaluated = new Date();
@@ -121,6 +123,14 @@ async function handlePageResults(result, page) {
     hasErrors(result.modules['wcag-techniques'].assertions, 'A');
   page.stats.hasNoErrors = result.metadata.failed === 0;
   await page.save();
+
+  notifyPageUpdate(
+    page.website.toString(),
+    'Evaluating',
+    page.id,
+    page.status,
+    page.lastEvaluated,
+  );
 
   const actAssertionsKeys = Object.keys(result.modules['act-rules'].assertions);
 

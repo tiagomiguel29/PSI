@@ -15,13 +15,13 @@ const PageSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: [
-        'Por avaliar',
-        'Em avaliação',
-        'Conforme',
-        'Não conforme',
-        'Erro na avaliação',
+        'Pending evaluation',
+        'Evaluating',
+        'Compliant',
+        'Not compliant',
+        'Evaluation error',
       ],
-      default: 'Por avaliar',
+      default: 'Pending evaluation',
     },
     lastEvaluated: {
       type: Date,

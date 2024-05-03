@@ -1,5 +1,7 @@
 const express = require('express');
+const http = require('http');
 const app = express();
+const { Server } = require('socket.io');
 const cors = require('cors');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
@@ -43,7 +45,16 @@ app.use('/api', require('./routes/api'));
 
 /* SERVER START */
 
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: '*',
+  },
+});
+
+require('./services/sockets').init(io);
+
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });

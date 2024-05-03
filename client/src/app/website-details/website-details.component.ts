@@ -20,6 +20,7 @@ import { PagesService } from '../services/pages.service';
 import { MessageService } from 'primeng/api';
 import { FormControl } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
+import { WebsocketService } from '../services/websocket.service';
 
 export interface NewPageDialogData {
   websiteId: string;
@@ -52,11 +53,11 @@ export class WebsiteDetailsComponent {
     this.subpageValidator(),
   ]);
   statusOptions = [{ value: 'all', viewValue: 'All'},
-              { value: 'Por avaliar', viewValue: 'Por avaliar' },
-              { value: 'Em avaliação', viewValue: 'Em avaliação' },
-              { value: 'Conforme', viewValue: 'Conforme' },
-              { value: 'Não conforme', viewValue: 'Não conforme'},
-              { value: 'Erro na avaliação', viewValue: 'Erro na avaliação'}
+              { value: 'Pending evaluation', viewValue: 'Pending evaluation' },
+              { value: 'Evaluating', viewValue: 'Evaluating' },
+              { value: 'Compliant', viewValue: 'Compliant' },
+              { value: 'Not compliant', viewValue: 'Not compliant'},
+              { value: 'Evaluation error', viewValue: 'Evaluation error'}
   ]
 
   statusFormControl = new FormControl('all');
@@ -74,6 +75,7 @@ export class WebsiteDetailsComponent {
     private websiteService: WebsiteService,
     private pagesService: PagesService,
     private messageService: MessageService,
+    private websocketService: WebsocketService,
     public dialog: MatDialog
   ) {
     this._id = this.route.snapshot.paramMap.get('id')!;
@@ -109,7 +111,6 @@ export class WebsiteDetailsComponent {
             summary: 'Success',
             detail: 'Evaluation started successfully',
           });
-          this.fetchPages();
         } else {
           this.messageService.add({
             severity: 'error',
@@ -117,6 +118,8 @@ export class WebsiteDetailsComponent {
             detail: response.message || 'Failed to start evaluation',
           });
         }
+        this.selection.clear();
+
       },
       error: error => {
         this.messageService.add({
@@ -124,6 +127,7 @@ export class WebsiteDetailsComponent {
           summary: 'Error',
           detail: error.error.message || 'Failed to start evaluation',
         });
+        this.selection.clear();
       },
     });
   }
@@ -204,6 +208,28 @@ export class WebsiteDetailsComponent {
         this.pageUrlToAdd.setValue(value.replace(this.protocol, ''), {
           emitEvent: false,
         });
+      }
+    });
+
+    this.websocketService.connectToWebsite(this._id);
+    this.websocketService.onWebsiteUpdate(() => {
+      this.fetchWebsite();
+      this.fetchPages();
+    });
+
+    // Subscribe to page updates an update the page status if the page is in the list
+    this.websocketService.onPageUpdate(data => {
+      if (data.websiteStatus) {
+        this.website.status = data.websiteStatus;
+      }
+
+      const page = this.pages.find(page => page._id === data.pageId);
+      if (page) {
+        page.status = data.newStatus;
+        if (data.date) {
+          page.lastEvaluated = data.date;
+        }
+        this.dataSource.data = this.pages;
       }
     });
   }
@@ -287,30 +313,6 @@ export class WebsiteDetailsComponent {
     });
 
 
-  }
-
-  deletePages() {
-    const ids = this.selection.selected.map(page => page._id);
-
-    this.pagesService.removePages(ids, this.website._id).subscribe({
-      next: response => {
-        if (response.success) {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Pages deleted successfully',
-          });
-          this.fetchPages();
-        }
-      },
-      error: error => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: error.error.message || 'Failed to delete pages',
-        });
-      },
-    });
   }
 }
 

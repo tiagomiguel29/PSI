@@ -20,6 +20,7 @@
     "mongoose": "^8.3.1",
     "morgan": "^1.10.0",
     "puppeteer": "^21.3.6",
+    "socket.io": "^4.7.5",
     "validator": "^13.11.0"
   },
   "devDependencies": {
