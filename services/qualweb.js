@@ -74,10 +74,6 @@ async function handleEvaluationStart(website, pages) {
     });
   }
 
-  website.lastEvaluated = new Date();
-
-  await updateWebsiteStats(website);
-
   if (error) {
     website.status = 'Evaluation error';
     await website.save();

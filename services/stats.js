@@ -6,7 +6,7 @@ const { notifyWebsiteUpdate } = require('./sockets');
 async function updateStats(website) {
   const pages = await Page.find({
     website: website._id,
-  }).select('stats status');
+  }).select('stats status lastEvaluated');
 
   const evaluatedPages = pages.filter((p) =>
     ['Compliant', 'Not compliant'].includes(p.status),
@@ -36,6 +36,8 @@ async function updateStats(website) {
   } else {
     website.status = 'Evaluated';
   }
+
+  website.lastEvaluated = new Date();
 
   await website.save();
 
