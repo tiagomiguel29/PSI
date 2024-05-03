@@ -46,7 +46,11 @@ app.use('/api', require('./routes/api'));
 /* SERVER START */
 
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: '*',
+  },
+});
 
 require('./services/sockets').init(io);
 
