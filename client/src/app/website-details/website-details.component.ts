@@ -20,6 +20,7 @@ import { PagesService } from '../services/pages.service';
 import { MessageService } from 'primeng/api';
 import { FormControl } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
+import { WebsocketService } from '../services/websocket.service';
 
 export interface NewPageDialogData {
   websiteId: string;
@@ -74,6 +75,7 @@ export class WebsiteDetailsComponent {
     private websiteService: WebsiteService,
     private pagesService: PagesService,
     private messageService: MessageService,
+    private websocketService: WebsocketService,
     public dialog: MatDialog
   ) {
     this._id = this.route.snapshot.paramMap.get('id')!;
@@ -206,6 +208,12 @@ export class WebsiteDetailsComponent {
         });
       }
     });
+
+    this.websocketService.connectToWebsite(this._id);
+    this.websocketService.onWebsiteUpdate(() => {
+      this.fetchWebsite();
+      this.fetchPages();
+    });
   }
 
   openDialog(): void {
@@ -287,30 +295,6 @@ export class WebsiteDetailsComponent {
     });
 
 
-  }
-
-  deletePages() {
-    const ids = this.selection.selected.map(page => page._id);
-
-    this.pagesService.removePages(ids, this.website._id).subscribe({
-      next: response => {
-        if (response.success) {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Pages deleted successfully',
-          });
-          this.fetchPages();
-        }
-      },
-      error: error => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: error.error.message || 'Failed to delete pages',
-        });
-      },
-    });
   }
 }
 
