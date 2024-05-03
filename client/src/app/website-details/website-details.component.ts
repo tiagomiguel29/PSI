@@ -52,11 +52,11 @@ export class WebsiteDetailsComponent {
     this.subpageValidator(),
   ]);
   statusOptions = [{ value: 'all', viewValue: 'All'},
-              { value: 'Por avaliar', viewValue: 'Por avaliar' },
-              { value: 'Em avaliação', viewValue: 'Em avaliação' },
-              { value: 'Conforme', viewValue: 'Conforme' },
-              { value: 'Não conforme', viewValue: 'Não conforme'},
-              { value: 'Erro na avaliação', viewValue: 'Erro na avaliação'}
+              { value: 'Pending evaluation', viewValue: 'Pending evaluation' },
+              { value: 'Evaluating', viewValue: 'Evaluating' },
+              { value: 'Compliant', viewValue: 'Compliant' },
+              { value: 'Not compliant', viewValue: 'Not compliant'},
+              { value: 'Evaluation error', viewValue: 'Evaluation error'}
   ]
 
   statusFormControl = new FormControl('all');

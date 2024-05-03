@@ -43,19 +43,19 @@ async function evaluate(url) {
 }
 
 // Checks is it fails at least one A or AA level rule
-function isConforme(assertions) {
+function isCompliant(assertions) {
   return !hasErrors(assertions, 'A') && !hasErrors(assertions, 'AA');
 }
 
 // Will start the evaluation process of the pages and update the website status
 async function handleEvaluationStart(website, pages) {
-  website.status = 'Em avaliação';
+  website.status = 'Evaluating';
   await website.save();
 
   let error = false;
 
   for (const page of pages) {
-    page.status = 'Em avaliação';
+    page.status = 'Evaluating';
     await page.save();
 
     await evaluate(page.url).then(async (result) => {
@@ -79,7 +79,7 @@ async function handleEvaluationStart(website, pages) {
   await updateWebsiteStats(website);
 
   if (error) {
-    website.status = 'Erro na avaliação';
+    website.status = 'Evaluation error';
     await website.save();
     return;
   }
@@ -95,18 +95,18 @@ async function handlePageResults(result, page) {
     !result.modules['act-rules'] ||
     !result.modules['wcag-techniques']
   ) {
-    page.status = 'Erro na avaliação';
+    page.status = 'Evaluation error';
     await page.save();
     return false;
   }
 
-  const resultOutcomeAct = isConforme(result.modules['act-rules'].assertions);
-  const resultOutcomeWcag = isConforme(
+  const resultOutcomeAct = isCompliant(result.modules['act-rules'].assertions);
+  const resultOutcomeWcag = isCompliant(
     result.modules['wcag-techniques'].assertions,
   );
 
   const resultOutcome =
-    resultOutcomeAct && resultOutcomeWcag ? 'Conforme' : 'Não conforme';
+    resultOutcomeAct && resultOutcomeWcag ? 'Compliant' : 'Not compliant';
 
   page.status = resultOutcome;
   page.lastEvaluated = new Date();

@@ -10,7 +10,7 @@ async function updateStats(website) {
   console.log(pages);
 
   const evaluatedPages = pages.filter((p) =>
-    ['Conforme', 'Não conforme'].includes(p.status),
+    ['Compliant', 'Not compliant'].includes(p.status),
   );
 
   const newStats = {
@@ -26,14 +26,16 @@ async function updateStats(website) {
 
   website.stats = { ...newStats };
 
-  if (pages.filter((p) => p.status === 'Erro na avaliação').length > 0) {
-    website.status = 'Erro na avaliação';
-  } else if (pages.filter((p) => p.status === 'Por avaliar').length > 0) {
-    website.status = 'Por avaliar';
-  } else if (pages.filter((p) => p.status === 'Em avaliação').length > 0) {
-    website.status = 'Por avaliar';
+  if (pages.filter((p) => p.status === 'Evaluation error').length > 0) {
+    website.status = 'Evaluation error';
+  } else if (
+    pages.filter((p) => p.status === 'Pending evaluation').length > 0
+  ) {
+    website.status = 'Pending evaluation';
+  } else if (pages.filter((p) => p.status === 'Evaluating').length > 0) {
+    website.status = 'Pending evaluation';
   } else {
-    website.status = 'Avaliado';
+    website.status = 'Evaluated';
   }
 
   await website.save();
