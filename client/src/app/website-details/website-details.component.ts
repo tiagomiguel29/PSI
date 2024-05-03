@@ -111,7 +111,6 @@ export class WebsiteDetailsComponent {
             summary: 'Success',
             detail: 'Evaluation started successfully',
           });
-          this.fetchPages();
         } else {
           this.messageService.add({
             severity: 'error',
@@ -119,6 +118,8 @@ export class WebsiteDetailsComponent {
             detail: response.message || 'Failed to start evaluation',
           });
         }
+        this.selection.clear();
+
       },
       error: error => {
         this.messageService.add({
@@ -126,6 +127,7 @@ export class WebsiteDetailsComponent {
           summary: 'Error',
           detail: error.error.message || 'Failed to start evaluation',
         });
+        this.selection.clear();
       },
     });
   }
