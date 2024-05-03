@@ -3,6 +3,7 @@ const Page = require('../models/Page');
 
 const { isMongoId, isSubPage, trimURL } = require('../utils/validation/common');
 const { validatePage } = require('../utils/validation/page');
+const { updateStats } = require('../services/stats');
 
 async function createPage(req, res) {
   try {
@@ -45,6 +46,8 @@ async function createPage(req, res) {
     }
 
     const page = await Page.create({ url: trimURL(url), website: websiteId });
+
+    await updateStats(website);
 
     return res.status(201).json({
       success: true,
@@ -173,6 +176,10 @@ async function removePage(req, res) {
       });
     }
 
+    const website = Website.findById(page.website);
+
+    await updateStats(website);
+
     return res.status(200).json({
       success: true,
       page,
@@ -187,9 +194,17 @@ async function removePage(req, res) {
 
 // Deletes multiple pages given an array of page IDs
 async function removePages(req, res) {
+  const { websiteId } = req.query;
   const { ids } = req.body;
 
   try {
+    if (!websiteId || !isMongoId(websiteId)) {
+      return res.status(400).json({
+        success: false,
+        message: 'A website ID must be provided',
+      });
+    }
+
     if (!ids || !Array.isArray(ids) || ids.length === 0) {
       return res.status(400).json({
         success: false,
@@ -206,6 +221,15 @@ async function removePages(req, res) {
       }
     }
 
+    const website = await Website.findById(websiteId);
+
+    if (!website) {
+      return res.status(404).json({
+        success: false,
+        message: 'Website not found',
+      });
+    }
+
     const pages = await Page.deleteMany({ _id: { $in: ids } });
 
     if (!pages) {
@@ -214,6 +238,8 @@ async function removePages(req, res) {
         message: 'Pages not found',
       });
     }
+
+    updateStats(website);
 
     return res.status(200).json({
       success: true,

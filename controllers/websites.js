@@ -6,6 +6,7 @@ const { handleEvaluationStart } = require('../services/qualweb');
 const { captureAndUpload } = require('../services/integrations');
 const { isMongoId, isSubPage, trimURL } = require('../utils/validation/common');
 const { validatePage } = require('../utils/validation/page');
+const { updateStats } = require('../services/stats');
 
 async function createWebsite(req, res) {
   const { url } = req.body;
@@ -102,6 +103,8 @@ async function addPages(req, res) {
 
       pageDocs.push(newPage);
     }
+
+    await updateStats(website);
 
     return res.status(201).json({
       success: true,

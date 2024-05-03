@@ -78,8 +78,8 @@ export class PagesService {
     );
   }
 
-  removePages(ids: string[]): Observable<StandardResponse> {
-    return this.http.delete<StandardResponse>(`${this.baseUrl}`, { body: { ids } }).pipe(
+  removePages(ids: string[], websiteId: string): Observable<StandardResponse> {
+    return this.http.delete<StandardResponse>(`${this.baseUrl}?websiteId=${websiteId}`, { body: { ids } }).pipe(
       map(response => response)
     );
   }
