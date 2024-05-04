@@ -46,6 +46,7 @@ const WebsiteSchema = new mongoose.Schema(
       topErrors: [
         {
           code: String,
+          name: String,
           description: String,
           count: Number,
         },

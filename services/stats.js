@@ -98,6 +98,7 @@ async function getTop10Errors(website) {
       const assertion = allConcat.find((a) => a.code === code);
       return {
         code,
+        name: assertion.name,
         description: assertion.description,
         count: assertionCounts[code],
       };
