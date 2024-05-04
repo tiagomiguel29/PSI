@@ -7,6 +7,7 @@ const { captureAndUpload } = require('../services/integrations');
 const { isMongoId, isSubPage, trimURL } = require('../utils/validation/common');
 const { validatePage } = require('../utils/validation/page');
 const { updateStats } = require('../services/stats');
+const PageEvaluation = require('../models/PageEvaluation');
 
 async function createWebsite(req, res) {
   const { url } = req.body;
@@ -233,6 +234,8 @@ async function removeWebsite(req, res) {
     }
 
     await Page.deleteMany({ website: website._id });
+
+    await PageEvaluation.deleteMany({ website: website._id });
 
     return res.status(200).json({
       success: true,
