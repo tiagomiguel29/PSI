@@ -17,5 +17,11 @@ export type Website = {
     pagesWithAAError: number;
     pagesWithAAAError: number;
     evaluatedPages: number;
+    topErrors: {
+      code: string;
+      name: string;
+      description: string;
+      count: number;
+    }[];
   }
 };

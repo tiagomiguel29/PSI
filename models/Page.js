@@ -33,6 +33,11 @@ const PageSchema = new mongoose.Schema(
       hasAErrors: Boolean,
       hasNoErrors: Boolean,
     },
+    evaluation: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'PageEvaluation',
+      default: null,
+    },
   },
   {
     timestamps: true,

@@ -8,6 +8,10 @@ const WebsiteSchema = new mongoose.Schema(
       trim: true,
       unique: true,
     },
+    rootPage: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Page',
+    },
     status: {
       type: String,
       enum: [
@@ -41,7 +45,9 @@ const WebsiteSchema = new mongoose.Schema(
       evaluatedPages: Number,
       topErrors: [
         {
+          code: String,
           name: String,
+          description: String,
           count: Number,
         },
       ],

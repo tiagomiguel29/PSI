@@ -160,30 +160,97 @@ async function handlePageResults(result, page) {
     }
   }
 
-  const pageEvalDoc = new PageEvaluation({
-    page: page._id,
-    result: resultOutcome,
-    passed: result.metadata.passed,
-    warning: result.metadata.warning,
-    failed: result.metadata.failed,
-    inapplicable: result.metadata.inapplicable,
-    actRules: {
-      passed: result.modules['act-rules'].metadata.passed,
-      warning: result.modules['act-rules'].metadata.warning,
-      failed: result.modules['act-rules'].metadata.failed,
-      inapplicable: result.modules['act-rules'].metadata.inapplicable,
-      assertions: result.modules['act-rules'].assertions,
+  // Convet an object to an array with the key as the name
+  // of the assertion
+  const actAssertions = Object.keys(result.modules['act-rules'].assertions).map(
+    (key) => {
+      return {
+        name: result.modules['act-rules'].assertions[key].name,
+        code: result.modules['act-rules'].assertions[key].code,
+        mapping: result.modules['act-rules'].assertions[key].mapping,
+        description: result.modules['act-rules'].assertions[key].description,
+        metadata: {
+          'success-criteria':
+            result.modules['act-rules'].assertions[key].metadata[
+              'success-criteria'
+            ],
+          passed: result.modules['act-rules'].assertions[key].metadata.passed,
+          warning: result.modules['act-rules'].assertions[key].metadata.warning,
+          failed: result.modules['act-rules'].assertions[key].metadata.failed,
+          inapplicable:
+            result.modules['act-rules'].assertions[key].metadata.inapplicable,
+          outcome: result.modules['act-rules'].assertions[key].metadata.outcome,
+          description:
+            result.modules['act-rules'].assertions[key].metadata.description,
+        },
+      };
     },
-    wcagTechniques: {
-      passed: result.modules['wcag-techniques'].metadata.passed,
-      warning: result.modules['wcag-techniques'].metadata.warning,
-      failed: result.modules['wcag-techniques'].metadata.failed,
-      inapplicable: result.modules['wcag-techniques'].metadata.inapplicable,
-      assertions: result.modules['wcag-techniques'].assertions,
-    },
+  );
+
+  const wcagAssertions = Object.keys(
+    result.modules['wcag-techniques'].assertions,
+  ).map((key) => {
+    return {
+      name: result.modules['wcag-techniques'].assertions[key].name,
+      code: result.modules['wcag-techniques'].assertions[key].code,
+      mapping: result.modules['wcag-techniques'].assertions[key].mapping,
+      description:
+        result.modules['wcag-techniques'].assertions[key].description,
+      metadata: {
+        'success-criteria':
+          result.modules['wcag-techniques'].assertions[key].metadata[
+            'success-criteria'
+          ],
+        passed:
+          result.modules['wcag-techniques'].assertions[key].metadata.passed,
+        warning:
+          result.modules['wcag-techniques'].assertions[key].metadata.warning,
+        failed:
+          result.modules['wcag-techniques'].assertions[key].metadata.failed,
+        inapplicable:
+          result.modules['wcag-techniques'].assertions[key].metadata
+            .inapplicable,
+        outcome:
+          result.modules['wcag-techniques'].assertions[key].metadata.outcome,
+        description:
+          result.modules['wcag-techniques'].assertions[key].metadata
+            .description,
+      },
+    };
   });
 
-  await pageEvalDoc.save();
+  // Update or create the page evaluation
+  const pageEvalDoc = await PageEvaluation.findOneAndUpdate(
+    { page: page.id },
+    {
+      page: page._id,
+      website: page.website,
+      result: resultOutcome,
+      passed: result.metadata.passed,
+      warning: result.metadata.warning,
+      failed: result.metadata.failed,
+      inapplicable: result.metadata.inapplicable,
+      actRules: {
+        passed: result.modules['act-rules'].metadata.passed,
+        warning: result.modules['act-rules'].metadata.warning,
+        failed: result.modules['act-rules'].metadata.failed,
+        inapplicable: result.modules['act-rules'].metadata.inapplicable,
+        assertions: actAssertions,
+      },
+      wcagTechniques: {
+        passed: result.modules['wcag-techniques'].metadata.passed,
+        warning: result.modules['wcag-techniques'].metadata.warning,
+        failed: result.modules['wcag-techniques'].metadata.failed,
+        inapplicable: result.modules['wcag-techniques'].metadata.inapplicable,
+        assertions: wcagAssertions,
+      },
+    },
+    { upsert: true, new: true },
+  );
+
+  page.evaluation = pageEvalDoc._id;
+
+  await page.save();
 
   return true;
 }
