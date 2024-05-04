@@ -1,4 +1,7 @@
+.top-error-chip {
+    background-color: #d4d4d4 !important;
 
+}
 
 /* Dark mode colors */
 @media (prefers-color-scheme: dark) {
@@ -12,6 +15,11 @@
     mat-paginator {
         background-color: #1f2937 !important;
         color: white !important;
+    }
+
+    .top-error-chip {
+        background-color: #111827 !important;
+
     }
 
 

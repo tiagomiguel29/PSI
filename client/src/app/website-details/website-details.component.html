@@ -216,6 +216,27 @@
       </dl>
     </div>
     </div>
+
+    <!-- Website TOP 10 Errors -->
+    <div class="w-full md:w-3/4 lg:w-2/3 xl:w-2/3 mx-auto mt-10" *ngIf="website?.stats.topErrors?.length > 0">
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4">
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white">
+          Top 10 Errors
+        </h3>
+        <!-- Flex div with up to 10 chips. If some chips dont fit, pass them to a new line -->
+        <div class="flex flex-wrap gap-2 mt-4">
+          <mat-chip
+            *ngFor="let error of website?.stats.topErrors"
+            class="top-error-chip"
+            matTooltip="{{ error.name }}"
+          >
+            {{ error.code }}: {{ error.count }}
+          </mat-chip>
+
+        </div>
+      </div>
+
+      </div>
     </div>
     <!-- Website Pages -->
     <div>
