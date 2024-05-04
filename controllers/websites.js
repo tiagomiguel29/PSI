@@ -28,6 +28,15 @@ async function createWebsite(req, res) {
 
     const newWebsite = await Website.create(website);
 
+    const rootPage = await Page.create({
+      url: newWebsite.url,
+      website: newWebsite._id,
+    });
+
+    newWebsite.rootPage = rootPage._id;
+
+    await newWebsite.save();
+
     captureAndUpload(url, `psi/websites/${newWebsite._id}.png`, newWebsite);
 
     const signedUrl = generateLink(`psi/websites/${newWebsite._id}.png`);
