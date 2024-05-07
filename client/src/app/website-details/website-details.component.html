@@ -39,8 +39,12 @@
                                 class="w-full h-full object-cover"
                               />
                             </div>
+                            <!-- If image if capturing show loading spinner -->
+                            <div *ngIf="website?.previewImageStatus === 'Capturing'" class="flex justify-center items-center w-full h-full sm:w-60 xl:w-96">
+                              <mat-spinner></mat-spinner>
+                            </div>
 
-                          <div *ngIf="imageLoading" class="flex justify-center items-center" >
+                          <div *ngIf="website?.previewImageStatus === 'Error'" class="flex justify-center items-center" >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               viewBox="0 0 24 24"
@@ -241,7 +245,7 @@
     <!-- Website Pages -->
     <div>
       <div
-        class="w-full md:w-3/4 lg:w-2/3 xl:w-2/3 mx-auto rounded-lg overflow-hidden shadow-lg mt-10">
+        class="w-full md:w-3/4 lg:w-2/3 xl:w-2/3 mx-auto rounded-lg overflow-hidden shadow-lg my-10">
         <div
           class="flex justify-between flex-row items-start bg-white dark:bg-gray-800 rounded-t-lg py-4 px-4">
           <mat-form-field>
