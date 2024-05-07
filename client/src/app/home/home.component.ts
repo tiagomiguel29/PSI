@@ -52,7 +52,7 @@ export class HomeComponent {
   constructor(
     private websiteService: WebsiteService,
     private router: Router,
-    private messageService: MessageService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit() {
@@ -88,54 +88,54 @@ export class HomeComponent {
 
   nextStep() {
     if (!this.url.valid) return;
-    this.websiteService.createWebsite(this.protocol + this.url.value).subscribe({
-      next: response => {
-        if (response.success) {
-          this.wbesiteId = response.website._id;
-          this.currentStep = 'stepTwo';
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Website added successfully',
-          });
-          this.currentStep = 'stepTwo';
-        } else {
-          if (response.message) {
+    this.websiteService
+      .createWebsite(this.protocol + this.url.value)
+      .subscribe({
+        next: response => {
+          if (response.success) {
+            this.wbesiteId = response.website._id;
+            this.currentStep = 'stepTwo';
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Website added successfully',
+            });
+            this.currentStep = 'stepTwo';
+          } else {
+            if (response.message) {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: response.message,
+              });
+              if (response.errors) {
+                response.errors.forEach((error: any) => {
+                  if (error.field === 'url') {
+                    this.url.setErrors({ invalidUrl: true });
+                  }
+                });
+              }
+            }
+          }
+        },
+        error: error => {
+          if (error.error.message) {
             this.messageService.add({
               severity: 'error',
               summary: 'Error',
-              detail: response.message,
+              detail: error.error.message,
             });
-            if (response.errors) {
-              response.errors.forEach((error: any) => {
-                if (error.field === 'url') {
-                  this.url.setErrors({ invalidUrl: true });
-                }
-              });
-            }
           }
-        }
-      },
-      error: error => {
-        if (error.error.message) {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: error.error.message,
-          });
-        }
 
-        if (error.error.errors) {
-          error.error.errors.forEach((error: any) => {
-            if (error.field === 'url') {
-              this.url.setErrors({ invalidUrl: true });
-            }
-          });
-        }
-      },
-    });
-
-
+          if (error.error.errors) {
+            error.error.errors.forEach((error: any) => {
+              if (error.field === 'url') {
+                this.url.setErrors({ invalidUrl: true });
+              }
+            });
+          }
+        },
+      });
   }
 
   removePage(page: string) {
@@ -157,38 +157,41 @@ export class HomeComponent {
   }
 
   done() {
-    if (this.pages.length === 0) this.router.navigate(['/websites/', this.wbesiteId]);
+    if (this.pages.length === 0)
+      this.router.navigate(['/websites/', this.wbesiteId]);
 
     if (this.pages.length > 0) {
-      this.websiteService.addPagesToWebsite(this.wbesiteId!, this.pages).subscribe({
-        next: response => {
-          if (response.success) {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Success',
-              detail: 'Pages added successfully',
-            });
-            this.router.navigate(['/websites/', this.wbesiteId]);
-          } else {
-            if (response.message) {
+      this.websiteService
+        .addPagesToWebsite(this.wbesiteId!, this.pages)
+        .subscribe({
+          next: response => {
+            if (response.success) {
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Pages added successfully',
+              });
+              this.router.navigate(['/websites/', this.wbesiteId]);
+            } else {
+              if (response.message) {
+                this.messageService.add({
+                  severity: 'error',
+                  summary: 'Error',
+                  detail: response.message,
+                });
+              }
+            }
+          },
+          error: error => {
+            if (error.error.message) {
               this.messageService.add({
                 severity: 'error',
                 summary: 'Error',
-                detail: response.message,
+                detail: error.error.message,
               });
             }
-          }
-        },
-        error: error => {
-          if (error.error.message) {
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error',
-              detail: error.error.message,
-            });
-          }
-        },
-      });
+          },
+        });
     }
   }
 

@@ -1,20 +1,19 @@
-
 /* Dark mode colors */
 @media (prefers-color-scheme: dark) {
-    table {
-        background-color: #1f2937 !important;
-    }
+  table {
+    background-color: #1f2937 !important;
+  }
 
-    mat-paginator {
-        background-color: #1f2937 !important;
-        color: white !important;
-    }
+  mat-paginator {
+    background-color: #1f2937 !important;
+    color: white !important;
+  }
 
-    th {
-        color: white !important;
-    }
+  th {
+    color: white !important;
+  }
 
-    td {
-        color: white !important;
-    }
+  td {
+    color: white !important;
+  }
 }

@@ -59,7 +59,9 @@ export class WebsitesComponent {
       this.sort = params.get('sort') || 'createdAt';
       this.sortDirection = params.get('sortDirection') || 'desc';
       this.status = params.get('status') || 'all';
-      this.statusFormControl = params.get('status') ? new FormControl(params.get('status')) : new FormControl('all');
+      this.statusFormControl = params.get('status')
+        ? new FormControl(params.get('status'))
+        : new FormControl('all');
       this.statusFormControl.valueChanges.subscribe(value => {
         this.router.navigate([], {
           relativeTo: this.route,
@@ -67,7 +69,13 @@ export class WebsitesComponent {
           queryParamsHandling: 'merge',
         });
       });
-      this.fetchWebsites(this.currentPage, this.limit, this.sort, this.sortDirection, this.status);
+      this.fetchWebsites(
+        this.currentPage,
+        this.limit,
+        this.sort,
+        this.sortDirection,
+        this.status
+      );
     });
 
     this.paginator.page.subscribe(() => {
@@ -106,7 +114,7 @@ export class WebsitesComponent {
         limit: this.paginator.pageSize,
         sort: this.sort,
         sortDirection: this.sortDirection,
-        status: this.statusFormControl.value
+        status: this.statusFormControl.value,
       },
       queryParamsHandling: 'merge', // Merge with existing query params
     });

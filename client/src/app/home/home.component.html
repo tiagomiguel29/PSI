@@ -9,12 +9,15 @@
       <mat-form-field floatLabel="always" class="w-full">
         <mat-label class="sr-only">Website URL to add</mat-label>
         <input matInput type="url" placeholder="" [formControl]="url" />
-        <span matTextPrefix class="dark:text-zinc-400"
-        (click)="switchProtocol()"
-        role="button"
-        tabindex="0"
-        (keyup.enter)="switchProtocol()"
-        >{{protocol}}&nbsp;</span>
+        <span
+          matTextPrefix
+          class="dark:text-zinc-400"
+          (click)="switchProtocol()"
+          role="button"
+          tabindex="0"
+          (keyup.enter)="switchProtocol()"
+          >{{ protocol }}&nbsp;</span
+        >
         <mat-error *ngIf="url.hasError('pattern') && !url.hasError('required')"
           >URL in wrong format (Ex: https://example.com)</mat-error
         >
@@ -59,7 +62,9 @@
                 placeholder=""
                 [formControl]="pageInput"
                 (input)="onPageInput()" />
-              <span matTextPrefix class="dark:text-zinc-400">{{protocol}}&nbsp;</span>
+              <span matTextPrefix class="dark:text-zinc-400"
+                >{{ protocol }}&nbsp;</span
+              >
               <mat-error
                 *ngIf="
                   pageInput.hasError('pattern') &&
@@ -73,7 +78,12 @@
               <mat-error *ngIf="pageInput.hasError('duplicate')"
                 >URL already added</mat-error
               >
-              <mat-error *ngIf="pageInput.hasError('invalidSubpage') && !pageInput.hasError('requiredField') && !pageInput.hasError('pattern')"
+              <mat-error
+                *ngIf="
+                  pageInput.hasError('invalidSubpage') &&
+                  !pageInput.hasError('requiredField') &&
+                  !pageInput.hasError('pattern')
+                "
                 >Page must be a subpage of the website URL provided</mat-error
               >
             </mat-form-field>

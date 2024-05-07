@@ -23,5 +23,5 @@ export type Website = {
       description: string;
       count: number;
     }[];
-  }
+  };
 };

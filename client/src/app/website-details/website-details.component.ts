@@ -52,20 +52,25 @@ export class WebsiteDetailsComponent {
     Validators.pattern('^[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(\\/[^\\s]*)?$'),
     this.subpageValidator(),
   ]);
-  statusOptions = [{ value: 'all', viewValue: 'All'},
-              { value: 'Pending evaluation', viewValue: 'Pending evaluation' },
-              { value: 'Evaluating', viewValue: 'Evaluating' },
-              { value: 'Compliant', viewValue: 'Compliant' },
-              { value: 'Not compliant', viewValue: 'Not compliant'},
-              { value: 'Evaluation error', viewValue: 'Evaluation error'}
-  ]
+  statusOptions = [
+    { value: 'all', viewValue: 'All' },
+    { value: 'Pending evaluation', viewValue: 'Pending evaluation' },
+    { value: 'Evaluating', viewValue: 'Evaluating' },
+    { value: 'Compliant', viewValue: 'Compliant' },
+    { value: 'Not compliant', viewValue: 'Not compliant' },
+    { value: 'Evaluation error', viewValue: 'Evaluation error' },
+  ];
 
   statusFormControl = new FormControl('all');
 
-  displayedColumns: string[] = ['select', 'url', 'status', 'createdAt', 'lastEvaluated'];
-  dataSource = new MatTableDataSource<{}>(
-    this.pages
-  );
+  displayedColumns: string[] = [
+    'select',
+    'url',
+    'status',
+    'createdAt',
+    'lastEvaluated',
+  ];
+  dataSource = new MatTableDataSource<{}>(this.pages);
 
   selection = new SelectionModel<Page>(true, []);
 
@@ -119,7 +124,6 @@ export class WebsiteDetailsComponent {
           });
         }
         this.selection.clear();
-
       },
       error: error => {
         this.messageService.add({
@@ -167,7 +171,6 @@ export class WebsiteDetailsComponent {
   }
 
   ngAfterViewInit() {
-
     this.paginator.page.subscribe(() => {
       this.fetchPages(this.paginator.pageIndex + 1, this.paginator.pageSize);
     });
@@ -180,27 +183,22 @@ export class WebsiteDetailsComponent {
         sortState.direction
       );
     });
-
-
   }
 
   ngOnInit() {
     this.fetchWebsite();
     this.fetchPages();
 
-
-
-
     this.statusFormControl.valueChanges.subscribe(value => {
       if (value) {
         this.fetchPages(
-        this.paginator.pageIndex + 1,
-        this.paginator.pageSize,
-        this.sortComponent.active,
-        this.sortComponent.direction,
-        value
-      );
-    }
+          this.paginator.pageIndex + 1,
+          this.paginator.pageSize,
+          this.sortComponent.active,
+          this.sortComponent.direction,
+          value
+        );
+      }
     });
 
     this.pageUrlToAdd.valueChanges.subscribe(value => {
@@ -259,8 +257,6 @@ export class WebsiteDetailsComponent {
         }
       });
     });
-
-
   }
 
   openDeleteDialog(): void {
@@ -271,7 +267,6 @@ export class WebsiteDetailsComponent {
       },
     });
   }
-
 
   isSubPage(parent: string | null, page: string) {
     const fullUrl = this.protocol + page;
@@ -301,18 +296,18 @@ export class WebsiteDetailsComponent {
     sortDirection = 'desc',
     status = 'all'
   ) {
-    this.pagesService.getPages(this._id, page, limit, sort, sortDirection, status).subscribe({
-      next: res => {
-        this.pages = res.pages;
-        this.dataSource.data = res.pages;
-        this.paginator.length = res.totalWebsitePages;
-      },
-      error: error => {
-        console.error('Error fetching pages:', error);
-      },
-    });
-
-
+    this.pagesService
+      .getPages(this._id, page, limit, sort, sortDirection, status)
+      .subscribe({
+        next: res => {
+          this.pages = res.pages;
+          this.dataSource.data = res.pages;
+          this.paginator.length = res.totalWebsitePages;
+        },
+        error: error => {
+          console.error('Error fetching pages:', error);
+        },
+      });
   }
 }
 
@@ -330,7 +325,7 @@ export class AddPageDialog {
 
   onAdd(): void {
     if (this.data.pageUrl.invalid) {
-      console.log(this.data.pageUrl.errors)
+      console.log(this.data.pageUrl.errors);
       return;
     }
     if (this.data.pageUrl) {
@@ -342,20 +337,20 @@ export class AddPageDialog {
         .subscribe({
           next: response => {
             if (response.success) {
-            this.data.onCloseSuccess();
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Success',
-              detail: 'Page added successfully',
-            });
-            this.dialogRef.close();
-          } else {
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error',
-              detail: response.message || 'Failed to add page',
-            });
-          }
+              this.data.onCloseSuccess();
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Page added successfully',
+              });
+              this.dialogRef.close();
+            } else {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: response.message || 'Failed to add page',
+              });
+            }
           },
           error: error => {
             this.messageService.add({
@@ -430,7 +425,6 @@ export class DeleteWebsiteDialog {
   selector: 'delete-pages-dialog',
   templateUrl: './delete-pages-dialog.html',
 })
-
 export class DeletePagesDialog {
   constructor(
     public dialogRef: MatDialogRef<DeletePagesDialog>,
@@ -441,32 +435,34 @@ export class DeletePagesDialog {
 
   onDelete(): void {
     if (this.data.pageIds) {
-      this.pagesService.removePages(this.data.pageIds, this.data.websiteId).subscribe({
-        next: response => {
-          if (response.success) {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Success',
-              detail: 'Pages deleted successfully',
-            });
-            this.dialogRef.close();
-            this.data.onCloseSuccess();
-          } else {
+      this.pagesService
+        .removePages(this.data.pageIds, this.data.websiteId)
+        .subscribe({
+          next: response => {
+            if (response.success) {
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Pages deleted successfully',
+              });
+              this.dialogRef.close();
+              this.data.onCloseSuccess();
+            } else {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: response.message || 'Failed to delete pages',
+              });
+            }
+          },
+          error: error => {
             this.messageService.add({
               severity: 'error',
               summary: 'Error',
-              detail: response.message || 'Failed to delete pages',
+              detail: error.error.message || 'Failed to delete pages',
             });
-          }
-        },
-        error: error => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: error.error.message || 'Failed to delete pages',
-          });
-        },
-      });
+          },
+        });
     }
   }
 

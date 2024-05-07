@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { io, Socket } from 'socket.io-client'
+import { io, Socket } from 'socket.io-client';
 import { environment } from 'src/environments/environment';
 
 interface PageUpdate {
@@ -10,7 +10,7 @@ interface PageUpdate {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class WebsocketService {
   private socket: Socket;

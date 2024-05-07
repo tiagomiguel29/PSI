@@ -71,7 +71,11 @@ export class WebsiteService {
     return this.http.get<WebsiteResponse>(`${this.baseUrl}/${id}`).pipe(
       map(response => {
         if (response.success) {
-          return { ...response.website, pages: response.pages, imageUrl: response.imageUrl};
+          return {
+            ...response.website,
+            pages: response.pages,
+            imageUrl: response.imageUrl,
+          };
         } else {
           throw new Error('Failed to load website');
         }
@@ -83,35 +87,27 @@ export class WebsiteService {
   createWebsite(url: string): Observable<WebsiteResponse> {
     return this.http
       .post<WebsiteResponse>(`${this.baseUrl}/new`, { url })
-      .pipe(
-        map(response => response)
-      );
+      .pipe(map(response => response));
   }
 
   // Add pages to a website
   addPagesToWebsite(id: string, pages: string[]): Observable<WebsiteResponse> {
     return this.http
       .post<WebsiteResponse>(`${this.baseUrl}/${id}/addPages`, { pages })
-      .pipe(
-        map(response => response)
-      );
+      .pipe(map(response => response));
   }
 
   // Delete a website by ID
   deleteWebsite(id: string): Observable<StandardResponse> {
     return this.http
       .delete<StandardResponse>(`${this.baseUrl}/${id}`)
-      .pipe(
-        map(response => response)
-      );
+      .pipe(map(response => response));
   }
 
   // Evaluate a website pages
   evaluate(id: string, pages: string[]): Observable<WebsiteResponse> {
     return this.http
       .post<WebsiteResponse>(`${this.baseUrl}/${id}/evaluate`, { pages })
-      .pipe(
-        map(response => response)
-      );
+      .pipe(map(response => response));
   }
 }
