@@ -52,7 +52,6 @@ async function getTop10Errors(website) {
     {
       $match: {
         website: website._id,
-        // actRules.assertions array must have elements with failed in outcome field
       },
     },
     {
@@ -83,28 +82,35 @@ async function getTop10Errors(website) {
     wcagConcat = wcagConcat.concat(pageEval.wcagTechniques.assertions);
   }
 
-  const allConcat = actConcat.concat(wcagConcat);
+  let allConcat = actConcat.concat(wcagConcat);
 
-  // Find the top 10 most common errors and return them with the count, the name, the code and the description
-  const assertionCounts = allConcat.reduce((acc, assertion) => {
-    acc[assertion.code] = (acc[assertion.code] || 0) + 1;
+  allConcat = allConcat.reduce((acc, assertion) => {
+    const existing = acc.find((a) => a.code === assertion.code);
+
+    if (existing) {
+      existing.metadata.failed += assertion.metadata.failed;
+    } else {
+      acc.push(assertion);
+    }
+
     return acc;
-  }, {});
+  }, []);
 
-  const topErrors = Object.keys(assertionCounts)
-    .sort((a, b) => assertionCounts[b] - assertionCounts[a])
+  const top10 = [];
+
+  allConcat
+    .sort((a, b) => b.metadata.failed - a.metadata.failed)
     .slice(0, 10)
-    .map((code) => {
-      const assertion = allConcat.find((a) => a.code === code);
-      return {
-        code,
+    .map((assertion) => {
+      top10.push({
+        code: assertion.code,
         name: assertion.name,
         description: assertion.description,
-        count: assertionCounts[code],
-      };
+        count: assertion.metadata.failed,
+      });
     });
 
-  return topErrors;
+  return top10;
 }
 
 module.exports = { updateStats };
