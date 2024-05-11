@@ -5,6 +5,7 @@ const { isMongoId, isSubPage, trimURL } = require('../utils/validation/common');
 const { validatePage } = require('../utils/validation/page');
 const { updateStats } = require('../services/stats');
 const PageEvaluation = require('../models/PageEvaluation');
+const { notifyWebsiteUpdate } = require('../services/sockets');
 
 async function createPage(req, res) {
   try {
@@ -49,6 +50,8 @@ async function createPage(req, res) {
     const page = await Page.create({ url: trimURL(url), website: websiteId });
 
     await updateStats(website);
+
+    notifyWebsiteUpdate(websiteId);
 
     return res.status(201).json({
       success: true,
