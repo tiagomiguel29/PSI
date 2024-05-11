@@ -2,8 +2,6 @@
 
 const Page = require('../models/Page');
 const PageEvaluation = require('../models/PageEvaluation');
-const mongoose = require('mongoose');
-const { notifyWebsiteUpdate } = require('./sockets');
 
 async function updateStats(website) {
   const pages = await Page.find({
