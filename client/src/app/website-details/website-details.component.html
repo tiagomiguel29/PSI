@@ -338,7 +338,8 @@
         <div
           class="flex flex-row items-center justify-end gap-x-4 bg-white dark:bg-gray-800 px-4">
           <button
-            mat-icon-button
+            mat-fab
+            extended
             color="primary"
             aria-label="Evaluate selected pages"
             [disabled]="!selection.hasValue()"
@@ -346,9 +347,11 @@
             matTooltipPosition="above"
             (click)="handleEvaluatePages()">
             <mat-icon>pageview</mat-icon>
+            Evaluate
           </button>
           <button
-            mat-icon-button
+            mat-fab
+            extended
             color="primary"
             aria-label="Delete selected pages"
             [disabled]="!selection.hasValue()"
@@ -356,6 +359,7 @@
             matTooltipPosition="above"
             (click)="openDeletePagesDialog()">
             <mat-icon>delete</mat-icon>
+            Delete
           </button>
         </div>
         <div class="overflow-x-auto">
