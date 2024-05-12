@@ -23,6 +23,7 @@ import { ToastModule } from 'primeng/toast';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
@@ -74,6 +75,7 @@ import { MessageService } from 'primeng/api';
     MatCheckboxModule,
     MatTooltipModule,
     MatProgressSpinnerModule,
+    MatExpansionModule,
   ],
   providers: [MessageService],
   bootstrap: [AppComponent],

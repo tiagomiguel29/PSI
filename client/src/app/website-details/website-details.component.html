@@ -312,6 +312,38 @@
               {{ error.code }}: {{ error.count }}
             </mat-chip>
           </div>
+          <div class="mt-4">
+            <mat-expansion-panel class="top-errors-details-panel">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  View details
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="flex flex-wrap gap-2 mt-4 w-full">
+                <ul class="w-full">
+                  <li
+                    *ngFor="let error of website?.stats.topErrors"
+                    class="w-full"
+                    >
+                    <div class="w-full flex flex-row justify-between gap-2">
+                      <div>
+                        <span aria-label="Error code">
+                          {{ error.code }}
+                        </span>
+                      </div>
+                      <div>
+                        <span class="flex flex-wrap" aria-label="Error name">
+                          {{ error.name }}
+                        </span>
+                      </div>
+
+
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </mat-expansion-panel>
+          </div>
         </div>
       </div>
     </div>
