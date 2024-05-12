@@ -4,6 +4,8 @@ const Page = require('../models/Page');
 const { isMongoId, isSubPage, trimURL } = require('../utils/validation/common');
 const { validatePage } = require('../utils/validation/page');
 const { updateStats } = require('../services/stats');
+const PageEvaluation = require('../models/PageEvaluation');
+const { notifyWebsiteUpdate } = require('../services/sockets');
 
 async function createPage(req, res) {
   try {
@@ -48,6 +50,8 @@ async function createPage(req, res) {
     const page = await Page.create({ url: trimURL(url), website: websiteId });
 
     await updateStats(website);
+
+    notifyWebsiteUpdate(websiteId);
 
     return res.status(201).json({
       success: true,
@@ -169,6 +173,8 @@ async function removePage(req, res) {
 
     const page = await Page.findByIdAndDelete(id);
 
+    await PageEvaluation.deleteMany({ page: id });
+
     if (!page) {
       return res.status(404).json({
         success: false,
@@ -231,6 +237,8 @@ async function removePages(req, res) {
     }
 
     const pages = await Page.deleteMany({ _id: { $in: ids } });
+
+    await PageEvaluation.deleteMany({ page: { $in: ids } });
 
     if (!pages) {
       return res.status(404).json({

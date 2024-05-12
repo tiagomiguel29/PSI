@@ -20,9 +20,10 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ToastModule } from 'primeng/toast';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatTooltipModule} from '@angular/material/tooltip';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
@@ -30,7 +31,11 @@ import { MatTableModule } from '@angular/material/table';
 import { HomeComponent } from './home/home.component';
 import { WebsitesComponent } from './websites/websites.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DeleteWebsiteDialog, WebsiteDetailsComponent, DeletePagesDialog } from './website-details/website-details.component';
+import {
+  DeleteWebsiteDialog,
+  WebsiteDetailsComponent,
+  DeletePagesDialog,
+} from './website-details/website-details.component';
 import { AddPageDialog } from './website-details/website-details.component';
 import { MessageService } from 'primeng/api';
 
@@ -69,7 +74,8 @@ import { MessageService } from 'primeng/api';
     ToastModule,
     MatCheckboxModule,
     MatTooltipModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatExpansionModule,
   ],
   providers: [MessageService],
   bootstrap: [AppComponent],

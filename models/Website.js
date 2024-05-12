@@ -34,7 +34,7 @@ const WebsiteSchema = new mongoose.Schema(
     previewImageStatus: {
       type: String,
       enum: ['Not captured', 'Capturing', 'Captured', 'Error'],
-      default: 'Not captured',
+      default: 'Capturing',
     },
     stats: {
       pagesWithoutErrors: Number,

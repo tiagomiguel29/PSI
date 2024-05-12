@@ -41,9 +41,9 @@ export class PagesService {
   constructor(private http: HttpClient) {}
 
   createPage(pageData: PageData): Observable<PageResponse> {
-    return this.http.post<PageResponse>(`${this.baseUrl}/new`, pageData).pipe(
-      map(response => response),
-    );
+    return this.http
+      .post<PageResponse>(`${this.baseUrl}/new`, pageData)
+      .pipe(map(response => response));
   }
 
   getPage(id: string): Observable<any> {
@@ -63,11 +63,13 @@ export class PagesService {
     status = 'all'
   ): Observable<PageListResponse> {
     let statusQuery = status === 'all' ? '' : `&status=${status}`;
-    let queryParams = `?page=${page}&limit=${limit}&sort=${sort}&sortDirection=${sortDirection}` + statusQuery;
+    let queryParams =
+      `?page=${page}&limit=${limit}&sort=${sort}&sortDirection=${sortDirection}` +
+      statusQuery;
     if (websiteId) queryParams += `&websiteId=${websiteId}`;
-    return this.http.get<PageListResponse>(`${this.baseUrl}${queryParams}`).pipe(
-      map(response => response),
-    );
+    return this.http
+      .get<PageListResponse>(`${this.baseUrl}${queryParams}`)
+      .pipe(map(response => response));
   }
 
   removePage(id: string): Observable<any> {
@@ -79,8 +81,10 @@ export class PagesService {
   }
 
   removePages(ids: string[], websiteId: string): Observable<StandardResponse> {
-    return this.http.delete<StandardResponse>(`${this.baseUrl}?websiteId=${websiteId}`, { body: { ids } }).pipe(
-      map(response => response)
-    );
+    return this.http
+      .delete<StandardResponse>(`${this.baseUrl}?websiteId=${websiteId}`, {
+        body: { ids },
+      })
+      .pipe(map(response => response));
   }
 }

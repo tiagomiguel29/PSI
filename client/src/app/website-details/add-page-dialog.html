@@ -1,27 +1,36 @@
 <h1 mat-dialog-title>Add page</h1>
 <form>
-<div mat-dialog-content>
-  <p>Insert the URL of the Page you would like to add.</p>
-  <mat-form-field appearance="fill" class="w-full" floatLabel="always">
-    <mat-label class="sr-only">Page to add</mat-label>
-    <span matTextPrefix>{{data.protocol}}&nbsp;</span>
-    <input matInput [formControl]="data.pageUrl" />
-    <mat-error
-      *ngIf="data.pageUrl.hasError('pattern') && !data.pageUrl.hasError('requiredField') && !data.pageUrl.hasError('required')"
-      >Please enter a valid URL</mat-error
-    >
-    <mat-error *ngIf="data.pageUrl.hasError('requiredField') || data.pageUrl.hasError('required')"
-      >URL is <strong>empty</strong></mat-error
-    >
-    <mat-error *ngIf="data.pageUrl.hasError('invalidSubpage') && !data.pageUrl.hasError('requiredField') && !data.pageUrl.hasError('required') && !data.pageUrl.hasError('pattern')"
-      >Page must be a subpage of the website</mat-error
-    >
-  </mat-form-field>
-</div>
-<div mat-dialog-actions>
-  <button mat-flat-button (click)="onCancel()" type="reset" color="warn">Cancel</button>
-  <button mat-flat-button (click)="onAdd()" type="submit" cdkFocusInitial color="primary">
-    Add
-  </button>
-</div>
+  <div mat-dialog-content>
+    <p>Insert the URL of the Page you would like to add.</p>
+    <mat-form-field appearance="fill" class="w-full" floatLabel="always">
+      <mat-label class="sr-only">Page to add</mat-label>
+      <span matTextPrefix>{{data.protocol}}&nbsp;</span>
+      <input matInput [formControl]="data.pageUrl" />
+      <mat-error
+        *ngIf="data.pageUrl.hasError('pattern') && !data.pageUrl.hasError('requiredField') && !data.pageUrl.hasError('required')"
+        >Please enter a valid URL</mat-error
+      >
+      <mat-error
+        *ngIf="data.pageUrl.hasError('requiredField') || data.pageUrl.hasError('required')"
+        >URL is <strong>empty</strong></mat-error
+      >
+      <mat-error
+        *ngIf="data.pageUrl.hasError('invalidSubpage') && !data.pageUrl.hasError('requiredField') && !data.pageUrl.hasError('required') && !data.pageUrl.hasError('pattern')"
+        >Page must be a subpage of the website</mat-error
+      >
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-flat-button (click)="onCancel()" type="reset" color="warn">
+      Cancel
+    </button>
+    <button
+      mat-flat-button
+      (click)="onAdd()"
+      type="submit"
+      cdkFocusInitial
+      color="primary">
+      Add
+    </button>
+  </div>
 </form>
