@@ -49,7 +49,7 @@ export class WebsiteDetailsComponent {
   protocol = 'https://';
   pageUrlToAdd = new FormControl('', [
     Validators.required,
-    Validators.pattern('^[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(\\/[^\\s]*)?$'),
+    Validators.pattern('^(?:(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})(?::\d{1,5})?(?:/[^ ]*)?$'),
     this.subpageValidator(),
   ]);
   statusOptions = [
@@ -245,7 +245,7 @@ export class WebsiteDetailsComponent {
     dialogRef.afterClosed().subscribe(result => {
       this.pageUrlToAdd = new FormControl('', [
         Validators.required,
-        Validators.pattern('^[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(\\/[^\\s]*)?$'),
+        Validators.pattern('^(?:(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})(?::\d{1,5})?(?:/[^ ]*)?$'),
         this.subpageValidator(),
       ]);
 
