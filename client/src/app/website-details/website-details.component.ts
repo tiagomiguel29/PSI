@@ -273,10 +273,7 @@ export class WebsiteDetailsComponent {
     if (!parent) return false;
 
     return (
-      fullUrl.startsWith(parent) &&
-      fullUrl !== parent &&
-      parent !== fullUrl + '/' &&
-      fullUrl !== parent + '/'
+      fullUrl.startsWith(parent)
     );
   }
 
