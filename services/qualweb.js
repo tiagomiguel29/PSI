@@ -172,6 +172,7 @@ async function handlePageResults(result, page) {
         code: result.modules['act-rules'].assertions[key].code,
         mapping: result.modules['act-rules'].assertions[key].mapping,
         description: result.modules['act-rules'].assertions[key].description,
+        results: result.modules['act-rules'].assertions[key].results,
         metadata: {
           'success-criteria':
             result.modules['act-rules'].assertions[key].metadata[
@@ -199,6 +200,7 @@ async function handlePageResults(result, page) {
       mapping: result.modules['wcag-techniques'].assertions[key].mapping,
       description:
         result.modules['wcag-techniques'].assertions[key].description,
+      results: result.modules['wcag-techniques'].assertions[key].results,
       metadata: {
         'success-criteria':
           result.modules['wcag-techniques'].assertions[key].metadata[

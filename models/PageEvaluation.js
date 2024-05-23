@@ -33,6 +33,7 @@ const PageEvaluationSchema = new mongoose.Schema(
           code: String,
           mapping: String,
           description: String,
+          results: Object,
           metadata: {
             'success-criteria': Array,
             passed: Number,
@@ -56,6 +57,7 @@ const PageEvaluationSchema = new mongoose.Schema(
           code: String,
           mapping: String,
           description: String,
+          results: Object,
           metadata: {
             'success-criteria': Array,
             passed: Number,
