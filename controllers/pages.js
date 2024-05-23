@@ -261,4 +261,49 @@ async function removePages(req, res) {
   }
 }
 
-module.exports = { createPage, getPage, removePage, getPages, removePages };
+async function getEvaluation(req, res) {
+  const { id } = req.params;
+
+  try {
+    if (!isMongoId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid page ID',
+      });
+    }
+
+    const evaluation = await PageEvaluation.findOne({ page: id }).populate(
+      'page',
+    );
+
+    if (!evaluation) {
+      return res.status(404).json({
+        success: false,
+        message: 'Evaluation not found',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      page: evaluation.page,
+      evaluation: {
+        ...evaluation,
+        page: evaluation.page._id,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
+
+module.exports = {
+  createPage,
+  getPage,
+  removePage,
+  getPages,
+  removePages,
+  getEvaluation,
+};
