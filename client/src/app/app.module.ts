@@ -38,6 +38,7 @@ import {
 } from './website-details/website-details.component';
 import { AddPageDialog } from './website-details/website-details.component';
 import { MessageService } from 'primeng/api';
+import { PageEvaluationComponent } from './page-evaluation/page-evaluation.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { MessageService } from 'primeng/api';
     AddPageDialog,
     DeleteWebsiteDialog,
     DeletePagesDialog,
+    PageEvaluationComponent,
   ],
   imports: [
     BrowserModule,
