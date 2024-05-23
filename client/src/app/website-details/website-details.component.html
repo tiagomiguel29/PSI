@@ -482,6 +482,7 @@
               <th mat-header-cell *matHeaderCellDef>Actions</th>
               <td mat-cell *matCellDef="let element">
                 <a
+                  *ngIf="element.status === 'Compliant' || element.status === 'Not compliant'"
                   mat-button
                   color="primary"
                   aria-label="View page evaluation"
