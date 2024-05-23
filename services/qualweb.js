@@ -134,6 +134,7 @@ async function handlePageResults(result, page) {
 
   const actAssertionsKeys = Object.keys(result.modules['act-rules'].assertions);
 
+  /*
   for (const key of actAssertionsKeys) {
     if (
       result.modules['act-rules'].assertions[key].metadata.outcome ===
@@ -158,7 +159,9 @@ async function handlePageResults(result, page) {
     } else {
       delete result.modules['wcag-techniques'].assertions[key].results;
     }
+
   }
+  */
 
   // Convet an object to an array with the key as the name
   // of the assertion
