@@ -69,6 +69,7 @@ export class WebsiteDetailsComponent {
     'status',
     'createdAt',
     'lastEvaluated',
+    'actions',
   ];
   dataSource = new MatTableDataSource<{}>(this.pages);
 
