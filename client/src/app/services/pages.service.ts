@@ -11,6 +11,7 @@ export interface PageResponse {
   page: Page;
   message?: string;
   errors?: Error[];
+  evaluation?: any;
 }
 
 export interface PageListResponse {
@@ -85,6 +86,12 @@ export class PagesService {
       .delete<StandardResponse>(`${this.baseUrl}?websiteId=${websiteId}`, {
         body: { ids },
       })
+      .pipe(map(response => response));
+  }
+
+  getPageEvaluation(pageId: string): Observable<PageResponse> {
+    return this.http
+      .get<PageResponse>(`${this.baseUrl}/${pageId}/evaluation`)
       .pipe(map(response => response));
   }
 }
