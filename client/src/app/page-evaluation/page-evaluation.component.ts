@@ -41,11 +41,23 @@ export class PageEvaluationComponent {
   }
 
   ngOnInit() {
-    this.fetchEvaluation();
+    this.fetchEvaluation(this.rules.value, this.results.value, this.levels.value);
   }
 
-  fetchEvaluation() {
-    this.pagesService.getPageEvaluation(this.pageId).subscribe({
+  ngAfterViewInit() {
+    this.rules.valueChanges.subscribe(value => {
+      this.fetchEvaluation(value, this.results.value, this.levels.value);
+    });
+    this.results.valueChanges.subscribe(value => {
+      this.fetchEvaluation(this.rules.value, value, this.levels.value);
+    });
+    this.levels.valueChanges.subscribe(value => {
+      this.fetchEvaluation(this.rules.value, this.results.value, value);
+    });
+  }
+
+  fetchEvaluation(rules: any, results: any, levels: any) {
+    this.pagesService.getPageEvaluation(this.pageId, rules, results, levels).subscribe({
       next: response => {
         if (response.success) {
           this.evaluation = response.evaluation;
