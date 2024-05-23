@@ -256,7 +256,7 @@
                             </mat-panel-description>
                           </mat-expansion-panel-header>
                           <h4 class="text-lg font-semibold text-gray-900 dark:text-white">Results</h4>
-                          <div class="grid grid-cols-1 divide-y divide-x divide-gray-200 dark:divide-gray-600">
+                          <div class="grid grid-cols-1 divide-y divide-gray-200 dark:divide-gray-600">
                             <div *ngFor="let result of assertion.results" class="py-2">
                                 <div *ngIf="result.verdict == 'warning'" class="grid grid-cols-1 lg:grid-cols-2 justify-between">
                                     <span class="text-yellow-500 font-bold">Warning</span>
