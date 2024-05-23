@@ -1,0 +1,12 @@
+.test-panel {
+  --mat-expansion-container-background-color: #f8fafc !important;
+}
+
+/* Dark mode colors */
+@media (prefers-color-scheme: dark) {
+
+
+  .test-panel {
+    --mat-expansion-container-background-color: #111827 !important;
+  }
+}

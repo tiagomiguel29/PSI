@@ -1,1 +1,186 @@
-<p>page-evaluation works!</p>
+<section>
+    <div *ngIf="isLoading" class="flex justify-center items-center mt-32">
+        <mat-spinner
+        ></mat-spinner>
+    </div>
+    <div *ngIf="!isLoading && page">
+        <div
+        class="mt-14 max-w-screen mx-auto px-6 w-full md:w-3/4 lg:w-2/3 xl:w-2/3">
+            <div class="flex flex-row items-center py-4">
+                <a
+                    [routerLink]="['/websites', page.website]"
+                    class="text-black dark:text-white hover:underline flex flex-row items-center gap-x-1">
+                    <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    class="w-6 h-6 fill-black dark:fill-white">
+                        <path
+                            fill-rule="evenodd"
+                            d="M11.03 3.97a.75.75 0 0 1 0 1.06l-6.22 6.22H21a.75.75 0 0 1 0 1.5H4.81l6.22 6.22a.75.75 0 1 1-1.06 1.06l-7.5-7.5a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 0 1 1.06 0Z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    Back to Website</a>
+            </div>
+        </div>
+        <div class="px-2">
+            <div class="w-full md:w-3/4 lg:w-2/3 xl:w-2/3 mx-auto bg-gray-200 dark:bg-gray-600 rounded-lg">
+                  <dl
+                    class="mt-10 grid grid-cols-1 gap-px bg-white/5 sm:grid-cols-2 lg:grid-cols-4 overflow-hidden rounded-lg shadow-lg">
+                    <div class="px-4 py-5 sm:p-6 bg-white dark:bg-gray-800">
+                      <dt
+                        class="text-base font-normal text-gray-900 dark:text-gray-400">
+                        Passed
+                      </dt>
+                      <dd
+                        class="mt-1 flex items-baseline justify-between md:block lg:flex">
+                        <div
+                          class="flex items-baseline text-2xl font-semibold text-green-600">
+                          {{ evaluation.passed }}
+                          <div
+                            class="ml-1 inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-green-100 text-green-800 md:mt-2 lg:mt-0">
+                            <span class="sr-only"> Percentage </span>
+                            {{
+                              (evaluation.passed /
+                                evaluation.total) *
+                                100 | number: '1.0-0'
+                            }}%
+                          </div>
+                        </div>
+                      </dd>
+                    </div>
+                    <div class="px-4 py-5 sm:p-6 bg-white dark:bg-gray-800">
+                      <dt
+                        class="text-base font-normal text-gray-900 dark:text-gray-400">
+                        Warnings
+                      </dt>
+                      <dd
+                        class="mt-1 flex items-baseline justify-between md:block lg:flex">
+                        <div
+                          class="flex items-baseline text-2xl font-semibold text-yellow-400">
+                          {{ evaluation.warning }}
+                          <div
+                            class="ml-1 inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-yellow-100 text-yellow-600 md:mt-2 lg:mt-0">
+                            <span class="sr-only"> Percentage </span>
+                            {{
+                              (evaluation.warning /
+                                evaluation.total) *
+                                100 | number: '1.0-0'
+                            }}%
+                          </div>
+                        </div>
+                      </dd>
+                    </div>
+                    <div class="px-4 py-5 sm:p-6 bg-white dark:bg-gray-800">
+                      <dt
+                        class="text-base font-normal text-gray-900 dark:text-gray-400">
+                        Failed
+                      </dt>
+                      <dd
+                        class="mt-1 flex items-baseline justify-between md:block lg:flex">
+                        <div
+                          class="flex items-baseline text-2xl font-semibold text-red-600">
+                          {{ evaluation.failed }}
+                          <div
+                            class="ml-1 inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-red-100 text-red-800 md:mt-2 lg:mt-0">
+                            <span class="sr-only"> Percentage </span>
+                            {{
+                                (evaluation.failed /
+                                    evaluation.total) *
+                                    100 | number: '1.0-0'
+                            }}%
+                          </div>
+                        </div>
+                      </dd>
+                    </div>
+                    <div class="px-4 py-5 sm:p-6 bg-white dark:bg-gray-800">
+                        <dt
+                          class="text-base font-normal text-gray-900 dark:text-gray-400">
+                          Innaplicable
+                        </dt>
+                        <dd
+                          class="mt-1 flex items-baseline justify-between md:block lg:flex">
+                          <div
+                            class="flex items-baseline text-2xl font-semibold text-neutral-300">
+                            {{ evaluation.inapplicable }}
+                            <div
+                              class="ml-1 inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-neutral-100 text-neutral-800 md:mt-2 lg:mt-0">
+                              <span class="sr-only"> Percentage </span>
+                              {{
+                                (evaluation.inapplicable /
+                                  evaluation.total) *
+                                  100 | number: '1.0-0'
+                              }}%
+                            </div>
+                          </div>
+                        </dd>
+                      </div>
+                  </dl>
+              </div>
+
+              <div class="w-full md:w-3/4 lg:w-2/3 xl:w-2/3 mx-auto bg-white dark:bg-gray-800 rounded-lg mt-10 p-4">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white">
+                        Assertions
+                      </h3>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-3 mt-4 divide-x divide-gray-200 dark:divide-gray-600">
+                    <div [formGroup]="results" class="px-4">
+                        <h4 class="font-semibold text-gray-900 dark:text-white text-center">
+                            Results
+                        </h4>
+                        <p><mat-checkbox formControlName="passed">Passed</mat-checkbox></p>
+                        <p><mat-checkbox formControlName="warning">Warning</mat-checkbox></p>
+                        <p><mat-checkbox formControlName="failed">Failed</mat-checkbox></p>
+                        <p><mat-checkbox formControlName="inapplicable">Inapplicable</mat-checkbox></p>
+                    </div>
+                    <div [formGroup]="levels" class="px-4">
+                        <h4 class="font-semibold text-gray-900 dark:text-white text-center">
+                            Levels
+                        </h4>
+                        <p><mat-checkbox formControlName="a">A</mat-checkbox></p>
+                        <p><mat-checkbox formControlName="aa">AA</mat-checkbox></p>
+                        <p><mat-checkbox formControlName="aaa">AAA</mat-checkbox></p>
+                    </div>
+                    <div [formGroup]="rules" class="px-4">
+                        <h4 class="font-semibold text-gray-900 dark:text-white text-center">
+                            Rules
+                        </h4>
+                        <p><mat-checkbox formControlName="act">ACT</mat-checkbox></p>
+                        <p><mat-checkbox formControlName="wcag">WCAG</mat-checkbox></p>
+                    </div>
+
+                </div>
+                <div class="mt-4">
+                    <mat-accordion>
+                        <mat-expansion-panel
+                        *ngFor="let assertion of evaluation.actRules.assertions"
+                        class="test-panel">
+                          <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                {{ assertion.code }}
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                {{ assertion.name }}
+                            </mat-panel-description>
+                          </mat-expansion-panel-header>
+                          <p>ACT Rule</p>
+                        </mat-expansion-panel>
+                        <mat-expansion-panel
+                        *ngFor="let assertion of evaluation.wcagTechniques.assertions"
+                        class="test-panel">
+                          <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                {{ assertion.code }}
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                {{ assertion.name }}
+                            </mat-panel-description>
+                          </mat-expansion-panel-header>
+                          <p>WCAG Rule</p>
+                        </mat-expansion-panel>
+                      </mat-accordion>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
