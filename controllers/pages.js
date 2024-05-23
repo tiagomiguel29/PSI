@@ -286,10 +286,7 @@ async function getEvaluation(req, res) {
     return res.status(200).json({
       success: true,
       page: evaluation.page,
-      evaluation: {
-        ...evaluation,
-        page: evaluation.page._id,
-      },
+      evaluation: evaluation,
     });
   } catch (error) {
     return res.status(500).json({
