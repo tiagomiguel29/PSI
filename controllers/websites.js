@@ -331,7 +331,7 @@ async function getPDF(req, res) {
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
       'Content-Disposition',
-      `attachment; filename=${website.url}.pdf`,
+      `inline; filename="${encodeURIComponent(website.url)}.pdf"`,
     );
 
     return res.status(200).send(buffer);
