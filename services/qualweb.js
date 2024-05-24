@@ -28,6 +28,13 @@ async function evaluate(url) {
 
     const qualwebOptions = {
       urls: [url],
+      execute: {
+        wappalyzer: false,
+        act: true,
+        wcag: true,
+        bp: false,
+        counter: false,
+      },
     };
 
     const results = await qualweb.evaluate(qualwebOptions);
