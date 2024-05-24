@@ -70,6 +70,7 @@
                       </div>
                     </div>
                   </div>
+                  <div class="flex items-stretch justify-start flex-col basis-auto flex-grow flex-shrink gap-x-6 gap-y-3 py-4 sm:py-0">
                   <div
                     class="flex items-stretch justify-start flex-col basis-auto flex-grow flex-shrink gap-x-6 gap-y-3 py-4 sm:py-0">
                     <div
@@ -132,6 +133,19 @@
                           : 'Not evaluated yet'
                       }}
                     </p>
+
+                  </div>
+                  <div class="flex flex-row justify-end">
+                    <a
+                    href="{{ apiUrl }}/api/websites/{{ website._id }}/pdf" target="_blank">
+                    <button
+                      mat-flat-button
+                      color="primary">
+                        <mat-icon>description</mat-icon>
+                      <span> PDF Report </span>
+                    </button>
+                  </a>
+                  </div>
                   </div>
                 </div>
               </div>
