@@ -2,6 +2,7 @@
 
 const Page = require('../models/Page');
 const PageEvaluation = require('../models/PageEvaluation');
+const { notifyWebsiteUpdate } = require('./sockets');
 
 async function updateStats(website) {
   const pages = await Page.find({
@@ -26,16 +27,32 @@ async function updateStats(website) {
 
   website.stats = { ...newStats };
 
-  if (pages.filter((p) => p.status === 'Evaluation error').length > 0) {
+  if (pages.length === 0) {
+    website.status = 'Pending evaluation';
+  } else if (pages.filter((p) => p.status === 'Evaluation error').length > 0) {
     website.status = 'Evaluation error';
   } else if (
-    pages.filter((p) => p.status === 'Pending evaluation').length > 0
+    pages.filter(
+      (p) => p.status === 'Pending evaluation' || p.status === 'Evaluating',
+    ).length > 0 &&
+    pages.filter(
+      (p) => p.status === 'Compliant' || p.status === 'Not compliant',
+    ).length > 0
+  ) {
+    website.status = 'Evaluating';
+  } else if (
+    pages.filter(
+      (p) => p.status === 'Compliant' || p.status === 'Not compliant',
+    ).length === pages.length
+  ) {
+    website.status = 'Evaluated';
+  } else if (
+    pages.filter((p) => p.status === 'Pending evaluation').length ===
+    pages.length
   ) {
     website.status = 'Pending evaluation';
-  } else if (pages.filter((p) => p.status === 'Evaluating').length > 0) {
-    website.status = 'Pending evaluation';
   } else {
-    website.status = 'Evaluated';
+    website.status = 'Evaluating';
   }
 
   website.lastEvaluated = new Date();
