@@ -70,82 +70,81 @@
                       </div>
                     </div>
                   </div>
-                  <div class="flex items-stretch justify-start flex-col basis-auto flex-grow flex-shrink gap-x-6 gap-y-3 py-4 sm:py-0">
                   <div
                     class="flex items-stretch justify-start flex-col basis-auto flex-grow flex-shrink gap-x-6 gap-y-3 py-4 sm:py-0">
                     <div
-                      class="flex flex-col sm:flex-row justify-between sm:items-start gap-y-4 gap-x-6">
+                      class="flex items-stretch justify-start flex-col basis-auto flex-grow flex-shrink gap-x-6 gap-y-3 py-4 sm:py-0">
                       <div
-                        class="flex items-stretch flex-col sm:flex-row justify-between gap-x-6 gap-y-2 pt-1">
-                        <p
-                          class="text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">
-                          Website Details
-                        </p>
-                        <mat-chip
-                          class="w-fit"
-                          [ngClass]="
-                            website?.status === 'Pending evaluation'
-                              ? 'pending'
-                              : website?.status === 'Evaluated'
-                                ? 'evaluated'
-                                : website?.status === 'Evaluating'
-                                  ? 'evaluating'
-                                  : 'error'
-                          ">
-                          <span
-                            class="text-sm font-medium text-white px-2 py-1 flex flex-row"
-                            aria-label="Website status">
-                            <mat-spinner
-                              *ngIf="website?.status === 'Evaluating'"
-                              diameter="20"
-                              strokeWidth="4"
-                              class="mr-2"></mat-spinner>
-                            {{ website?.status }}</span
-                          >
-                        </mat-chip>
+                        class="flex flex-col sm:flex-row justify-between sm:items-start gap-y-4 gap-x-6">
+                        <div
+                          class="flex items-stretch flex-col sm:flex-row justify-between gap-x-6 gap-y-2 pt-1">
+                          <p
+                            class="text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">
+                            Website Details
+                          </p>
+                          <mat-chip
+                            class="w-fit"
+                            [ngClass]="
+                              website?.status === 'Pending evaluation'
+                                ? 'pending'
+                                : website?.status === 'Evaluated'
+                                  ? 'evaluated'
+                                  : website?.status === 'Evaluating'
+                                    ? 'evaluating'
+                                    : 'error'
+                            ">
+                            <span
+                              class="text-sm font-medium text-white px-2 py-1 flex flex-row"
+                              aria-label="Website status">
+                              <mat-spinner
+                                *ngIf="website?.status === 'Evaluating'"
+                                diameter="20"
+                                strokeWidth="4"
+                                class="mr-2"></mat-spinner>
+                              {{ website?.status }}</span
+                            >
+                          </mat-chip>
+                        </div>
+                        <div class="w-full sm:w-fit">
+                          <button
+                            mat-flat-button
+                            class="w-full"
+                            color="warn"
+                            (click)="openDeleteDialog()">
+                            Delete
+                          </button>
+                        </div>
                       </div>
-                      <div class="w-full sm:w-fit">
-                        <button
-                          mat-flat-button
-                          class="w-full"
-                          color="warn"
-                          (click)="openDeleteDialog()">
-                          Delete
-                        </button>
-                      </div>
+                      <p
+                        class="text-sm font-medium text-gray-600 dark:text-gray-400">
+                        <span class="font-bold">URL: </span>{{ website?.url }}
+                      </p>
+                      <p
+                        class="text-sm font-medium text-gray-600 dark:text-gray-400">
+                        <span class="font-bold">Created at: </span
+                        >{{ website?.createdAt | date: 'MMM d, y, h:mm:ss a' }}
+                      </p>
+                      <p
+                        class="text-sm font-medium text-gray-600 dark:text-gray-400">
+                        <span class="font-bold">Last Evaluation: </span
+                        >{{
+                          website?.lastEvaluated
+                            ? (website.lastEvaluated
+                              | date: 'MMM d, y, h:mm:ss a')
+                            : 'Not evaluated yet'
+                        }}
+                      </p>
                     </div>
-                    <p
-                      class="text-sm font-medium text-gray-600 dark:text-gray-400">
-                      <span class="font-bold">URL: </span>{{ website?.url }}
-                    </p>
-                    <p
-                      class="text-sm font-medium text-gray-600 dark:text-gray-400">
-                      <span class="font-bold">Created at: </span
-                      >{{ website?.createdAt | date: 'MMM d, y, h:mm:ss a' }}
-                    </p>
-                    <p
-                      class="text-sm font-medium text-gray-600 dark:text-gray-400">
-                      <span class="font-bold">Last Evaluation: </span
-                      >{{
-                        website?.lastEvaluated
-                          ? (website.lastEvaluated
-                            | date: 'MMM d, y, h:mm:ss a')
-                          : 'Not evaluated yet'
-                      }}
-                    </p>
-
-                  </div>
-                  <div class="flex flex-row justify-end">
-                    <a
-                    href="{{ apiUrl }}/api/websites/{{ website._id }}/pdf" target="_blank">
-                    <button
-                      mat-flat-button
-                      color="primary">
-                        <mat-icon>description</mat-icon>
-                      <span> PDF Report </span>
-                    </button>
-                  </a>
-                  </div>
+                    <div class="flex flex-row justify-end">
+                      <a
+                        href="{{ apiUrl }}/api/websites/{{ website._id }}/pdf"
+                        target="_blank">
+                        <button mat-flat-button color="primary">
+                          <mat-icon>description</mat-icon>
+                          <span> PDF Report </span>
+                        </button>
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -329,16 +328,13 @@
           <div class="mt-4">
             <mat-expansion-panel class="top-errors-details-panel">
               <mat-expansion-panel-header>
-                <mat-panel-title>
-                  View details
-                </mat-panel-title>
+                <mat-panel-title> View details </mat-panel-title>
               </mat-expansion-panel-header>
               <div class="flex flex-wrap gap-2 mt-4 w-full">
                 <ul class="w-full">
                   <li
                     *ngFor="let error of website?.stats.topErrors"
-                    class="w-full"
-                    >
+                    class="w-full">
                     <div class="w-full flex flex-row justify-between gap-2">
                       <div>
                         <span aria-label="Error code">
@@ -350,8 +346,6 @@
                           {{ error.name }}
                         </span>
                       </div>
-
-
                     </div>
                   </li>
                 </ul>
@@ -496,12 +490,14 @@
               <th mat-header-cell *matHeaderCellDef>Actions</th>
               <td mat-cell *matCellDef="let element">
                 <a
-                  *ngIf="element.status === 'Compliant' || element.status === 'Not compliant'"
+                  *ngIf="
+                    element.status === 'Compliant' ||
+                    element.status === 'Not compliant'
+                  "
                   mat-button
                   color="primary"
                   aria-label="View page evaluation"
-                  [routerLink]="['/pages', element._id]"
-                 >
+                  [routerLink]="['/pages', element._id]">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"

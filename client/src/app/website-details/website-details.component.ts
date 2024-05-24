@@ -51,7 +51,9 @@ export class WebsiteDetailsComponent {
   apiUrl = environment.apiUrl;
   pageUrlToAdd = new FormControl('', [
     Validators.required,
-    Validators.pattern('^(?:(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})(?::\d{1,5})?(?:/[^ ]*)?$'),
+    Validators.pattern(
+      '^(?:(?:[a-zA-Z0-9-]+.)+[a-zA-Z]{2,})(?::d{1,5})?(?:/[^ ]*)?$'
+    ),
     this.subpageValidator(),
   ]);
   statusOptions = [
@@ -248,7 +250,9 @@ export class WebsiteDetailsComponent {
     dialogRef.afterClosed().subscribe(result => {
       this.pageUrlToAdd = new FormControl('', [
         Validators.required,
-        Validators.pattern('^(?:(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})(?::\d{1,5})?(?:/[^ ]*)?$'),
+        Validators.pattern(
+          '^(?:(?:[a-zA-Z0-9-]+.)+[a-zA-Z]{2,})(?::d{1,5})?(?:/[^ ]*)?$'
+        ),
         this.subpageValidator(),
       ]);
 
@@ -275,9 +279,7 @@ export class WebsiteDetailsComponent {
     const fullUrl = this.protocol + page;
     if (!parent) return false;
 
-    return (
-      fullUrl.startsWith(parent)
-    );
+    return fullUrl.startsWith(parent);
   }
 
   subpageValidator(): ValidatorFn {

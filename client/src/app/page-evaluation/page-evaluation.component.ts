@@ -8,7 +8,9 @@ import { FormBuilder } from '@angular/forms';
 @Component({
   selector: 'app-page-evaluation',
   templateUrl: './page-evaluation.component.html',
-  styleUrls: ['./page-evaluation.component.scss']
+  styleUrls: [
+    './page-evaluation.component.scss',
+  ],
 })
 export class PageEvaluationComponent {
   pageId: string;
@@ -35,13 +37,17 @@ export class PageEvaluationComponent {
     private pagesService: PagesService,
     private route: ActivatedRoute,
     private messageService: MessageService,
-    private _formBuilder: FormBuilder,
+    private _formBuilder: FormBuilder
   ) {
     this.pageId = this.route.snapshot.paramMap.get('id')!;
   }
 
   ngOnInit() {
-    this.fetchEvaluation(this.rules.value, this.results.value, this.levels.value);
+    this.fetchEvaluation(
+      this.rules.value,
+      this.results.value,
+      this.levels.value
+    );
   }
 
   ngAfterViewInit() {
@@ -57,29 +63,32 @@ export class PageEvaluationComponent {
   }
 
   fetchEvaluation(rules: any, results: any, levels: any) {
-    this.pagesService.getPageEvaluation(this.pageId, rules, results, levels).subscribe({
-      next: response => {
-        if (response.success) {
-          this.evaluation = response.evaluation;
-          this.page = response.page;
-        } else {
+    this.pagesService
+      .getPageEvaluation(this.pageId, rules, results, levels)
+      .subscribe({
+        next: response => {
+          if (response.success) {
+            this.evaluation = response.evaluation;
+            this.page = response.page;
+          } else {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail:
+                response.message ||
+                'An error occurred fetching the evaluation.',
+            });
+          }
+          this.isLoading = false;
+        },
+        error: error => {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: response.message || 'An error occurred fetching the evaluation.',
+            detail: 'An error occurred fetching the evaluation.',
           });
-        }
-        this.isLoading = false;
-      },
-      error: error => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'An error occurred fetching the evaluation.',
-        });
-        this.isLoading = false;
-      }
-    });
+          this.isLoading = false;
+        },
+      });
   }
-
 }

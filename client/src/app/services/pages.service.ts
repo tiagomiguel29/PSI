@@ -89,7 +89,12 @@ export class PagesService {
       .pipe(map(response => response));
   }
 
-  getPageEvaluation(pageId: string, rules: any, results: any, levels: any): Observable<PageResponse> {
+  getPageEvaluation(
+    pageId: string,
+    rules: any,
+    results: any,
+    levels: any
+  ): Observable<PageResponse> {
     const params = new URLSearchParams();
     for (const key in rules) {
       params.append(key, rules[key]);
@@ -101,7 +106,9 @@ export class PagesService {
       params.append(key, levels[key]);
     }
     return this.http
-      .get<PageResponse>(`${this.baseUrl}/${pageId}/evaluation?${params.toString()}`)
+      .get<PageResponse>(
+        `${this.baseUrl}/${pageId}/evaluation?${params.toString()}`
+      )
       .pipe(map(response => response));
   }
 }
