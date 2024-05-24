@@ -135,7 +135,7 @@
                         }}
                       </p>
                     </div>
-                    <div class="flex flex-row justify-end">
+                    <div class="flex flex-row justify-end" *ngIf="website">
                       <a
                         href="{{ apiUrl }}/api/websites/{{ website._id }}/pdf"
                         target="_blank">
