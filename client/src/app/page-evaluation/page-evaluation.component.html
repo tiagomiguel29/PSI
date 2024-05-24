@@ -35,12 +35,12 @@
               class="mt-1 flex items-baseline justify-between md:block lg:flex">
               <div
                 class="flex items-baseline text-2xl font-semibold text-green-600">
-                {{ evaluation.passed }}
+                {{ evaluation.testsPassed }}
                 <div
                   class="ml-1 inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-green-100 text-green-800 md:mt-2 lg:mt-0">
                   <span class="sr-only"> Percentage </span>
                   {{
-                    (evaluation.passed / evaluation.total) * 100
+                    (evaluation.testsPassed / evaluation.testsTotal) * 100
                       | number: '1.0-0'
                   }}%
                 </div>
@@ -55,12 +55,12 @@
               class="mt-1 flex items-baseline justify-between md:block lg:flex">
               <div
                 class="flex items-baseline text-2xl font-semibold text-yellow-400">
-                {{ evaluation.warning }}
+                {{ evaluation.testsWarning }}
                 <div
                   class="ml-1 inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-yellow-100 text-yellow-600 md:mt-2 lg:mt-0">
                   <span class="sr-only"> Percentage </span>
                   {{
-                    (evaluation.warning / evaluation.total) * 100
+                    (evaluation.testsWarning / evaluation.testsTotal) * 100
                       | number: '1.0-0'
                   }}%
                 </div>
@@ -75,12 +75,12 @@
               class="mt-1 flex items-baseline justify-between md:block lg:flex">
               <div
                 class="flex items-baseline text-2xl font-semibold text-red-600">
-                {{ evaluation.failed }}
+                {{ evaluation.testsFailed }}
                 <div
                   class="ml-1 inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-red-100 text-red-800 md:mt-2 lg:mt-0">
                   <span class="sr-only"> Percentage </span>
                   {{
-                    (evaluation.failed / evaluation.total) * 100
+                    (evaluation.testsFailed / evaluation.testsTotal) * 100
                       | number: '1.0-0'
                   }}%
                 </div>
@@ -95,12 +95,12 @@
               class="mt-1 flex items-baseline justify-between md:block lg:flex">
               <div
                 class="flex items-baseline text-2xl font-semibold text-neutral-300">
-                {{ evaluation.inapplicable }}
+                {{ evaluation.testsInapplicable }}
                 <div
                   class="ml-1 inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-neutral-100 text-neutral-800 md:mt-2 lg:mt-0">
                   <span class="sr-only"> Percentage </span>
                   {{
-                    (evaluation.inapplicable / evaluation.total) * 100
+                    (evaluation.testsInapplicable / evaluation.testsTotal) * 100
                       | number: '1.0-0'
                   }}%
                 </div>
