@@ -32,7 +32,6 @@ function applyResultsFilter(evaluation, results) {
   evaluation.actRules.assertions = evaluation.actRules.assertions.filter(
     (assertion) => {
       const { outcome } = assertion.metadata;
-      console.log(outcome);
       return (
         (passed && outcome === 'passed') ||
         (warning && outcome === 'warning') ||
@@ -45,7 +44,6 @@ function applyResultsFilter(evaluation, results) {
   evaluation.wcagTechniques.assertions =
     evaluation.wcagTechniques.assertions.filter((assertion) => {
       const { outcome } = assertion.metadata;
-      console.log(outcome);
       return (
         (passed && outcome === 'passed') ||
         (warning && outcome === 'warning') ||
