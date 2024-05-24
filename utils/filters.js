@@ -54,16 +54,20 @@ function applyResultsFilter(evaluation, results) {
 }
 
 function applyLevelsFilter(evaluation, levels) {
-  const { a, aa, aaa } = levels;
+  const { a, aa, aaa, others } = levels;
 
   evaluation.actRules.assertions = evaluation.actRules.assertions.filter(
     (assertion) => {
       const { 'success-criteria': successCriteria } = assertion.metadata;
+      if (others && successCriteria.length === 0) {
+        return true;
+      }
       return successCriteria.some((criteria) => {
         return (
           (a && criteria.level === 'A') ||
           (aa && criteria.level === 'AA') ||
-          (aaa && criteria.level === 'AAA')
+          (aaa && criteria.level === 'AAA') ||
+          (others && ['A', 'AA', 'AAA'].includes(criteria.level) === false)
         );
       });
     },
@@ -72,11 +76,15 @@ function applyLevelsFilter(evaluation, levels) {
   evaluation.wcagTechniques.assertions =
     evaluation.wcagTechniques.assertions.filter((assertion) => {
       const { 'success-criteria': successCriteria } = assertion.metadata;
+      if (others && successCriteria.length === 0) {
+        return true;
+      }
       return successCriteria.some((criteria) => {
         return (
           (a && criteria.level === 'A') ||
           (aa && criteria.level === 'AA') ||
-          (aaa && criteria.level === 'AAA')
+          (aaa && criteria.level === 'AAA') ||
+          (others && ['A', 'AA', 'AAA'].includes(criteria.level) === false)
         );
       });
     });

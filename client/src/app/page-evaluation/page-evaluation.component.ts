@@ -31,6 +31,7 @@ export class PageEvaluationComponent {
     a: true,
     aa: true,
     aaa: true,
+    others: true,
   });
 
   constructor(

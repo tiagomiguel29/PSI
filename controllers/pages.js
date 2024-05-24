@@ -265,8 +265,18 @@ async function removePages(req, res) {
 async function getEvaluation(req, res) {
   const { id } = req.params;
 
-  const { act, wcag, passed, warning, failed, inapplicable, a, aa, aaa } =
-    req.query;
+  const {
+    act,
+    wcag,
+    passed,
+    warning,
+    failed,
+    inapplicable,
+    a,
+    aa,
+    aaa,
+    others,
+  } = req.query;
 
   const rules = {
     act: act === 'true',
@@ -284,6 +294,7 @@ async function getEvaluation(req, res) {
     a: a === 'true',
     aa: aa === 'true',
     aaa: aaa === 'true',
+    others: others === 'true',
   };
 
   const filters = {
