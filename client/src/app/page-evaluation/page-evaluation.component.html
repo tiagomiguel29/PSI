@@ -1,286 +1,370 @@
 <section>
-    <div *ngIf="isLoading" class="flex justify-center items-center mt-32">
-        <mat-spinner
-        ></mat-spinner>
+  <div *ngIf="isLoading" class="flex justify-center items-center mt-32">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div *ngIf="!isLoading && page">
+    <div
+      class="mt-14 max-w-screen mx-auto px-6 w-full md:w-3/4 lg:w-2/3 xl:w-2/3">
+      <div class="flex flex-row items-center py-4">
+        <a
+          [routerLink]="['/websites', page.website]"
+          class="text-black dark:text-white hover:underline flex flex-row items-center gap-x-1">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            class="w-6 h-6 fill-black dark:fill-white">
+            <path
+              fill-rule="evenodd"
+              d="M11.03 3.97a.75.75 0 0 1 0 1.06l-6.22 6.22H21a.75.75 0 0 1 0 1.5H4.81l6.22 6.22a.75.75 0 1 1-1.06 1.06l-7.5-7.5a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 0 1 1.06 0Z"
+              clip-rule="evenodd" />
+          </svg>
+          Back to Website</a
+        >
+      </div>
     </div>
-    <div *ngIf="!isLoading && page">
-        <div
-        class="mt-14 max-w-screen mx-auto px-6 w-full md:w-3/4 lg:w-2/3 xl:w-2/3">
-            <div class="flex flex-row items-center py-4">
-                <a
-                    [routerLink]="['/websites', page.website]"
-                    class="text-black dark:text-white hover:underline flex flex-row items-center gap-x-1">
-                    <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    class="w-6 h-6 fill-black dark:fill-white">
-                        <path
-                            fill-rule="evenodd"
-                            d="M11.03 3.97a.75.75 0 0 1 0 1.06l-6.22 6.22H21a.75.75 0 0 1 0 1.5H4.81l6.22 6.22a.75.75 0 1 1-1.06 1.06l-7.5-7.5a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 0 1 1.06 0Z"
-                            clip-rule="evenodd" />
-                    </svg>
-                    Back to Website</a>
-            </div>
-        </div>
-        <div class="px-2">
-            <div class="w-full md:w-3/4 lg:w-2/3 xl:w-2/3 mx-auto bg-gray-200 dark:bg-gray-600 rounded-lg">
-                  <dl
-                    class="mt-10 grid grid-cols-1 gap-px bg-white/5 sm:grid-cols-2 lg:grid-cols-4 overflow-hidden rounded-lg shadow-lg">
-                    <div class="px-4 py-5 sm:p-6 bg-white dark:bg-gray-800">
-                      <dt
-                        class="text-base font-normal text-gray-900 dark:text-gray-400">
-                        Passed
-                      </dt>
-                      <dd
-                        class="mt-1 flex items-baseline justify-between md:block lg:flex">
-                        <div
-                          class="flex items-baseline text-2xl font-semibold text-green-600">
-                          {{ evaluation.passed }}
-                          <div
-                            class="ml-1 inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-green-100 text-green-800 md:mt-2 lg:mt-0">
-                            <span class="sr-only"> Percentage </span>
-                            {{
-                              (evaluation.passed /
-                                evaluation.total) *
-                                100 | number: '1.0-0'
-                            }}%
-                          </div>
-                        </div>
-                      </dd>
-                    </div>
-                    <div class="px-4 py-5 sm:p-6 bg-white dark:bg-gray-800">
-                      <dt
-                        class="text-base font-normal text-gray-900 dark:text-gray-400">
-                        Warnings
-                      </dt>
-                      <dd
-                        class="mt-1 flex items-baseline justify-between md:block lg:flex">
-                        <div
-                          class="flex items-baseline text-2xl font-semibold text-yellow-400">
-                          {{ evaluation.warning }}
-                          <div
-                            class="ml-1 inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-yellow-100 text-yellow-600 md:mt-2 lg:mt-0">
-                            <span class="sr-only"> Percentage </span>
-                            {{
-                              (evaluation.warning /
-                                evaluation.total) *
-                                100 | number: '1.0-0'
-                            }}%
-                          </div>
-                        </div>
-                      </dd>
-                    </div>
-                    <div class="px-4 py-5 sm:p-6 bg-white dark:bg-gray-800">
-                      <dt
-                        class="text-base font-normal text-gray-900 dark:text-gray-400">
-                        Failed
-                      </dt>
-                      <dd
-                        class="mt-1 flex items-baseline justify-between md:block lg:flex">
-                        <div
-                          class="flex items-baseline text-2xl font-semibold text-red-600">
-                          {{ evaluation.failed }}
-                          <div
-                            class="ml-1 inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-red-100 text-red-800 md:mt-2 lg:mt-0">
-                            <span class="sr-only"> Percentage </span>
-                            {{
-                                (evaluation.failed /
-                                    evaluation.total) *
-                                    100 | number: '1.0-0'
-                            }}%
-                          </div>
-                        </div>
-                      </dd>
-                    </div>
-                    <div class="px-4 py-5 sm:p-6 bg-white dark:bg-gray-800">
-                        <dt
-                          class="text-base font-normal text-gray-900 dark:text-gray-400">
-                          Innaplicable
-                        </dt>
-                        <dd
-                          class="mt-1 flex items-baseline justify-between md:block lg:flex">
-                          <div
-                            class="flex items-baseline text-2xl font-semibold text-neutral-300">
-                            {{ evaluation.inapplicable }}
-                            <div
-                              class="ml-1 inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-neutral-100 text-neutral-800 md:mt-2 lg:mt-0">
-                              <span class="sr-only"> Percentage </span>
-                              {{
-                                (evaluation.inapplicable /
-                                  evaluation.total) *
-                                  100 | number: '1.0-0'
-                              }}%
-                            </div>
-                          </div>
-                        </dd>
-                      </div>
-                  </dl>
+    <div class="px-2">
+      <div
+        class="w-full md:w-3/4 lg:w-2/3 xl:w-2/3 mx-auto bg-gray-200 dark:bg-gray-600 rounded-lg">
+        <dl
+          class="mt-10 grid grid-cols-1 gap-px bg-white/5 sm:grid-cols-2 lg:grid-cols-4 overflow-hidden rounded-lg shadow-lg">
+          <div class="px-4 py-5 sm:p-6 bg-white dark:bg-gray-800">
+            <dt class="text-base font-normal text-gray-900 dark:text-gray-400">
+              Passed
+            </dt>
+            <dd
+              class="mt-1 flex items-baseline justify-between md:block lg:flex">
+              <div
+                class="flex items-baseline text-2xl font-semibold text-green-600">
+                {{ evaluation.passed }}
+                <div
+                  class="ml-1 inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-green-100 text-green-800 md:mt-2 lg:mt-0">
+                  <span class="sr-only"> Percentage </span>
+                  {{
+                    (evaluation.passed / evaluation.total) * 100
+                      | number: '1.0-0'
+                  }}%
+                </div>
               </div>
-
-              <div class="w-full md:w-3/4 lg:w-2/3 xl:w-2/3 mx-auto bg-white dark:bg-gray-800 rounded-lg mt-10 p-4">
-                <div class="pt-4 px-4">
-                    <h3 class="text-xl font-bold text-gray-900 dark:text-white">
-                        Assertions
-                      </h3>
+            </dd>
+          </div>
+          <div class="px-4 py-5 sm:p-6 bg-white dark:bg-gray-800">
+            <dt class="text-base font-normal text-gray-900 dark:text-gray-400">
+              Warnings
+            </dt>
+            <dd
+              class="mt-1 flex items-baseline justify-between md:block lg:flex">
+              <div
+                class="flex items-baseline text-2xl font-semibold text-yellow-400">
+                {{ evaluation.warning }}
+                <div
+                  class="ml-1 inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-yellow-100 text-yellow-600 md:mt-2 lg:mt-0">
+                  <span class="sr-only"> Percentage </span>
+                  {{
+                    (evaluation.warning / evaluation.total) * 100
+                      | number: '1.0-0'
+                  }}%
                 </div>
-                <div class="grid grid-cols-1 lg:grid-cols-3 mt-4 divide-y lg:divide-y-0 lg:divide-x divide-gray-200 dark:divide-gray-600">
-                    <div [formGroup]="results" class="p-4">
-                        <h4 class="font-semibold text-gray-900 dark:text-white text-center">
-                            Results
-                        </h4>
-                        <p><mat-checkbox formControlName="passed">Passed</mat-checkbox></p>
-                        <p><mat-checkbox formControlName="warning">Warning</mat-checkbox></p>
-                        <p><mat-checkbox formControlName="failed">Failed</mat-checkbox></p>
-                        <p><mat-checkbox formControlName="inapplicable">Inapplicable</mat-checkbox></p>
-                    </div>
-                    <div [formGroup]="levels" class="p-4">
-                        <h4 class="font-semibold text-gray-900 dark:text-white text-center">
-                            Levels
-                        </h4>
-                        <p><mat-checkbox formControlName="a">A</mat-checkbox></p>
-                        <p><mat-checkbox formControlName="aa">AA</mat-checkbox></p>
-                        <p><mat-checkbox formControlName="aaa">AAA</mat-checkbox></p>
-                    </div>
-                    <div [formGroup]="rules" class="p-4">
-                        <h4 class="font-semibold text-gray-900 dark:text-white text-center">
-                            Rules
-                        </h4>
-                        <p><mat-checkbox formControlName="act">ACT</mat-checkbox></p>
-                        <p><mat-checkbox formControlName="wcag">WCAG</mat-checkbox></p>
-                    </div>
-
+              </div>
+            </dd>
+          </div>
+          <div class="px-4 py-5 sm:p-6 bg-white dark:bg-gray-800">
+            <dt class="text-base font-normal text-gray-900 dark:text-gray-400">
+              Failed
+            </dt>
+            <dd
+              class="mt-1 flex items-baseline justify-between md:block lg:flex">
+              <div
+                class="flex items-baseline text-2xl font-semibold text-red-600">
+                {{ evaluation.failed }}
+                <div
+                  class="ml-1 inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-red-100 text-red-800 md:mt-2 lg:mt-0">
+                  <span class="sr-only"> Percentage </span>
+                  {{
+                    (evaluation.failed / evaluation.total) * 100
+                      | number: '1.0-0'
+                  }}%
                 </div>
-                <div class="mt-4">
-                    <mat-accordion>
-                        <mat-expansion-panel
-                        *ngFor="let assertion of evaluation.actRules.assertions"
-                        class="test-panel">
-                          <mat-expansion-panel-header>
-                            <mat-panel-title class="flex flex-row items-center gap-x-2">
-                                <span *ngIf="assertion.metadata.outcome == 'passed'">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-6 fill-green-500">
-                                        <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
-                                      </svg>
-
-                                </span>
-                                <span *ngIf="assertion.metadata.outcome == 'warning'">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-6 fill-yellow-500">
-                                        <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
-                                      </svg>
-
-                                </span>
-                                <span *ngIf="assertion.metadata.outcome == 'failed'">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-6 fill-red-500">
-                                        <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z" clip-rule="evenodd" />
-                                      </svg>
-                                </span>
-                                <span *ngIf="assertion.metadata.outcome == 'inapplicable'">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-6 fill-neutral-300">
-                                        <path fill-rule="evenodd" d="m6.72 5.66 11.62 11.62A8.25 8.25 0 0 0 6.72 5.66Zm10.56 12.68L5.66 6.72a8.25 8.25 0 0 0 11.62 11.62ZM5.105 5.106c3.807-3.808 9.98-3.808 13.788 0 3.808 3.807 3.808 9.98 0 13.788-3.807 3.808-9.98 3.808-13.788 0-3.808-3.807-3.808-9.98 0-13.788Z" clip-rule="evenodd" />
-                                      </svg>
-
-                                </span>
-
-                                <span>{{ assertion.code }}</span>
-                            </mat-panel-title>
-                            <mat-panel-description class="overflow-hidden whitespace-nowrap truncate">
-                                {{ assertion.name }}
-                            </mat-panel-description>
-                          </mat-expansion-panel-header>
-                          <h4 class="text-lg font-semibold text-gray-900 dark:text-white">Results</h4>
-                          <div class="grid grid-cols-1 divide-y divide-gray-200 dark:divide-gray-600">
-                            <div *ngFor="let result of assertion.results" class="py-2">
-
-                                <div *ngIf="result.verdict == 'warning'" class="grid grid-cols-1 lg:grid-cols-2 justify-between">
-                                    <span class="text-yellow-500 font-bold">Warning</span>
-                                    <span class="flex flex-wrap">{{ result.description }}</span>
-                                </div>
-                                <div *ngIf="result.verdict == 'failed'" class="grid grid-cols-1 lg:grid-cols-2 justify-between">
-                                    <span class="text-red-500 font-bold">Failed</span>
-                                    <span>{{ result.description }}</span>
-                                </div>
-                                <div *ngIf="result.verdict == 'passed'" class="grid grid-cols-1 lg:grid-cols-2 justify-between">
-                                    <span class="text-green-500 font-bold">Passed</span>
-                                    <span>{{ result.description }}</span>
-                                </div>
-                                <div *ngIf="result.verdict == 'inapplicable'" class="grid grid-cols-1 lg:grid-cols-2 justify-between">
-                                    <span class="text-neutral-300 font-bold">Inapplicable</span>
-                                    <span>{{ result.description }}</span>
-                                </div>
-
-
-
-                            </div>
-                          </div>
-                        </mat-expansion-panel>
-                        <mat-expansion-panel
-                        *ngFor="let assertion of evaluation.wcagTechniques.assertions"
-                        class="test-panel">
-                          <mat-expansion-panel-header>
-                            <mat-panel-title class="flex flex-row items-center gap-x-2">
-                                <span *ngIf="assertion.metadata.outcome == 'passed'">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-6 fill-green-500">
-                                        <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
-                                      </svg>
-
-                                </span>
-                                <span *ngIf="assertion.metadata.outcome == 'warning'">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-6 fill-yellow-500">
-                                        <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
-                                      </svg>
-
-                                </span>
-                                <span *ngIf="assertion.metadata.outcome == 'failed'">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-6 fill-red-500">
-                                        <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z" clip-rule="evenodd" />
-                                      </svg>
-                                </span>
-                                <span *ngIf="assertion.metadata.outcome == 'inapplicable'">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-6 fill-neutral-300">
-                                        <path fill-rule="evenodd" d="m6.72 5.66 11.62 11.62A8.25 8.25 0 0 0 6.72 5.66Zm10.56 12.68L5.66 6.72a8.25 8.25 0 0 0 11.62 11.62ZM5.105 5.106c3.807-3.808 9.98-3.808 13.788 0 3.808 3.807 3.808 9.98 0 13.788-3.807 3.808-9.98 3.808-13.788 0-3.808-3.807-3.808-9.98 0-13.788Z" clip-rule="evenodd" />
-                                      </svg>
-
-                                </span>
-
-                                <span>{{ assertion.code }}</span>
-                            </mat-panel-title>
-                            <mat-panel-description class="overflow-hidden whitespace-nowrap truncate">
-
-                            <div class="flex flex-row flex-1 min-w-0 ">
-
-                                    <p class="truncate">
-                                        {{ assertion.name }}
-                                    </p>
-
-                                </div>
-                            </mat-panel-description>
-                          </mat-expansion-panel-header>
-                          <h4 class="text-lg font-semibold text-gray-900 dark:text-white">Results</h4>
-                          <div class="grid grid-cols-1 divide-y divide-gray-200 dark:divide-gray-600">
-                            <div *ngFor="let result of assertion.results" class="py-2">
-                                <div *ngIf="result.verdict == 'warning'" class="grid grid-cols-1 lg:grid-cols-2 justify-between">
-                                    <span class="text-yellow-500 font-bold">Warning</span>
-                                    <span class="flex flex-wrap">{{ result.description }}</span>
-                                </div>
-                                <div *ngIf="result.verdict == 'failed'" class="grid grid-cols-1 lg:grid-cols-2 justify-between">
-                                    <span class="text-red-500 font-bold">Failed</span>
-                                    <span>{{ result.description }}</span>
-                                </div>
-                                <div *ngIf="result.verdict == 'passed'" class="grid grid-cols-1 lg:grid-cols-2 justify-between">
-                                    <span class="text-green-500 font-bold">Passed</span>
-                                    <span>{{ result.description }}</span>
-                                </div>
-                                <div *ngIf="result.verdict == 'inapplicable'" class="grid grid-cols-1 lg:grid-cols-2 justify-between">
-                                    <span class="text-neutral-300 font-bold">Inapplicable</span>
-                                    <span>{{ result.description }}</span>
-                                </div>
-
-                            </div>
-                          </div>
-                        </mat-expansion-panel>
-                      </mat-accordion>
+              </div>
+            </dd>
+          </div>
+          <div class="px-4 py-5 sm:p-6 bg-white dark:bg-gray-800">
+            <dt class="text-base font-normal text-gray-900 dark:text-gray-400">
+              Innaplicable
+            </dt>
+            <dd
+              class="mt-1 flex items-baseline justify-between md:block lg:flex">
+              <div
+                class="flex items-baseline text-2xl font-semibold text-neutral-300">
+                {{ evaluation.inapplicable }}
+                <div
+                  class="ml-1 inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-neutral-100 text-neutral-800 md:mt-2 lg:mt-0">
+                  <span class="sr-only"> Percentage </span>
+                  {{
+                    (evaluation.inapplicable / evaluation.total) * 100
+                      | number: '1.0-0'
+                  }}%
                 </div>
-            </div>
+              </div>
+            </dd>
+          </div>
+        </dl>
+      </div>
+
+      <div
+        class="w-full md:w-3/4 lg:w-2/3 xl:w-2/3 mx-auto bg-white dark:bg-gray-800 rounded-lg mt-10 p-4">
+        <div class="pt-4 px-4">
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white">
+            Assertions
+          </h3>
         </div>
+        <div
+          class="grid grid-cols-1 lg:grid-cols-3 mt-4 divide-y lg:divide-y-0 lg:divide-x divide-gray-200 dark:divide-gray-600">
+          <div [formGroup]="results" class="p-4">
+            <h4 class="font-semibold text-gray-900 dark:text-white text-center">
+              Results
+            </h4>
+            <p><mat-checkbox formControlName="passed">Passed</mat-checkbox></p>
+            <p>
+              <mat-checkbox formControlName="warning">Warning</mat-checkbox>
+            </p>
+            <p><mat-checkbox formControlName="failed">Failed</mat-checkbox></p>
+            <p>
+              <mat-checkbox formControlName="inapplicable"
+                >Inapplicable</mat-checkbox
+              >
+            </p>
+          </div>
+          <div [formGroup]="levels" class="p-4">
+            <h4 class="font-semibold text-gray-900 dark:text-white text-center">
+              Levels
+            </h4>
+            <p><mat-checkbox formControlName="a">A</mat-checkbox></p>
+            <p><mat-checkbox formControlName="aa">AA</mat-checkbox></p>
+            <p><mat-checkbox formControlName="aaa">AAA</mat-checkbox></p>
+          </div>
+          <div [formGroup]="rules" class="p-4">
+            <h4 class="font-semibold text-gray-900 dark:text-white text-center">
+              Rules
+            </h4>
+            <p><mat-checkbox formControlName="act">ACT</mat-checkbox></p>
+            <p><mat-checkbox formControlName="wcag">WCAG</mat-checkbox></p>
+          </div>
+        </div>
+        <div class="mt-4">
+          <mat-accordion>
+            <mat-expansion-panel
+              *ngFor="let assertion of evaluation.actRules.assertions"
+              class="test-panel">
+              <mat-expansion-panel-header>
+                <mat-panel-title class="flex flex-row items-center gap-x-2">
+                  <span *ngIf="assertion.metadata.outcome == 'passed'">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      class="size-6 fill-green-500">
+                      <path
+                        fill-rule="evenodd"
+                        d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </span>
+                  <span *ngIf="assertion.metadata.outcome == 'warning'">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      class="size-6 fill-yellow-500">
+                      <path
+                        fill-rule="evenodd"
+                        d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </span>
+                  <span *ngIf="assertion.metadata.outcome == 'failed'">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      class="size-6 fill-red-500">
+                      <path
+                        fill-rule="evenodd"
+                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </span>
+                  <span *ngIf="assertion.metadata.outcome == 'inapplicable'">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      class="size-6 fill-neutral-300">
+                      <path
+                        fill-rule="evenodd"
+                        d="m6.72 5.66 11.62 11.62A8.25 8.25 0 0 0 6.72 5.66Zm10.56 12.68L5.66 6.72a8.25 8.25 0 0 0 11.62 11.62ZM5.105 5.106c3.807-3.808 9.98-3.808 13.788 0 3.808 3.807 3.808 9.98 0 13.788-3.807 3.808-9.98 3.808-13.788 0-3.808-3.807-3.808-9.98 0-13.788Z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </span>
+
+                  <span>{{ assertion.code }}</span>
+                </mat-panel-title>
+                <mat-panel-description
+                  class="overflow-hidden whitespace-nowrap truncate">
+                  {{ assertion.name }}
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <ng-template matExpansionPanelContent>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white">
+                  Results
+                </h4>
+                <div
+                  class="grid grid-cols-1 divide-y divide-gray-200 dark:divide-gray-600">
+                  <div *ngFor="let result of assertion.results" class="py-2">
+                    <div>
+                      <div
+                        *ngIf="result.verdict == 'warning'"
+                        class="grid grid-cols-1 lg:grid-cols-2 justify-between">
+                        <span class="text-yellow-500 font-bold">Warning</span>
+                        <span class="flex flex-wrap">{{
+                          result.description
+                        }}</span>
+                      </div>
+
+                      <div
+                        *ngIf="result.verdict == 'failed'"
+                        class="grid grid-cols-1 lg:grid-cols-2 justify-between">
+                        <span class="text-red-500 font-bold">Failed</span>
+                        <span>{{ result.description }}</span>
+                      </div>
+                      <div
+                        *ngIf="result.verdict == 'passed'"
+                        class="grid grid-cols-1 lg:grid-cols-2 justify-between">
+                        <span class="text-green-500 font-bold">Passed</span>
+                        <span>{{ result.description }}</span>
+                      </div>
+                      <div
+                        *ngIf="result.verdict == 'inapplicable'"
+                        class="grid grid-cols-1 lg:grid-cols-2 justify-between">
+                        <span class="text-neutral-300 font-bold"
+                          >Inapplicable</span
+                        >
+                        <span>{{ result.description }}</span>
+                      </div>
+
+                      <div *ngFor="let element of result.elements" class="py-2">
+                        <pre><code [highlight]="element.htmlCode" [languages]="['xml']"></code></pre>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </mat-expansion-panel>
+            <mat-expansion-panel
+              *ngFor="let assertion of evaluation.wcagTechniques.assertions"
+              class="test-panel">
+              <mat-expansion-panel-header>
+                <mat-panel-title class="flex flex-row items-center gap-x-2">
+                  <span *ngIf="assertion.metadata.outcome == 'passed'">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      class="size-6 fill-green-500">
+                      <path
+                        fill-rule="evenodd"
+                        d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </span>
+                  <span *ngIf="assertion.metadata.outcome == 'warning'">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      class="size-6 fill-yellow-500">
+                      <path
+                        fill-rule="evenodd"
+                        d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </span>
+                  <span *ngIf="assertion.metadata.outcome == 'failed'">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      class="size-6 fill-red-500">
+                      <path
+                        fill-rule="evenodd"
+                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </span>
+                  <span *ngIf="assertion.metadata.outcome == 'inapplicable'">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      class="size-6 fill-neutral-300">
+                      <path
+                        fill-rule="evenodd"
+                        d="m6.72 5.66 11.62 11.62A8.25 8.25 0 0 0 6.72 5.66Zm10.56 12.68L5.66 6.72a8.25 8.25 0 0 0 11.62 11.62ZM5.105 5.106c3.807-3.808 9.98-3.808 13.788 0 3.808 3.807 3.808 9.98 0 13.788-3.807 3.808-9.98 3.808-13.788 0-3.808-3.807-3.808-9.98 0-13.788Z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </span>
+
+                  <span>{{ assertion.code }}</span>
+                </mat-panel-title>
+                <mat-panel-description
+                  class="overflow-hidden whitespace-nowrap truncate">
+                  <div class="flex flex-row flex-1 min-w-0">
+                    <p class="truncate">
+                      {{ assertion.name }}
+                    </p>
+                  </div>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <ng-template matExpansionPanelContent>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white">
+                  Results
+                </h4>
+                <div
+                  class="grid grid-cols-1 divide-y divide-gray-200 dark:divide-gray-600">
+                  <div *ngFor="let result of assertion.results" class="py-2">
+                    <div>
+                      <div
+                        *ngIf="result.verdict == 'warning'"
+                        class="grid grid-cols-1 lg:grid-cols-2 justify-between">
+                        <span class="text-yellow-500 font-bold">Warning</span>
+                        <span class="flex flex-wrap">{{
+                          result.description
+                        }}</span>
+                      </div>
+
+                      <div
+                        *ngIf="result.verdict == 'failed'"
+                        class="grid grid-cols-1 lg:grid-cols-2 justify-between">
+                        <span class="text-red-500 font-bold">Failed</span>
+                        <span>{{ result.description }}</span>
+                      </div>
+                      <div
+                        *ngIf="result.verdict == 'passed'"
+                        class="grid grid-cols-1 lg:grid-cols-2 justify-between">
+                        <span class="text-green-500 font-bold">Passed</span>
+                        <span>{{ result.description }}</span>
+                      </div>
+                      <div
+                        *ngIf="result.verdict == 'inapplicable'"
+                        class="grid grid-cols-1 lg:grid-cols-2 justify-between">
+                        <span class="text-neutral-300 font-bold"
+                          >Inapplicable</span
+                        >
+                        <span>{{ result.description }}</span>
+                      </div>
+
+                      <div *ngFor="let element of result.elements" class="py-2">
+                        <pre><code class="rounded-lg shadow-lg" [highlight]="element.htmlCode" [languages]="['xml']"></code></pre>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </div>
     </div>
+  </div>
 </section>

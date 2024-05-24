@@ -23,7 +23,8 @@ import { ToastModule } from 'primeng/toast';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import {MatExpansionModule} from '@angular/material/expansion';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { HighlightModule, HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
 
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
@@ -78,8 +79,17 @@ import { PageEvaluationComponent } from './page-evaluation/page-evaluation.compo
     MatTooltipModule,
     MatProgressSpinnerModule,
     MatExpansionModule,
+    HighlightModule,
   ],
-  providers: [MessageService],
+  providers: [
+    MessageService,
+    {
+      provide: HIGHLIGHT_OPTIONS,
+      useValue: {
+        fullLibraryLoader: () => import('highlight.js'),
+      },
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
