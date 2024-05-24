@@ -17,6 +17,7 @@ const PageEvaluationSchema = new mongoose.Schema(
       type: String,
       enum: ['Compliant', 'Not compliant', 'Evaluation error'],
     },
+    total: Number,
     passed: Number,
     warning: Number,
     failed: Number,
@@ -32,6 +33,7 @@ const PageEvaluationSchema = new mongoose.Schema(
           code: String,
           mapping: String,
           description: String,
+          results: Object,
           metadata: {
             'success-criteria': Array,
             passed: Number,
@@ -55,6 +57,7 @@ const PageEvaluationSchema = new mongoose.Schema(
           code: String,
           mapping: String,
           description: String,
+          results: Object,
           metadata: {
             'success-criteria': Array,
             passed: Number,
@@ -73,6 +76,24 @@ const PageEvaluationSchema = new mongoose.Schema(
     collection: 'pageEvaluations',
   },
 );
+
+PageEvaluationSchema.pre('save', function (next) {
+  this.total =
+    (this.passed || 0) +
+    (this.warning || 0) +
+    (this.failed || 0) +
+    (this.inapplicable || 0);
+  next();
+});
+
+PageEvaluationSchema.pre('findOneAndUpdate', function (next) {
+  this._update.total =
+    (this._update.passed || 0) +
+    (this._update.warning || 0) +
+    (this._update.failed || 0) +
+    (this._update.inapplicable || 0);
+  next();
+});
 
 module.exports = PageEvaluation = mongoose.model(
   'PageEvaluation',

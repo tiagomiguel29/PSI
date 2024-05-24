@@ -5,7 +5,7 @@ const { isMongoId, isSubPage, trimURL } = require('../utils/validation/common');
 const { validatePage } = require('../utils/validation/page');
 const { updateStats } = require('../services/stats');
 const PageEvaluation = require('../models/PageEvaluation');
-const { notifyWebsiteUpdate } = require('../services/sockets');
+const { applyFiltersToEvaluation } = require('../utils/filters');
 
 async function createPage(req, res) {
   try {
@@ -50,8 +50,6 @@ async function createPage(req, res) {
     const page = await Page.create({ url: trimURL(url), website: websiteId });
 
     await updateStats(website);
-
-    notifyWebsiteUpdate(websiteId);
 
     return res.status(201).json({
       success: true,
@@ -261,4 +259,87 @@ async function removePages(req, res) {
   }
 }
 
-module.exports = { createPage, getPage, removePage, getPages, removePages };
+async function getEvaluation(req, res) {
+  const { id } = req.params;
+
+  const {
+    act,
+    wcag,
+    passed,
+    warning,
+    failed,
+    inapplicable,
+    a,
+    aa,
+    aaa,
+    others,
+  } = req.query;
+
+  const rules = {
+    act: act === 'true',
+    wcag: wcag === 'true',
+  };
+
+  const results = {
+    passed: passed === 'true',
+    warning: warning === 'true',
+    failed: failed === 'true',
+    inapplicable: inapplicable === 'true',
+  };
+
+  const levels = {
+    a: a === 'true',
+    aa: aa === 'true',
+    aaa: aaa === 'true',
+    others: others === 'true',
+  };
+
+  const filters = {
+    rules,
+    results,
+    levels,
+  };
+
+  try {
+    if (!isMongoId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid page ID',
+      });
+    }
+
+    const evaluation = await PageEvaluation.findOne({ page: id }).populate(
+      'page',
+    );
+
+    const filteredEvaluation = applyFiltersToEvaluation(evaluation, filters);
+
+    if (!evaluation) {
+      return res.status(404).json({
+        success: false,
+        message: 'Evaluation not found',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      page: evaluation.page,
+      evaluation: filteredEvaluation,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
+
+module.exports = {
+  createPage,
+  getPage,
+  removePage,
+  getPages,
+  removePages,
+  getEvaluation,
+};

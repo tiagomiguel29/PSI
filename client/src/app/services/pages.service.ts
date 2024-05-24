@@ -11,6 +11,7 @@ export interface PageResponse {
   page: Page;
   message?: string;
   errors?: Error[];
+  evaluation?: any;
 }
 
 export interface PageListResponse {
@@ -85,6 +86,29 @@ export class PagesService {
       .delete<StandardResponse>(`${this.baseUrl}?websiteId=${websiteId}`, {
         body: { ids },
       })
+      .pipe(map(response => response));
+  }
+
+  getPageEvaluation(
+    pageId: string,
+    rules: any,
+    results: any,
+    levels: any
+  ): Observable<PageResponse> {
+    const params = new URLSearchParams();
+    for (const key in rules) {
+      params.append(key, rules[key]);
+    }
+    for (const key in results) {
+      params.append(key, results[key]);
+    }
+    for (const key in levels) {
+      params.append(key, levels[key]);
+    }
+    return this.http
+      .get<PageResponse>(
+        `${this.baseUrl}/${pageId}/evaluation?${params.toString()}`
+      )
       .pipe(map(response => response));
   }
 }

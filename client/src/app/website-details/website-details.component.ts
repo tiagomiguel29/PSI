@@ -21,6 +21,7 @@ import { MessageService } from 'primeng/api';
 import { FormControl } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
 import { WebsocketService } from '../services/websocket.service';
+import { environment } from 'src/environments/environment';
 
 export interface NewPageDialogData {
   websiteId: string;
@@ -47,9 +48,12 @@ export class WebsiteDetailsComponent {
   imageUrl?: string = '';
   imageLoading: boolean = true;
   protocol = 'https://';
+  apiUrl = environment.apiUrl;
   pageUrlToAdd = new FormControl('', [
     Validators.required,
-    Validators.pattern('^[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(\\/[^\\s]*)?$'),
+    Validators.pattern(
+      '^(?:(?:[a-zA-Z0-9-]+.)+[a-zA-Z]{2,})(?::d{1,5})?(?:/[^ ]*)?$'
+    ),
     this.subpageValidator(),
   ]);
   statusOptions = [
@@ -69,6 +73,7 @@ export class WebsiteDetailsComponent {
     'status',
     'createdAt',
     'lastEvaluated',
+    'actions',
   ];
   dataSource = new MatTableDataSource<{}>(this.pages);
 
@@ -245,7 +250,9 @@ export class WebsiteDetailsComponent {
     dialogRef.afterClosed().subscribe(result => {
       this.pageUrlToAdd = new FormControl('', [
         Validators.required,
-        Validators.pattern('^[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(\\/[^\\s]*)?$'),
+        Validators.pattern(
+          '^(?:(?:[a-zA-Z0-9-]+.)+[a-zA-Z]{2,})(?::d{1,5})?(?:/[^ ]*)?$'
+        ),
         this.subpageValidator(),
       ]);
 
@@ -272,12 +279,7 @@ export class WebsiteDetailsComponent {
     const fullUrl = this.protocol + page;
     if (!parent) return false;
 
-    return (
-      fullUrl.startsWith(parent) &&
-      fullUrl !== parent &&
-      parent !== fullUrl + '/' &&
-      fullUrl !== parent + '/'
-    );
+    return fullUrl.startsWith(parent);
   }
 
   subpageValidator(): ValidatorFn {

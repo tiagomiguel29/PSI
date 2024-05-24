@@ -8,6 +8,7 @@ const { isMongoId, isSubPage, trimURL } = require('../utils/validation/common');
 const { validatePage } = require('../utils/validation/page');
 const { updateStats } = require('../services/stats');
 const PageEvaluation = require('../models/PageEvaluation');
+const { generatePdf } = require('../services/pdf');
 
 async function createWebsite(req, res) {
   const { url } = req.body;
@@ -303,6 +304,45 @@ async function evaluate(req, res) {
   }
 }
 
+async function getPDF(req, res) {
+  const { id } = req.params;
+
+  try {
+    if (!isMongoId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid website ID',
+      });
+    }
+
+    const website = await Website.findById(id);
+
+    if (!website) {
+      return res.status(404).json({
+        success: false,
+        message: 'Website not found',
+      });
+    }
+
+    const pages = await Page.find({ website: website._id });
+
+    const buffer = await generatePdf(website, pages);
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader(
+      'Content-Disposition',
+      `inline; filename="${encodeURIComponent(website.url)}.pdf"`,
+    );
+
+    return res.status(200).send(buffer);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
+
 module.exports = {
   createWebsite,
   addPages,
@@ -310,4 +350,5 @@ module.exports = {
   getWebsites,
   removeWebsite,
   evaluate,
+  getPDF,
 };

@@ -5,6 +5,8 @@ const pagesControllers = require('../../../controllers/pages');
 
 router.post('/new', pagesControllers.createPage);
 
+router.get('/:id/evaluation', pagesControllers.getEvaluation);
+
 router.get('/:id', pagesControllers.getPage);
 
 router.delete('/:id', pagesControllers.removePage);

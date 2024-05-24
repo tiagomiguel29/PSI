@@ -23,7 +23,8 @@ import { ToastModule } from 'primeng/toast';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import {MatExpansionModule} from '@angular/material/expansion';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { HighlightModule, HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
 
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
@@ -38,6 +39,7 @@ import {
 } from './website-details/website-details.component';
 import { AddPageDialog } from './website-details/website-details.component';
 import { MessageService } from 'primeng/api';
+import { PageEvaluationComponent } from './page-evaluation/page-evaluation.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +50,7 @@ import { MessageService } from 'primeng/api';
     AddPageDialog,
     DeleteWebsiteDialog,
     DeletePagesDialog,
+    PageEvaluationComponent,
   ],
   imports: [
     BrowserModule,
@@ -76,8 +79,17 @@ import { MessageService } from 'primeng/api';
     MatTooltipModule,
     MatProgressSpinnerModule,
     MatExpansionModule,
+    HighlightModule,
   ],
-  providers: [MessageService],
+  providers: [
+    MessageService,
+    {
+      provide: HIGHLIGHT_OPTIONS,
+      useValue: {
+        fullLibraryLoader: () => import('highlight.js'),
+      },
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

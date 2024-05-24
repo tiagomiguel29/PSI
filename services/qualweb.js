@@ -28,6 +28,13 @@ async function evaluate(url) {
 
     const qualwebOptions = {
       urls: [url],
+      execute: {
+        wappalyzer: false,
+        act: true,
+        wcag: true,
+        bp: false,
+        counter: false,
+      },
     };
 
     const results = await qualweb.evaluate(qualwebOptions);
@@ -134,6 +141,7 @@ async function handlePageResults(result, page) {
 
   const actAssertionsKeys = Object.keys(result.modules['act-rules'].assertions);
 
+  /*
   for (const key of actAssertionsKeys) {
     if (
       result.modules['act-rules'].assertions[key].metadata.outcome ===
@@ -158,7 +166,9 @@ async function handlePageResults(result, page) {
     } else {
       delete result.modules['wcag-techniques'].assertions[key].results;
     }
+
   }
+  */
 
   // Convet an object to an array with the key as the name
   // of the assertion
@@ -169,6 +179,7 @@ async function handlePageResults(result, page) {
         code: result.modules['act-rules'].assertions[key].code,
         mapping: result.modules['act-rules'].assertions[key].mapping,
         description: result.modules['act-rules'].assertions[key].description,
+        results: result.modules['act-rules'].assertions[key].results,
         metadata: {
           'success-criteria':
             result.modules['act-rules'].assertions[key].metadata[
@@ -196,6 +207,7 @@ async function handlePageResults(result, page) {
       mapping: result.modules['wcag-techniques'].assertions[key].mapping,
       description:
         result.modules['wcag-techniques'].assertions[key].description,
+      results: result.modules['wcag-techniques'].assertions[key].results,
       metadata: {
         'success-criteria':
           result.modules['wcag-techniques'].assertions[key].metadata[
