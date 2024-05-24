@@ -5,6 +5,8 @@ const websitesControllers = require('../../../controllers/websites');
 
 router.post('/new', websitesControllers.createWebsite);
 
+router.get('/:id/pdf', websitesControllers.getPDF);
+
 router.post('/:id/evaluate', websitesControllers.evaluate);
 
 router.post('/:id/addPages', websitesControllers.addPages);
