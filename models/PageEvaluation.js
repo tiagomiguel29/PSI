@@ -17,6 +17,11 @@ const PageEvaluationSchema = new mongoose.Schema(
       type: String,
       enum: ['Compliant', 'Not compliant', 'Evaluation error'],
     },
+    testsTotal: Number,
+    testsPassed: Number,
+    testsWarning: Number,
+    testsFailed: Number,
+    testsInapplicable: Number,
     total: Number,
     passed: Number,
     warning: Number,
@@ -83,6 +88,11 @@ PageEvaluationSchema.pre('save', function (next) {
     (this.warning || 0) +
     (this.failed || 0) +
     (this.inapplicable || 0);
+  this.testsTotal =
+    (this.testsPassed || 0) +
+    (this.testsWarning || 0) +
+    (this.testsFailed || 0) +
+    (this.testsInapplicable || 0);
   next();
 });
 
@@ -92,6 +102,11 @@ PageEvaluationSchema.pre('findOneAndUpdate', function (next) {
     (this._update.warning || 0) +
     (this._update.failed || 0) +
     (this._update.inapplicable || 0);
+  this._update.testsTotal =
+    (this._update.testsPassed || 0) +
+    (this._update.testsWarning || 0) +
+    (this._update.testsFailed || 0) +
+    (this._update.testsInapplicable || 0);
   next();
 });
 

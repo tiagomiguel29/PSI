@@ -238,6 +238,20 @@ async function handlePageResults(result, page) {
       page: page._id,
       website: page.website,
       result: resultOutcome,
+      testsPassed:
+        actAssertions.filter((a) => a.metadata.outcome === 'passed').length +
+        wcagAssertions.filter((a) => a.metadata.outcome === 'passed').length,
+      testsWarning:
+        actAssertions.filter((a) => a.metadata.outcome === 'warning').length +
+        wcagAssertions.filter((a) => a.metadata.outcome === 'warning').length,
+      testsFailed:
+        actAssertions.filter((a) => a.metadata.outcome === 'failed').length +
+        wcagAssertions.filter((a) => a.metadata.outcome === 'failed').length,
+      testsInapplicable:
+        actAssertions.filter((a) => a.metadata.outcome === 'inapplicable')
+          .length +
+        wcagAssertions.filter((a) => a.metadata.outcome === 'inapplicable')
+          .length,
       passed: result.metadata.passed,
       warning: result.metadata.warning,
       failed: result.metadata.failed,
