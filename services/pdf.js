@@ -132,55 +132,6 @@ async function generatePdf(website, pages) {
                 website.stats.evaluatedPages
               }</td></tr>
             </table>
-            <h2>Detailed Error Statistics</h2>
-            <table>
-              <tr>
-                <th>Error Code</th>
-                <th>Error Name</th>
-                <th>Description</th>
-                <th>Count</th>
-              </tr>
-              ${website.stats.topErrors
-                .map(
-                  (error) => `
-                <tr>
-                  <td>${error.code}</td>
-                  <td>${error.name}</td>
-                  <td>${error.description}</td>
-                  <td>${error.count}</td>
-                </tr>`,
-                )
-                .join('')}
-            </table>
-            <h2>Pages</h2>
-            <table>
-                <tr>
-                    <th rowspan="2" class="url-cell">URL</th> <!-- Apply max-width style here -->
-                    <th rowspan="2">Status</th>
-                    <th rowspan="2">Last Evaluated</th>
-                    <th colspan="3">Has Error</th>
-                </tr>
-                <tr>
-                    <th>A</th>
-                    <th>AA</th>
-                    <th>AAA</th>
-                </tr>
-                ${pages
-                  .map(
-                    (page) => `
-                    <tr>
-                    <td class="url-cell">${
-                      page.url
-                    }</td> <!-- Apply max-width style here -->
-                    <td>${page.status}</td>
-                    <td>${formatDate(page.lastEvaluated)}</td>
-                    <td>${page.stats.hasAErrors ? 'Yes' : 'No'}</td>
-                    <td>${page.stats.hasAAErrors ? 'Yes' : 'No'}</td>
-                    <td>${page.stats.hasAAAErrors ? 'Yes' : 'No'}</td>
-                    </tr>`,
-                  )
-                  .join('')}
-                </table>
           </div>
         </body>
       </html>
