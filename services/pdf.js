@@ -132,6 +132,26 @@ async function generatePdf(website, pages) {
                 website.stats.evaluatedPages
               }</td></tr>
             </table>
+            <h2>Detailed Error Statistics</h2>
+            <table>
+              <tr>
+                <th>Error Code</th>
+                <th>Error Name</th>
+                <th>Description</th>
+                <th>Count</th>
+              </tr>
+              ${website.stats.topErrors
+                .map(
+                  (error) => `
+                <tr>
+                  <td>${error.code}</td>
+                  <td>${error.name}</td>
+                  <td>${error.description}</td>
+                  <td>${error.count}</td>
+                </tr>`,
+                )
+                .join('')}
+            </table>
           </div>
         </body>
       </html>
