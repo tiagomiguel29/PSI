@@ -1,6 +1,14 @@
 # PSI
 
 Projeto de Sistemas de Informação
+(Software Engineering Project)
+
+Faculty of Sciences of the University of Lisbon
+
+Teacher: Carlos Duarte
+
+Final Grade: 20/20
+
 
 ---
 
